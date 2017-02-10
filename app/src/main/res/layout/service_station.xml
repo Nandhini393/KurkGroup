@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="utf-8"?>
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <android.support.v7.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/appColor"
+            android:elevation="4dp">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:id="@+id/img_back"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:layout_alignParentLeft="true"
+                    android:layout_centerInParent="true"
+                    android:src="@drawable/back" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:text="Book a service"
+                    android:textAllCaps="true"
+                    android:id="@+id/txt_header"
+                    android:textColor="@color/white"
+                    android:textSize="16dp" />
+
+            </RelativeLayout>
+        </android.support.v7.widget.Toolbar>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ScrollView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_below="@+id/toolbar"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/txt_spanText"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="15dp"
+                        android:gravity="center"
+                        android:text="Select shell service station"
+                        android:textColor="@color/black"
+                        android:textSize="16dp" />
+
+                    <RelativeLayout
+                        android:id="@+id/rl_select_service_station"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="20dp"
+                        android:layout_marginRight="20dp"
+
+                        android:background="@drawable/edit_text_border2"
+                        android:orientation="horizontal"
+                        android:padding="5dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_alignParentLeft="true"
+                            android:layout_centerInParent="true"
+                            android:layout_marginLeft="10dp"
+                            android:id="@+id/txt_SelectStationText"
+                            android:text="@string/menu_edit_service"
+                            android:textColor="@color/black"
+                            android:textSize="15dp" />
+
+                        <ImageView
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:layout_alignParentRight="true"
+                            android:background="@drawable/down_arrow" />
+
+
+                    </RelativeLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:orientation="vertical"
+                        android:layout_height="300dp">
+
+                        <ListView
+                            android:id="@+id/listview"
+                            android:visibility="gone"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_below="@+id/txt_select_station"
+                            android:layout_margin="20dp"
+                            android:background="@color/edit_fill_grey" />
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:gravity="center"
+                            android:visibility="gone"
+                            android:layout_margin="20dp"
+                            android:background="@color/edit_fill_grey"
+                            android:layout_marginLeft="10dp"
+                            android:text="No services available"
+                            android:id="@+id/txt_error"
+                            android:textSize="15dp" />
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:orientation="horizontal"
+                            android:layout_margin="20dp"
+                            android:visibility="gone"
+                            android:id="@+id/ll_disp_station"
+                            android:layout_height="wrap_content">
+                            <ImageView
+                                android:layout_width="100dp"
+                                android:id="@+id/img_profile"
+                                android:layout_height="100dp" />
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:orientation="vertical"
+                                android:layout_gravity="center"
+                                android:gravity="center|left"
+
+                                android:layout_marginLeft="10dp"
+                                android:layout_height="match_parent">
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:text="New Text"
+                                    android:textSize="15dp"
+                                    android:textColor="@color/appColor"
+                                    android:id="@+id/txt_comp_name"
+                                    android:layout_gravity="center" />
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:text="New Text"
+                                    android:layout_marginTop="5dp"
+                                    android:id="@+id/txt_address"
+                                    android:layout_gravity="center" />
+                            </LinearLayout>
+                        </LinearLayout>
+                    </LinearLayout>
+
+
+                    <LinearLayout
+                        android:id="@+id/ll_date"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/listview"
+                        android:layout_marginRight="30dp"
+                        android:layout_marginLeft="30dp"
+                        android:background="@drawable/edit_text_noborder"
+                        android:layout_centerInParent="true"
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            android:id="@+id/img_calen"
+                            android:layout_width="50dp"
+                            android:layout_height="50dp"
+                            android:background="@color/appColor"
+                            android:layout_gravity="right|center"
+                            android:onClick="setDate"
+                            android:padding="5dp"
+                            android:src="@drawable/calen_white" />
+
+                        <TextView
+                            android:id="@+id/txt_set_date"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_gravity="center"
+                            android:layout_marginRight="20dp"
+                            android:background="@color/white"
+                            android:hint="Select Date"
+                            android:gravity="center"
+                            android:layout_margin="10dp"
+                            android:textColor="@color/black"
+                            android:textSize="16dp" />
+                    </LinearLayout>
+                </LinearLayout>
+            </ScrollView>
+
+            <TextView
+                android:id="@+id/txt_next"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_alignParentBottom="true"
+                android:background="@color/appColor"
+                android:gravity="center"
+                android:text="Next"
+                android:textAllCaps="true"
+                android:textColor="@color/white"
+                android:textSize="16dp" />
+        </RelativeLayout>
+
+
+    </LinearLayout>
+

@@ -1,0 +1,26 @@
+<resources>
+    <string name="app_name">Kurk Group</string>
+    <string name="login_car_reg_num">Car Reg Number</string>
+    <string name="login_pass">Password</string>
+    <string name="login_reg">Register</string>
+    <string name="login">Login</string>
+    <string name="forgot_pass">Forgot Password</string>
+    <string name="reg_name">Name</string>
+    <string name="reg_email">Email</string>
+    <string name="reg_pass">Password</string>
+    <string name="reg_car_num">Car Number</string>
+    <string name="reg_car_model">Car Model</string>
+    <string name="reg_contact_num">Contact Number</string>
+    <string name="reg_manf_date">Manufacture Date</string>
+    <string name="reg_car_type">Car Type</string>
+    <string name="register">Register</string>
+    <string name="forgot_email">Enter your email-Id</string>
+    <string name="forgot_submit">Sumbit</string>
+    <string name="click_here_car_model">Click here to see the car model</string>
+    <string name="book_service">Book a service</string>
+    <string name="menu_edit_service">Select shell service station</string>
+    <string name="menu_update_profile">Update profile</string>
+    <string name="menu_booking">Booking</string>
+    <string name="menu_cancel_service">Cancel services</string>
+    <string name="menu_logout">Logout</string>
+</resources>
