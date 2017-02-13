@@ -130,6 +130,8 @@ public class ServiceStation extends Activity implements ServiceStationInterface 
         registerReceiver(myReceiver, filter1);
 
 
+
+        Log.i("BN", "id" +  gD.prefs.getString("pickUp_address",null));
         Log.i("PP1", "id" + gD.prefs.getString("ss_id", null));
 
         Log.i("PP1", "ss_image" + gD.prefs.getString("ss_image", null));

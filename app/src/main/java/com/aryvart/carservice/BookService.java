@@ -66,7 +66,7 @@ public class BookService extends Activity implements LocationListener,View.OnCli
     TextView txt_headerName;
     //Menu
     DrawerLayout myDrawerLayout;
-    LinearLayout myLinearLayout,ll_updateProfile,ll_cancelService,ll_editBooking,ll_viewBooking,ll_logOut,ll_diagno,ll_pickUP;
+    LinearLayout myLinearLayout,ll_updateProfile,ll_cancelService,ll_editBooking,ll_viewBooking,ll_logOut,ll_diagno,ll_pickUP,ll_Map;
     GeneralData gD;
     String str_ServiceType;
     TextView txt_diagnoText,txt_pickUpText;
@@ -100,6 +100,7 @@ public class BookService extends Activity implements LocationListener,View.OnCli
     public static boolean isGPSEnabled = false;
     public static boolean isNetworkEnabled = false;
     LocationManager locationManager;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -132,6 +133,7 @@ public class BookService extends Activity implements LocationListener,View.OnCli
         txt_pickUpText=(TextView)findViewById(R.id.txt_pickUp_text);
         txt_headerName=(TextView)findViewById(R.id.txt_header);
         btn_viewBookings=(Button)findViewById(R.id.btn_view_bookings);
+        ll_Map=(LinearLayout)findViewById(R.id.ll_map);
         Typeface typeFace1 = Typeface.createFromAsset(getAssets(), "fonts/Oswald-Bold.otf");
         txt_headerName.setTypeface(typeFace1);
         txt_view_car_det.setTypeface(typeFace1);
@@ -139,7 +141,6 @@ public class BookService extends Activity implements LocationListener,View.OnCli
         txt_diagnoText.setTypeface(typeFace1);
         txt_pickUpText.setTypeface(typeFace1);
         btn_viewBookings.setTypeface(typeFace1);
-
         marker_icon_view.setOnClickListener(this);
         myLinearLayout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -167,34 +168,73 @@ public class BookService extends Activity implements LocationListener,View.OnCli
                     Log.e("BN","str_ServiceType is null");
                     Toast.makeText(BookService.this, "Select your service type", Toast.LENGTH_SHORT).show();
                 }
+                else if(completeAddresss==null){
+                    Log.e("BN","str_ServiceType is null");
+                    Toast.makeText(BookService.this, "Enter your address", Toast.LENGTH_SHORT).show();
+                }
                 else
                 {
                     Log.e("BN","str_ServiceType->"+str_ServiceType);
-                    startActivity(new Intent(BookService.this, ServiceStation.class));
-                    SharedPreferences.Editor prefEdit = gD.prefs.edit();
-                    prefEdit.putString("ss_name", null);
-                    prefEdit.putString("ss_id", null);
-                    prefEdit.putString("ss_image", null);
-                    prefEdit.putString("ss_addr", null);
-                    prefEdit.putString("ss_diagno_charge", null);
-                    prefEdit.putString("ss_pickup_charge", null);
-                    prefEdit.putString("ss_modular_reprogramming_charge", null);
-                    prefEdit.putString("edit_ss_id", null);
-                    prefEdit.putString("edit_ss_book_id", null);
-                    prefEdit.putString("edit_ss_serviceArray", null);
-                    prefEdit.putString("edit_ss_image", null);
-                    prefEdit.putString("edit_ss_name", null);
-                    prefEdit.putString("edit_ss_addr", null);
-                    prefEdit.putString("edit_ss_date", null);
-                    SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(context);
-                    SharedPreferences.Editor editor = sharedPrefs.edit();
-                    Gson gson = new Gson();
-                    String json = gson.toJson(null);
-                    String json_id = gson.toJson(null);
-                    editor.putString("key", json);
-                    editor.putString("key_id", json_id);
-                    editor.commit();
-                    prefEdit.commit();
+                        View itemView1;
+                        final AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                        builder.setCancelable(true);
+                        itemView1 = LayoutInflater.from(context)
+                                .inflate(R.layout.logout_popup, null);
+                        final AlertDialog altDialog = builder.create();
+                        altDialog.setView(itemView1);
+                        TextView txt_content=(TextView)itemView1.findViewById(R.id.txt_content);
+                        Button btn_yes = (Button) itemView1.findViewById(R.id.btn_yes);
+                        Button btn_no = (Button) itemView1.findViewById(R.id.btn_no);
+                        txt_content.setText("Your Address : "+completeAddresss);
+                        btn_yes.setText("Confirm");
+                        btn_no.setText("Change");
+                        btn_yes.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                SharedPreferences.Editor prefEdit = gD.prefs.edit();
+                                prefEdit.putString("pickUp_address", completeAddresss);
+                                prefEdit.putString("ss_name", null);
+                                prefEdit.putString("ss_id", null);
+                                prefEdit.putString("ss_image", null);
+                                prefEdit.putString("ss_addr", null);
+                                prefEdit.putString("ss_diagno_charge", null);
+                                prefEdit.putString("ss_pickup_charge", null);
+                                prefEdit.putString("ss_modular_reprogramming_charge", null);
+                                prefEdit.putString("edit_ss_id", null);
+                                prefEdit.putString("edit_ss_book_id", null);
+                                prefEdit.putString("edit_ss_serviceArray", null);
+                                prefEdit.putString("edit_ss_image", null);
+                                prefEdit.putString("edit_ss_name", null);
+                                prefEdit.putString("edit_ss_addr", null);
+                                prefEdit.putString("edit_ss_date", null);
+                                SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(context);
+                                SharedPreferences.Editor editor = sharedPrefs.edit();
+                                Gson gson = new Gson();
+                                String json = gson.toJson(null);
+                                String json_id = gson.toJson(null);
+                                editor.putString("key", json);
+                                editor.putString("key_id", json_id);
+                                editor.commit();
+                                prefEdit.commit();
+                                startActivity(new Intent(BookService.this, ServiceStation.class));
+                                altDialog.dismiss();
+                            }
+                        });
+                        btn_no.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                SharedPreferences.Editor prefEdit1 = gD.prefs.edit();
+                                prefEdit1.putString("pickUp_address", null);
+                                prefEdit1.commit();
+                                altDialog.dismiss();
+                            }
+                        });
+                        altDialog.show();
+
+
+
+
+
                 }
 
             }
@@ -208,6 +248,9 @@ public class BookService extends Activity implements LocationListener,View.OnCli
         ll_diagno.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                txt_diagnoText.setTextColor(Color.parseColor("#0987ff"));
+                txt_pickUpText.setTextColor(Color.parseColor("#000000"));
+                ll_Map.setVisibility(View.GONE);
                 startActivity(new Intent(BookService.this,BookServiceDiagno.class));
                /* txt_diagnoText.setTextColor(Color.parseColor("#0987ff"));
                 txt_pickUpText.setTextColor(Color.parseColor("#000000"));
@@ -221,9 +264,10 @@ public class BookService extends Activity implements LocationListener,View.OnCli
         ll_pickUP.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                ll_Map.setVisibility(View.VISIBLE);
                 txt_pickUpText.setTextColor(Color.parseColor("#0987ff"));
                 txt_diagnoText.setTextColor(Color.parseColor("#000000"));
-                btn_bookService.setVisibility(View.VISIBLE);
+              //  btn_bookService.setVisibility(View.VISIBLE);
                 str_ServiceType="pickup";
                 SharedPreferences.Editor prefEdit = gD.prefs.edit();
                 prefEdit.putString("str_serviceType",str_ServiceType);
@@ -335,7 +379,6 @@ public class BookService extends Activity implements LocationListener,View.OnCli
 
         if (!isGPSEnabled && !isNetworkEnabled) {
 
-
             LayoutInflater inflater = LayoutInflater.from(context);
             View dialogLayout = inflater.inflate(R.layout.layout_confirmation, null);
 
@@ -356,17 +399,12 @@ public class BookService extends Activity implements LocationListener,View.OnCli
 
             Button btn_submit = (Button) dialogLayout.findViewById(R.id.ok);
             Button btn_cancel = (Button) dialogLayout.findViewById(R.id.cancel);
-
-
-
-
             btn_submit.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
 
                     Intent callGPSSettingIntent = new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS);
                     startActivity(callGPSSettingIntent);
-
 
                     alertDialog.cancel();
                     mGoogleApiClient = new GoogleApiClient.Builder(context)
@@ -616,7 +654,7 @@ public class BookService extends Activity implements LocationListener,View.OnCli
                 //  mLocationMarkerText.setText("Lat : " + position.target.latitude + "," + "Long : " + position.target.longitude);
 
 
-                updateLocation(position.target);
+               updateLocation(position.target);
 
 
             }

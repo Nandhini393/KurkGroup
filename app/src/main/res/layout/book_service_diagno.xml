@@ -56,7 +56,7 @@
         <ImageView
             android:id="@+id/img_carModel"
             android:layout_width="match_parent"
-            android:layout_height="150dp"
+            android:layout_height="135dp"
             android:layout_gravity="center"
             android:layout_margin="5dp"
             android:background="@color/edit_fill_grey"
@@ -103,7 +103,7 @@
 
             <LinearLayout
                 android:layout_width="0dp"
-                android:layout_height="100dp"
+                android:layout_height="80dp"
                 android:layout_marginRight="3dp"
                 android:layout_weight="1"
                 android:weightSum="2"
@@ -128,13 +128,13 @@
                     android:textAllCaps="true"
                     android:id="@+id/txt_diagno_text"
                     android:textColor="@color/black"
-                    android:textSize="15dp" />
+                    android:textSize="14dp" />
 
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="0dp"
-                android:layout_height="100dp"
+                android:layout_height="80dp"
                 android:layout_weight="1"
                 android:weightSum="2"
                 android:padding="5dp"
@@ -164,12 +164,7 @@
 
         </LinearLayout>
 
-       <!-- <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@color/edit_fill_grey">
 
-        </LinearLayout>-->
 
     </LinearLayout>
 

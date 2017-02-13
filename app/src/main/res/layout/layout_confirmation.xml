@@ -58,8 +58,7 @@
             android:text="OK"
             android:textAllCaps="false"
             android:textAppearance="@android:style/TextAppearance.DeviceDefault.Small"
-            android:textColor="@color/white"
-            android:textStyle="bold" />
+            android:textColor="@color/white" />
 
     <Button
 
@@ -67,16 +66,15 @@
             android:layout_width="0dp"
             android:layout_height="40dp"
             android:layout_weight="1"
-            android:background="@color/colorPrimary"
+            android:background="#c0c0c0"
             android:padding="2dp"
             android:text="CANCEL"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
-
             android:textAllCaps="false"
             android:textAppearance="@android:style/TextAppearance.DeviceDefault.Small"
-            android:textColor="@color/white"
-            android:textStyle="bold" />
+            android:textColor="@color/black"
+            />
     </LinearLayout>
 
 
