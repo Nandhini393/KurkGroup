@@ -10,6 +10,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.aryvart.carservice.R;
+import com.google.android.gms.maps.GoogleMap;
 
 /**
  * Created by android2 on 14/9/16.
@@ -21,12 +22,22 @@ public class GeneralData {
     public SharedPreferences prefs;
     public AlertDialog altDialog;
     public static int n_count=0;
+    public static GoogleMap googleMapGeneral;
+    public static String strAddress;
+    public static String strLatitutde;
+    public static String strLongitude;
+
+
+    public GeneralData() {
+
+    }
 
     public GeneralData(Context con) {
         context = con;
         prefs = con.getSharedPreferences("Registerprefs", Context.MODE_PRIVATE);
 
     }
+
 
     public void showAlertDialog(final Context context, String strTitle, String strContent) {
         View itemView1;

@@ -20,7 +20,8 @@
     <string name="book_service">Book a service</string>
     <string name="menu_edit_service">Select shell service station</string>
     <string name="menu_update_profile">Update profile</string>
-    <string name="menu_booking">Booking</string>
+    <string name="menu_booking">Booked services</string>
     <string name="menu_cancel_service">Cancel services</string>
     <string name="menu_logout">Logout</string>
+    <string name="google_api_key">AIzaSyBbHEqLtVRp2z7uOROz6T5ZBOaxBDcJkD0</string>
 </resources>

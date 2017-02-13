@@ -8,6 +8,8 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="com.aryvart.utician.MAPS_RECEIVE" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
     <application
         android:allowBackup="true"
@@ -30,7 +32,10 @@
             android:windowSoftInputMode="stateHidden"></activity>
         <activity
             android:name=".BookService"
-            android:windowSoftInputMode="stateHidden|adjustPan"></activity>
+            android:windowSoftInputMode="stateHidden"></activity>
+        <activity
+            android:name=".BookServiceDiagno"
+            android:windowSoftInputMode="stateHidden"></activity>
         <activity
             android:name=".ServiceStation"
             android:windowSoftInputMode="stateHidden|adjustPan"></activity>
@@ -68,6 +73,13 @@
         <activity
             android:name=".Edt_Service.ServiceConfirmation_Edit"
             android:windowSoftInputMode="stateHidden|adjustPan"></activity>
+
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="@string/google_api_key" />
     </application>
 
 </manifest>

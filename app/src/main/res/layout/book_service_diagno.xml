@@ -24,6 +24,13 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
 
+                <ImageView
+                    android:id="@+id/img_back"
+                    android:layout_width="25dp"
+                    android:layout_height="30dp"
+                    android:layout_alignParentLeft="true"
+                    android:layout_marginRight="10dp"
+                    android:src="@drawable/back" />
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -49,7 +56,7 @@
         <ImageView
             android:id="@+id/img_carModel"
             android:layout_width="match_parent"
-            android:layout_height="140dp"
+            android:layout_height="150dp"
             android:layout_gravity="center"
             android:layout_margin="5dp"
             android:background="@color/edit_fill_grey"
@@ -69,40 +76,21 @@
             android:text="@string/click_here_car_model"
             android:textColor="@color/white"
             android:textSize="15dp" />
-<LinearLayout
-    android:layout_width="match_parent"
-    android:orientation="horizontal"
-    android:gravity="center"
-    android:layout_height="wrap_content">
-    <Button
-        android:id="@+id/btn_book_service"
-        android:layout_width="160dp"
-        android:layout_height="35dp"
-        android:layout_gravity="center"
-        android:layout_marginBottom="20dp"
-        android:layout_marginTop="20dp"
-        android:background="@drawable/edittext_style_violet_fill"
-        android:text="@string/book_service"
-        android:textAllCaps="true"
-        android:visibility="visible"
-        android:layout_marginRight="20dp"
-        android:textAppearance="@android:style/TextAppearance.DeviceDefault.Small"
-        android:textColor="@color/white" />
-    <Button
-        android:id="@+id/btn_view_bookings"
-        android:layout_width="160dp"
-        android:layout_height="35dp"
-        android:layout_gravity="center"
-        android:layout_marginBottom="20dp"
-        android:layout_marginTop="20dp"
-        android:background="@drawable/edittext_style_violet_fill"
-        android:text="View bookings"
-        android:textAllCaps="true"
-        android:visibility="visible"
-        android:textAppearance="@android:style/TextAppearance.DeviceDefault.Small"
-        android:textColor="@color/white" />
-</LinearLayout>
 
+        <Button
+            android:id="@+id/btn_book_service"
+            android:layout_width="160dp"
+            android:layout_height="35dp"
+            android:layout_gravity="center"
+            android:layout_marginBottom="20dp"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/edittext_style_violet_fill"
+            android:text="@string/book_service"
+            android:textAllCaps="true"
+
+            android:visibility="visible"
+            android:textAppearance="@android:style/TextAppearance.DeviceDefault.Small"
+            android:textColor="@color/white" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -115,7 +103,7 @@
 
             <LinearLayout
                 android:layout_width="0dp"
-                android:layout_height="80dp"
+                android:layout_height="100dp"
                 android:layout_marginRight="3dp"
                 android:layout_weight="1"
                 android:weightSum="2"
@@ -140,22 +128,22 @@
                     android:textAllCaps="true"
                     android:id="@+id/txt_diagno_text"
                     android:textColor="@color/black"
-                    android:textSize="14dp" />
+                    android:textSize="15dp" />
 
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="0dp"
-                android:layout_height="80dp"
+                android:layout_height="100dp"
                 android:layout_weight="1"
                 android:weightSum="2"
                 android:padding="5dp"
-                android:id="@+id/ll_pickUp"
+                android:id="@+id/ll_modular"
                 android:orientation="vertical"
                 android:background="@color/edit_fill_grey">
 
                 <ImageView
-                    android:id="@+id/img_pickUp"
+                    android:id="@+id/img_modular"
                     android:layout_width="wrap_content"
                     android:layout_height="0dp"
                     android:layout_weight="1.5"
@@ -167,59 +155,21 @@
                     android:layout_height="0dp"
                     android:layout_weight="0.5"
                     android:layout_gravity="center"
-                    android:text="Pick up"
+                    android:text="Modular reprogramming"
                     android:textAllCaps="true"
-                    android:id="@+id/txt_pickUp_text"
+                    android:id="@+id/txt_modular_text"
                     android:textColor="@color/black"
-                    android:textSize="14dp" />
+                    android:textSize="12dp" />
             </LinearLayout>
 
         </LinearLayout>
 
-      <LinearLayout
+       <!-- <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@color/edit_fill_grey">
-          <RelativeLayout
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:layout_below="@+id/header">
 
-
-              <fragment
-                  android:id="@+id/uber_map"
-                  android:name="com.google.android.gms.maps.MapFragment"
-                  android:layout_width="match_parent"
-                  android:layout_height="match_parent" />
-
-              <include
-                  android:layout_marginTop="50dp"
-                  android:id="@+id/marker_view_incl"
-                  layout="@layout/marker_view"
-                  android:layout_gravity="bottom"
-                  android:layout_width="match_parent"
-                  android:layout_height="50dp" />
-
-              <FrameLayout
-                  android:layout_marginTop="20dp"
-                  android:layout_width="200dp"
-                  android:layout_height="30dp"
-                  android:background="#ededed"
-                  android:layout_marginLeft="10dp"
-                  android:orientation="horizontal" >
-                  <fragment
-                      android:id="@+id/autocomplete_fragment"
-                      android:name="com.aryvart.carservice.CustomPlaceAutoCompleteFragment"
-                      android:layout_width="match_parent"
-                      android:background="#fff"
-                      android:layout_gravity="center"
-                      android:layout_marginRight="5dp"
-                      android:textColor="#fff"
-
-                      android:layout_height="wrap_content" />
-              </FrameLayout>
-          </RelativeLayout>
-        </LinearLayout>
+        </LinearLayout>-->
 
     </LinearLayout>
 
