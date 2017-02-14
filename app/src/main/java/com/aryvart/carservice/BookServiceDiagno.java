@@ -63,24 +63,12 @@ public class BookServiceDiagno extends Activity {
     Button btn_bookService;
     ImageView img_menu, img_back;
     TextView txt_headerName;
-    //Menu
-    Double lat = 0.0, longi = 0.0;
-    LatLng TutorialsPoint = new LatLng(lat, longi);
-    //Menu
-    DrawerLayout myDrawerLayout;
-    LinearLayout myLinearLayout, ll_updateProfile, ll_cancelService, ll_editBooking, ll_viewBooking, ll_logOut, ll_diagno, ll_modular;
+
+    LinearLayout  ll_diagno, ll_modular;
     GeneralData gD;
-    String str_ServiceType;
+    String str_ServiceType,str_FromEditBtn;
     TextView txt_diagnoText, txt_modularText;
-    //permission to access external storage
-    private static final int REQUEST_EXTERNAL_STORAGE = 1;
-    private static String[] PERMISSIONS_STORAGE = {
-            Manifest.permission.READ_EXTERNAL_STORAGE,
-            Manifest.permission.WRITE_EXTERNAL_STORAGE,
-            Manifest.permission.INTERNET, Manifest.permission.ACCESS_NETWORK_STATE,
-            Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.CALL_PHONE,
-            Manifest.permission.CAMERA, Manifest.permission.SEND_SMS, Manifest.permission.ACCESS_WIFI_STATE
-    };
+
 
 
     @Override
@@ -91,17 +79,16 @@ public class BookServiceDiagno extends Activity {
         txt_view_car_det = (TextView) findViewById(R.id.txt_click_car_model);
         btn_bookService = (Button) findViewById(R.id.btn_book_service);
         gD = new GeneralData(context);
-
+        str_FromEditBtn = getIntent().getStringExtra("str_fromEdit");
+        if (str_FromEditBtn != null) {
+            Log.e("YKD", "not null");
+        } else {
+            Log.e("YKD", "null");
+        }
 
         img_back = (ImageView) findViewById(R.id.img_back);
         img_menu = (ImageView) findViewById(R.id.img_menu);
-        myDrawerLayout = (DrawerLayout) findViewById(R.id.my_list_drawer_layout);
-        myLinearLayout = (LinearLayout) findViewById(R.id.llaySliderParent);
-        ll_updateProfile = (LinearLayout) findViewById(R.id.ll_update_profile);
-        ll_cancelService = (LinearLayout) findViewById(R.id.ll_cancel_service);
-        ll_editBooking = (LinearLayout) findViewById(R.id.ll_edit_service);
-        ll_logOut = (LinearLayout) findViewById(R.id.ll_logout);
-        ll_viewBooking = (LinearLayout) findViewById(R.id.ll_booking);
+
         ll_diagno = (LinearLayout) findViewById(R.id.ll_diagno);
         ll_modular = (LinearLayout) findViewById(R.id.ll_modular);
         txt_diagnoText = (TextView) findViewById(R.id.txt_diagno_text);
@@ -114,27 +101,11 @@ public class BookServiceDiagno extends Activity {
         txt_diagnoText.setTypeface(typeFace1);
         txt_modularText.setTypeface(typeFace1);
 
-        myLinearLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                myDrawerLayout.setClickable(false);
-                myDrawerLayout.setEnabled(false);
-                myDrawerLayout.setFocusableInTouchMode(false);
-                myDrawerLayout.setFocusable(false);
 
-            }
-        });
         img_back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 finish();
-            }
-        });
-        img_menu.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                myDrawerLayout.openDrawer(myLinearLayout);
-
             }
         });
 
@@ -144,40 +115,43 @@ public class BookServiceDiagno extends Activity {
                 if (str_ServiceType == null) {
                     Log.e("BN", "str_ServiceType is null");
                     Toast.makeText(BookServiceDiagno.this, "Select your service type", Toast.LENGTH_SHORT).show();
-                } else {
+                }
+                else {
+                   /* if (str_FromEditBtn != null) {
+                        Log.e("YKD", "not null");
+                        startActivity(new Intent(BookServiceDiagno.this, ServiceStation.class));
+                        finish();
+                    } else {*/
+                        startActivity(new Intent(BookServiceDiagno.this, ServiceStation.class));
+                        Log.e("YKD", "null");
+                        SharedPreferences.Editor prefEdit = gD.prefs.edit();
+                        prefEdit.putString("ss_name", null);
+                        prefEdit.putString("ss_id", null);
+                        prefEdit.putString("ss_image", null);
+                        prefEdit.putString("ss_addr", null);
+                        prefEdit.putString("ss_diagno_charge", null);
+                        prefEdit.putString("ss_pickup_charge", null);
+                        prefEdit.putString("ss_modular_reprogramming_charge", null);
+                        prefEdit.putString("edit_ss_id", null);
+                        prefEdit.putString("edit_ss_book_id", null);
+                        prefEdit.putString("edit_ss_serviceArray", null);
+                        prefEdit.putString("edit_ss_image", null);
+                        prefEdit.putString("edit_ss_name", null);
+                        prefEdit.putString("edit_ss_addr", null);
+                        prefEdit.putString("edit_ss_date", null);
+                        SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(context);
+                        SharedPreferences.Editor editor = sharedPrefs.edit();
+                        Gson gson = new Gson();
+                        String json = gson.toJson(null);
+                        String json_id = gson.toJson(null);
+                        editor.putString("key", json);
+                        editor.putString("key_id", json_id);
+                        editor.commit();
+                        prefEdit.commit();
+                        finish();
+                    //}
                     Log.e("BN", "str_ServiceType->" + str_ServiceType);
-                    startActivity(new Intent(BookServiceDiagno.this, ServiceStation.class));
 
-                    SharedPreferences.Editor prefEdit = gD.prefs.edit();
-                    prefEdit.putString("ss_name", null);
-                    prefEdit.putString("ss_id", null);
-                    prefEdit.putString("ss_image", null);
-                    prefEdit.putString("ss_addr", null);
-                    prefEdit.putString("ss_diagno_charge", null);
-                    prefEdit.putString("ss_pickup_charge", null);
-                    prefEdit.putString("ss_modular_reprogramming_charge", null);
-
-
-                    prefEdit.putString("edit_ss_id", null);
-                    prefEdit.putString("edit_ss_book_id", null);
-                    prefEdit.putString("edit_ss_serviceArray", null);
-                    prefEdit.putString("edit_ss_image", null);
-                    prefEdit.putString("edit_ss_name", null);
-                    prefEdit.putString("edit_ss_addr", null);
-                    prefEdit.putString("edit_ss_date", null);
-
-
-                    SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(context);
-                    SharedPreferences.Editor editor = sharedPrefs.edit();
-                    Gson gson = new Gson();
-                    String json = gson.toJson(null);
-                    String json_id = gson.toJson(null);
-                    editor.putString("key", json);
-                    editor.putString("key_id", json_id);
-                    editor.commit();
-
-
-                    prefEdit.commit();
                 }
 
             }
@@ -227,103 +201,11 @@ public class BookServiceDiagno extends Activity {
                 altDialog.show();
             }
         });
-        ll_updateProfile.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(BookServiceDiagno.this, EditProfile.class));
-            }
-        });
-        ll_cancelService.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(BookServiceDiagno.this, CancelBookingList.class));
-            }
-        });
-        ll_editBooking.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(BookServiceDiagno.this, EditBookingList.class));
-            }
-        });
-        ll_viewBooking.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(BookServiceDiagno.this, ViewBookingList.class));
-            }
-        });
-        ll_logOut.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-
-                View itemView1;
-                final AlertDialog.Builder builder = new AlertDialog.Builder(context);
-                builder.setCancelable(true);
-                itemView1 = LayoutInflater.from(context)
-                        .inflate(R.layout.logout_popup, null);
-                final AlertDialog altDialog = builder.create();
-                altDialog.setView(itemView1);
-                Button btn_yes = (Button) itemView1.findViewById(R.id.btn_yes);
-                Button btn_no = (Button) itemView1.findViewById(R.id.btn_no);
-                btn_yes.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
-                        NetworkInfo netInfo = connectivityManager.getActiveNetworkInfo();
-                        boolean isConnected = netInfo != null && netInfo.isConnectedOrConnecting();
-
-                        if (isConnected) {
-                            SharedPreferences.Editor prefEdit = gD.prefs.edit();
-                            prefEdit.putString("car_number", null);
-                            prefEdit.putString("password", null);
-                            prefEdit.commit();
-                            startActivity(new Intent(BookServiceDiagno.this, SignIn.class));
-                            finish();
-                        } else {
-                            Toast.makeText(BookServiceDiagno.this, "No internet connection", Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                });
-                btn_no.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        altDialog.dismiss();
-                    }
-                });
-                altDialog.show();
-
-
-            }
-        });
 
 
     }
 
-    //persmission method.
-    public static void verifyStoragePermissions(Activity activity) {
-// Check if we have read or write permission
-        int writePermission = ActivityCompat.checkSelfPermission(activity, Manifest.permission.WRITE_EXTERNAL_STORAGE);
-        int readPermission = ActivityCompat.checkSelfPermission(activity, Manifest.permission.READ_EXTERNAL_STORAGE);
 
-        int internetPermission = ActivityCompat.checkSelfPermission(activity, Manifest.permission.INTERNET);
-        int access_network_Permission = ActivityCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_NETWORK_STATE);
-        int access_fine_loc_Permission = ActivityCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_FINE_LOCATION);
-        int access_coarse_loc_Permission = ActivityCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_COARSE_LOCATION);
-        int wifiPermission = ActivityCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_WIFI_STATE);
-
-        if (writePermission != PackageManager.PERMISSION_GRANTED || readPermission != PackageManager.PERMISSION_GRANTED || internetPermission != PackageManager.PERMISSION_GRANTED ||
-                access_network_Permission != PackageManager.PERMISSION_GRANTED ||
-                access_fine_loc_Permission != PackageManager.PERMISSION_GRANTED ||
-                access_coarse_loc_Permission != PackageManager.PERMISSION_GRANTED ||
-                wifiPermission != PackageManager.PERMISSION_GRANTED) {
-// We don't have permission so prompt the user
-            ActivityCompat.requestPermissions(
-                    activity,
-                    PERMISSIONS_STORAGE,
-                    REQUEST_EXTERNAL_STORAGE
-            );
-        }
-    }
 }
 
 

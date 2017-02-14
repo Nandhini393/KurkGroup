@@ -132,6 +132,8 @@ public class ServiceStation extends Activity implements ServiceStationInterface 
 
 
         Log.i("BN", "id" +  gD.prefs.getString("pickUp_address",null));
+        Log.i("BN", "str_serviceType-->" +    gD.prefs.getString("str_serviceType", null));
+
         Log.i("PP1", "id" + gD.prefs.getString("ss_id", null));
 
         Log.i("PP1", "ss_image" + gD.prefs.getString("ss_image", null));
@@ -289,11 +291,14 @@ public class ServiceStation extends Activity implements ServiceStationInterface 
         txt_next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                Log.i("BN_SS", "str_serviceType-->" + gD.prefs.getString("str_serviceType", null));
                 ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
                 NetworkInfo netInfo = connectivityManager.getActiveNetworkInfo();
                 boolean isConnected = netInfo != null && netInfo.isConnectedOrConnecting();
 
                 if (isConnected) {
+
                     SharedPreferences.Editor prefEdit = gD.prefs.edit();
                     prefEdit.putString("ss_date", txt_date.getText().toString().trim());
                     prefEdit.putString("ss_name", str_StationName);
@@ -303,13 +308,48 @@ public class ServiceStation extends Activity implements ServiceStationInterface 
                     prefEdit.putString("ss_diagno_charge", str_DiagnoCharge);
                     prefEdit.putString("ss_pickup_charge", str_PickupCharge);
                     prefEdit.putString("ss_modular_reprogramming_charge", str_ModularCharge);
-
+                    prefEdit.putString("ss_id", str_StationId);
 
                     if (str_StationId == null) {
                         Toast.makeText(ServiceStation.this, "Select your service station", Toast.LENGTH_SHORT).show();
                     } else if (txt_date.getText().toString().trim().length() == 0) {
                         Toast.makeText(ServiceStation.this, "Select your service date", Toast.LENGTH_SHORT).show();
                     } else {
+
+                        if (gD.prefs.getString("str_serviceType", null).equalsIgnoreCase("modular")||gD.prefs.getString("str_serviceType", null).equalsIgnoreCase("modularpickup")) {
+                            startActivity(new Intent(ServiceStation.this,ServiceConfirmation.class));
+                            finish();
+                        }
+                        else{
+                            Intent i = new Intent(ServiceStation.this, ChooseService.class);
+                            //  i.putExtra("edit_ss_serviceArray",gD.prefs.getString("edit_ss_serviceArray", null));
+                            startActivity(i);
+                            finish();
+                            Log.i("HH_n", "str_ChoosenStationId : " + str_ChoosenStationId);
+                            Log.i("HH_n", "sharedPref : " +gD.prefs.getString("ss_id", null) );
+
+                            if (str_ChoosenStationId!=null && (gD.prefs.getString("ss_id", null))!=null)
+                            {
+                                if (str_ChoosenStationId.equalsIgnoreCase(gD.prefs.getString("ss_id", null))) {
+                                    Log.i("HH_n1", "choosen : " + str_ChoosenStationId);
+                                    Log.i("HH_n1", "sharedPref : " + gD.prefs.getString("ss_id", null));
+                                    Log.i("HH_n1", "equal");
+                                } else {
+                                    Log.i("HH_n1", "choosen : " + str_ChoosenStationId);
+                                    Log.i("HH_n1", "sharedPref : " + gD.prefs.getString("ss_id", null));
+                                    Log.i("HH_n1", "not equal ");
+                                    SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(context);
+                                    SharedPreferences.Editor editor = sharedPrefs.edit();
+                                    Gson gson = new Gson();
+                                    String json = gson.toJson(null);
+                                    String json_id = gson.toJson(null);
+                                    editor.putString("key", json);
+                                    editor.putString("key_id", json_id);
+                                    editor.commit();
+                                }
+
+                            }
+                        }
 
                    /* if (str_StationId.equalsIgnoreCase(str_ServiceStationId)) {
                         Log.i("HH", "choosen : " + str_StationId);
@@ -322,35 +362,9 @@ public class ServiceStation extends Activity implements ServiceStationInterface 
 
                     }*/
 
-                        prefEdit.putString("ss_id", str_StationId);
-                        Intent i = new Intent(ServiceStation.this, ChooseService.class);
-                        //  i.putExtra("edit_ss_serviceArray",gD.prefs.getString("edit_ss_serviceArray", null));
-                        startActivity(i);
-                        finish();
-                        Log.i("HH_n", "str_ChoosenStationId : " + str_ChoosenStationId);
-                        Log.i("HH_n", "sharedPref : " +gD.prefs.getString("ss_id", null) );
 
-                        if (str_ChoosenStationId!=null && (gD.prefs.getString("ss_id", null))!=null)
-                        {
-                            if (str_ChoosenStationId.equalsIgnoreCase(gD.prefs.getString("ss_id", null))) {
-                                Log.i("HH_n1", "choosen : " + str_ChoosenStationId);
-                                Log.i("HH_n1", "sharedPref : " + gD.prefs.getString("ss_id", null));
-                                Log.i("HH_n1", "equal");
-                            } else {
-                                Log.i("HH_n1", "choosen : " + str_ChoosenStationId);
-                                Log.i("HH_n1", "sharedPref : " + gD.prefs.getString("ss_id", null));
-                                Log.i("HH_n1", "not equal ");
-                                SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(context);
-                                SharedPreferences.Editor editor = sharedPrefs.edit();
-                                Gson gson = new Gson();
-                                String json = gson.toJson(null);
-                                String json_id = gson.toJson(null);
-                                editor.putString("key", json);
-                                editor.putString("key_id", json_id);
-                                editor.commit();
-                            }
 
-                        }
+
                     }
 
                     prefEdit.commit();
@@ -396,8 +410,6 @@ public class ServiceStation extends Activity implements ServiceStationInterface 
         editor.putString("key", json);
         editor.putString("key_id", json_id);
         editor.commit();
-
-
         prefEdit.commit();
         finish();
     }

@@ -1,4 +1,4 @@
-package com.aryvart.carservice;
+package com.aryvart.carservice.Edt_Service;
 
 import android.Manifest;
 import android.app.Activity;
@@ -17,9 +17,6 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AlertDialog;
@@ -33,8 +30,16 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.aryvart.carservice.BookServiceDiagno;
+import com.aryvart.carservice.CancelBookingList;
+import com.aryvart.carservice.EditBookingList;
+import com.aryvart.carservice.EditProfile;
 import com.aryvart.carservice.GenericClasses.GPSTracker;
 import com.aryvart.carservice.GenericClasses.GeneralData;
+import com.aryvart.carservice.R;
+import com.aryvart.carservice.ServiceStation;
+import com.aryvart.carservice.SignIn;
+import com.aryvart.carservice.ViewBookingList;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationListener;
@@ -57,19 +62,19 @@ import java.util.Locale;
 /**
  * Created by android2 on 31/1/17.
  */
-public class BookService extends Activity implements LocationListener, View.OnClickListener, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, OnMapReadyCallback {
+public class BookServiceEdit extends Activity implements LocationListener,View.OnClickListener, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, OnMapReadyCallback {
     Context context;
     //form fields
     TextView txt_view_car_det;
-    Button btn_bookService, btn_viewBookings;
+    Button btn_bookService,btn_viewBookings;
     ImageView img_menu;
     TextView txt_headerName;
     //Menu
     DrawerLayout myDrawerLayout;
-    LinearLayout myLinearLayout, ll_updateProfile, ll_cancelService, ll_editBooking, ll_viewBooking, ll_logOut, ll_diagno, ll_pickUP, ll_Map;
+    LinearLayout myLinearLayout,ll_updateProfile,ll_cancelService,ll_editBooking,ll_viewBooking,ll_logOut,ll_diagno,ll_pickUP,ll_Map;
     GeneralData gD;
-    String str_ServiceType, str_EditButtonClicked;
-    TextView txt_diagnoText, txt_pickUpText, txt_pickUpAddress;
+    String str_ServiceType;
+    TextView txt_diagnoText,txt_pickUpText;
     //Menu
     Double lat = 0.0, longi = 0.0;
     LatLng TutorialsPoint = new LatLng(lat, longi);
@@ -90,7 +95,6 @@ public class BookService extends Activity implements LocationListener, View.OnCl
     ImageView marker_icon_view;
     TextView text;
     String completeAddresss;
-    //Double d_AdrLat,d_AdrLong;
     //map
     private GoogleApiClient mGoogleApiClient = null;
 
@@ -109,35 +113,32 @@ public class BookService extends Activity implements LocationListener, View.OnCl
         context = this;
         txt_view_car_det = (TextView) findViewById(R.id.txt_click_car_model);
         btn_bookService = (Button) findViewById(R.id.btn_book_service);
-        str_EditButtonClicked = getIntent().getStringExtra("btn_editClicked");
-
         gD = new GeneralData(context);
 
 
-        if (GeneralData.n_count == 0) {
+        if(GeneralData.n_count==0){
             verifyStoragePermissions(this);
-            GeneralData.n_count = 1;
+            GeneralData.n_count=1;
         }
         editText = (EditText) findViewById(R.id.editWorkLocation);
-        text = (TextView) findViewById(R.id.text);
-        marker_icon_view = (ImageView) findViewById(R.id.marker_icon_view);
+        text= (TextView) findViewById(R.id.text);
+        marker_icon_view= (ImageView) findViewById(R.id.marker_icon_view);
 
         img_menu = (ImageView) findViewById(R.id.img_menu);
         myDrawerLayout = (DrawerLayout) findViewById(R.id.my_list_drawer_layout);
         myLinearLayout = (LinearLayout) findViewById(R.id.llaySliderParent);
         ll_updateProfile = (LinearLayout) findViewById(R.id.ll_update_profile);
         ll_cancelService = (LinearLayout) findViewById(R.id.ll_cancel_service);
-        ll_editBooking = (LinearLayout) findViewById(R.id.ll_edit_service);
+        ll_editBooking=(LinearLayout)findViewById(R.id.ll_edit_service);
         ll_logOut = (LinearLayout) findViewById(R.id.ll_logout);
-        ll_viewBooking = (LinearLayout) findViewById(R.id.ll_booking);
-        ll_diagno = (LinearLayout) findViewById(R.id.ll_diagno);
-        ll_pickUP = (LinearLayout) findViewById(R.id.ll_pickUp);
-        txt_diagnoText = (TextView) findViewById(R.id.txt_diagno_text);
-        txt_pickUpText = (TextView) findViewById(R.id.txt_pickUp_text);
-        txt_headerName = (TextView) findViewById(R.id.txt_header);
-        btn_viewBookings = (Button) findViewById(R.id.btn_view_bookings);
-        ll_Map = (LinearLayout) findViewById(R.id.ll_map);
-        txt_pickUpAddress = (TextView) findViewById(R.id.txt_PickUpAddr);
+        ll_viewBooking=(LinearLayout)findViewById(R.id.ll_booking);
+        ll_diagno=(LinearLayout)findViewById(R.id.ll_diagno);
+        ll_pickUP=(LinearLayout)findViewById(R.id.ll_pickUp);
+        txt_diagnoText=(TextView)findViewById(R.id.txt_diagno_text);
+        txt_pickUpText=(TextView)findViewById(R.id.txt_pickUp_text);
+        txt_headerName=(TextView)findViewById(R.id.txt_header);
+        btn_viewBookings=(Button)findViewById(R.id.btn_view_bookings);
+        ll_Map=(LinearLayout)findViewById(R.id.ll_map);
         Typeface typeFace1 = Typeface.createFromAsset(getAssets(), "fonts/Oswald-Bold.otf");
         txt_headerName.setTypeface(typeFace1);
         txt_view_car_det.setTypeface(typeFace1);
@@ -146,41 +147,6 @@ public class BookService extends Activity implements LocationListener, View.OnCl
         txt_pickUpText.setTypeface(typeFace1);
         btn_viewBookings.setTypeface(typeFace1);
         marker_icon_view.setOnClickListener(this);
-        Log.i("BN", "completeAddresss->" + gD.prefs.getString("pickUp_address", null));
-        Log.i("BN_BS", "str_serviceType-->" + gD.prefs.getString("str_serviceType", null));
-
-        if (gD.prefs.getString("pickUp_address", null) != null) {
-            Log.i("BNCom_onC", "completeAddresss->" + completeAddresss);
-            Log.i("BNCom_onC", "pickUp_addressLat->" + gD.prefs.getString("pickUp_addressLat", null));
-            Log.i("BNCom_onC", "pickUp_addressLong->" + gD.prefs.getString("pickUp_addressLong", null));
-        }
-
-      /*  if (str_EditButtonClicked != null) {
-            if( gD.prefs.getString("str_serviceType", null).equalsIgnoreCase("pickup")){
-                txt_pickUpText.setTextColor(Color.parseColor("#0987ff"));
-                txt_diagnoText.setTextColor(Color.parseColor("#000000"));
-            }
-            else if( gD.prefs.getString("str_serviceType", null).equalsIgnoreCase("diagnostics")){
-                txt_diagnoText.setTextColor(Color.parseColor("#0987ff"));
-                txt_pickUpText.setTextColor(Color.parseColor("#000000"));
-            }
-
-            btn_bookService.setVisibility(View.GONE);
-            btn_viewBookings.setText("next");
-          *//*  completeAddresss = gD.prefs.getString("pickUp_address", null);
-            txt_pickUpAddress.setVisibility(View.VISIBLE);
-            if (gD.prefs.getString("pickUp_address", null) != null) {
-                txt_pickUpAddress.setText("Your Address : " + completeAddresss);
-            }*//*
-            Log.e("YK", "not null");
-        } else {
-            btn_bookService.setVisibility(View.VISIBLE);
-            btn_viewBookings.setText("view bookings");
-            Log.e("YK", "null");
-            *//*txt_pickUpAddress.setVisibility(View.GONE);
-            txt_pickUpAddress.setText("");*//*
-        }*/
-
         myLinearLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -200,16 +166,96 @@ public class BookService extends Activity implements LocationListener, View.OnCl
             }
         });
 
+        btn_bookService.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(str_ServiceType==null){
+                    Log.e("BN","str_ServiceType is null");
+                    Toast.makeText(BookServiceEdit.this, "Select your service type", Toast.LENGTH_SHORT).show();
+                }
+                else if(completeAddresss==null){
+                    Log.e("BN","str_ServiceType is null");
+                    Toast.makeText(BookServiceEdit.this, "Enter your address", Toast.LENGTH_SHORT).show();
+                }
+                else
+                {
+                    Log.e("BN","str_ServiceType->"+str_ServiceType);
+                        View itemView1;
+                        final AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                        builder.setCancelable(true);
+                        itemView1 = LayoutInflater.from(context)
+                                .inflate(R.layout.logout_popup, null);
+                        final AlertDialog altDialog = builder.create();
+                        altDialog.setView(itemView1);
+                        TextView txt_content=(TextView)itemView1.findViewById(R.id.txt_content);
+                        Button btn_yes = (Button) itemView1.findViewById(R.id.btn_yes);
+                        Button btn_no = (Button) itemView1.findViewById(R.id.btn_no);
+                        txt_content.setText("Your Address : "+completeAddresss);
+                        btn_yes.setText("Confirm");
+                        btn_no.setText("Change");
+                        btn_yes.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                SharedPreferences.Editor prefEdit = gD.prefs.edit();
+                                prefEdit.putString("ss_name", null);
+                                prefEdit.putString("ss_id", null);
+                                prefEdit.putString("ss_image", null);
+                                prefEdit.putString("ss_addr", null);
+                                prefEdit.putString("ss_diagno_charge", null);
+                                prefEdit.putString("ss_pickup_charge", null);
+                                prefEdit.putString("ss_modular_reprogramming_charge", null);
+                                prefEdit.putString("edit_ss_id", null);
+                                prefEdit.putString("edit_ss_book_id", null);
+                                prefEdit.putString("edit_ss_serviceArray", null);
+                                prefEdit.putString("edit_ss_image", null);
+                                prefEdit.putString("edit_ss_name", null);
+                                prefEdit.putString("edit_ss_addr", null);
+                                prefEdit.putString("edit_ss_date", null);
+                                SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(context);
+                                SharedPreferences.Editor editor = sharedPrefs.edit();
+                                Gson gson = new Gson();
+                                String json = gson.toJson(null);
+                                String json_id = gson.toJson(null);
+                                editor.putString("key", json);
+                                editor.putString("key_id", json_id);
+                                editor.commit();
+                                prefEdit.commit();
+                                startActivity(new Intent(BookServiceEdit.this, ServiceStation.class));
+                                altDialog.dismiss();
+                            }
+                        });
+                        btn_no.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                SharedPreferences.Editor prefEdit1 = gD.prefs.edit();
+                                prefEdit1.putString("pickUp_address", null);
+                                prefEdit1.commit();
+                                altDialog.dismiss();
+                            }
+                        });
+                        altDialog.show();
 
 
+
+
+
+                }
+
+            }
+        });
+        btn_viewBookings.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(BookServiceEdit.this,ViewBookingList.class));
+            }
+        });
         ll_diagno.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                str_ServiceType = "diagnostics";
                 txt_diagnoText.setTextColor(Color.parseColor("#0987ff"));
                 txt_pickUpText.setTextColor(Color.parseColor("#000000"));
-                ll_Map.setVisibility(View.VISIBLE);
-
+                ll_Map.setVisibility(View.GONE);
+                startActivity(new Intent(BookServiceEdit.this,BookServiceDiagno.class));
                /* txt_diagnoText.setTextColor(Color.parseColor("#0987ff"));
                 txt_pickUpText.setTextColor(Color.parseColor("#000000"));
                 str_ServiceType="diagnostics";
@@ -225,9 +271,11 @@ public class BookService extends Activity implements LocationListener, View.OnCl
                 ll_Map.setVisibility(View.VISIBLE);
                 txt_pickUpText.setTextColor(Color.parseColor("#0987ff"));
                 txt_diagnoText.setTextColor(Color.parseColor("#000000"));
-                //  btn_bookService.setVisibility(View.VISIBLE);
-                str_ServiceType = "pickup";
-
+              //  btn_bookService.setVisibility(View.VISIBLE);
+                str_ServiceType="pickup";
+                SharedPreferences.Editor prefEdit = gD.prefs.edit();
+                prefEdit.putString("str_serviceType",str_ServiceType);
+                prefEdit.commit();
             }
         });
         txt_view_car_det.setOnClickListener(new View.OnClickListener() {
@@ -244,40 +292,38 @@ public class BookService extends Activity implements LocationListener, View.OnCl
                 TextView txt_carModel = (TextView) itemView1.findViewById(R.id.txt_car_model);
                 TextView txt_carNum = (TextView) itemView1.findViewById(R.id.txt_car_num);
                 TextView txt_carType = (TextView) itemView1.findViewById(R.id.txt_car_type);
-                if (gD.prefs.getString("name", null) != null) {
-                    txt_name.setText(gD.prefs.getString("name", null));
-                    txt_carModel.setText(gD.prefs.getString("car_model", null));
-                    txt_carNum.setText(gD.prefs.getString("car_number", null));
-                    txt_carType.setText(gD.prefs.getString("car_type", null));
+                if(gD.prefs.getString("name",null)!=null){
+                    txt_name.setText(gD.prefs.getString("name",null));
+                    txt_carModel.setText(gD.prefs.getString("car_model",null));
+                    txt_carNum.setText(gD.prefs.getString("car_number",null));
+                    txt_carType.setText(gD.prefs.getString("car_type",null));
                 }
 
                 altDialog.show();
             }
         });
-
-
         ll_updateProfile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(BookService.this, EditProfile.class));
+                startActivity(new Intent(BookServiceEdit.this, EditProfile.class));
             }
         });
         ll_cancelService.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(BookService.this, CancelBookingList.class));
+                startActivity(new Intent(BookServiceEdit.this, CancelBookingList.class));
             }
         });
         ll_editBooking.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(BookService.this, EditBookingList.class));
+                startActivity(new Intent(BookServiceEdit.this, EditBookingList.class));
             }
         });
         ll_viewBooking.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(BookService.this, ViewBookingList.class));
+                startActivity(new Intent(BookServiceEdit.this, ViewBookingList.class));
             }
         });
         ll_logOut.setOnClickListener(new View.OnClickListener() {
@@ -285,41 +331,43 @@ public class BookService extends Activity implements LocationListener, View.OnCl
             public void onClick(View v) {
 
 
-                View itemView1;
-                final AlertDialog.Builder builder = new AlertDialog.Builder(context);
-                builder.setCancelable(true);
-                itemView1 = LayoutInflater.from(context)
-                        .inflate(R.layout.logout_popup, null);
-                final AlertDialog altDialog = builder.create();
-                altDialog.setView(itemView1);
-                Button btn_yes = (Button) itemView1.findViewById(R.id.btn_yes);
-                Button btn_no = (Button) itemView1.findViewById(R.id.btn_no);
-                btn_yes.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
-                        NetworkInfo netInfo = connectivityManager.getActiveNetworkInfo();
-                        boolean isConnected = netInfo != null && netInfo.isConnectedOrConnecting();
+                    View itemView1;
+                    final AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                    builder.setCancelable(true);
+                    itemView1 = LayoutInflater.from(context)
+                            .inflate(R.layout.logout_popup, null);
+                    final AlertDialog altDialog = builder.create();
+                    altDialog.setView(itemView1);
+                    Button btn_yes = (Button) itemView1.findViewById(R.id.btn_yes);
+                    Button btn_no = (Button) itemView1.findViewById(R.id.btn_no);
+                    btn_yes.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+                            NetworkInfo netInfo = connectivityManager.getActiveNetworkInfo();
+                            boolean isConnected = netInfo != null && netInfo.isConnectedOrConnecting();
 
-                        if (isConnected) {
-                            SharedPreferences.Editor prefEdit = gD.prefs.edit();
-                            prefEdit.putString("car_number", null);
-                            prefEdit.putString("password", null);
-                            prefEdit.commit();
-                            startActivity(new Intent(BookService.this, SignIn.class));
-                            finish();
-                        } else {
-                            Toast.makeText(BookService.this, "No internet connection", Toast.LENGTH_SHORT).show();
+                            if (isConnected) {
+                                SharedPreferences.Editor prefEdit = gD.prefs.edit();
+                                prefEdit.putString("car_number", null);
+                                prefEdit.putString("password", null);
+                                prefEdit.commit();
+                                startActivity(new Intent(BookServiceEdit.this, SignIn.class));
+                                finish();
+                            }
+                            else{
+                                Toast.makeText(BookServiceEdit.this, "No internet connection", Toast.LENGTH_SHORT).show();
+                            }
                         }
-                    }
-                });
-                btn_no.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        altDialog.dismiss();
-                    }
-                });
-                altDialog.show();
+                    });
+                    btn_no.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            altDialog.dismiss();
+                        }
+                    });
+                    altDialog.show();
+
 
 
             }
@@ -327,7 +375,7 @@ public class BookService extends Activity implements LocationListener, View.OnCl
 
 
         //map coding
-        final SharedPreferences.Editor prefEdit = gD.prefs.edit();
+
 
         locationManager = (LocationManager) getApplicationContext().getSystemService(LOCATION_SERVICE);
         isGPSEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
@@ -410,141 +458,9 @@ public class BookService extends Activity implements LocationListener, View.OnCl
                 .addOnConnectionFailedListener(this)
                 .build();
 
-        btn_bookService.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
 
-                Log.i("BNCom_onBu", "completeAddresss->" + completeAddresss);
-                Log.i("BNCom_onBu", "str_ServiceType->" + str_ServiceType);
-
-                if (str_ServiceType == null) {
-                    Log.e("BN", "str_ServiceType is null");
-                    Toast.makeText(BookService.this, "Select your service type", Toast.LENGTH_SHORT).show();
-                } else if (completeAddresss == null) {
-                    Log.e("BN", "completeAddresss is null");
-                    Toast.makeText(BookService.this, "Enter your address", Toast.LENGTH_SHORT).show();
-                } else {
-                    Log.e("BN", "completeAddresss->" + completeAddresss);
-                    prefEdit.putString("pickUp_address", completeAddresss);
-                    prefEdit.putString("str_serviceType", str_ServiceType);
-
-                    if (str_ServiceType.equalsIgnoreCase("pickup")) {
-                       /* if (str_EditButtonClicked != null) {
-                            Log.e("YK", "not null");
-                            Log.e("BN", "str_ServiceType->" + str_ServiceType);
-
-                            startActivity(new Intent(BookService.this, ServiceStation.class));
-                        } else {*/
-                            startActivity(new Intent(BookService.this, ServiceStation.class));
-                            prefEdit.putString("ss_name", null);
-                            prefEdit.putString("ss_id", null);
-                            prefEdit.putString("ss_image", null);
-                            prefEdit.putString("ss_addr", null);
-                            prefEdit.putString("ss_diagno_charge", null);
-                            prefEdit.putString("ss_pickup_charge", null);
-                            prefEdit.putString("ss_modular_reprogramming_charge", null);
-                            prefEdit.putString("edit_ss_id", null);
-                            prefEdit.putString("edit_ss_book_id", null);
-                            prefEdit.putString("edit_ss_serviceArray", null);
-                            prefEdit.putString("edit_ss_image", null);
-                            prefEdit.putString("edit_ss_name", null);
-                            prefEdit.putString("edit_ss_addr", null);
-                            prefEdit.putString("edit_ss_date", null);
-                            SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(context);
-                            SharedPreferences.Editor editor = sharedPrefs.edit();
-                            Gson gson = new Gson();
-                            String json = gson.toJson(null);
-                            String json_id = gson.toJson(null);
-                            editor.putString("key", json);
-                            editor.putString("key_id", json_id);
-                            editor.commit();
-                        //}
-                    } else if (str_ServiceType.equalsIgnoreCase("diagnostics")) {
-                       /* if (str_EditButtonClicked != null) {
-                            Intent i = new Intent(BookService.this, BookServiceDiagno.class);
-                            i.putExtra("str_fromEdit", "edit");
-                            startActivity(i);
-
-
-                        } else {*/
-                            startActivity(new Intent(BookService.this, BookServiceDiagno.class));
-                        //}
-
-                    }
-
-                }
-                prefEdit.commit();
-            }
-        });
-
-
-
-        btn_viewBookings.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                startActivity(new Intent(BookService.this, ViewBookingList.class));
-
-                /*  if(btn_viewBookings.getText().toString().trim().equalsIgnoreCase("next")){
-                //  startActivity(new Intent(BookService.this, ServiceStation.class));
-                    Log.e("BN", "completeAddresss->" + completeAddresss);
-                    Log.e("BN", "str_ServiceType->" + str_ServiceType);
-                    prefEdit.putString("pickUp_address", completeAddresss);
-                    prefEdit.putString("str_serviceType", str_ServiceType);
-                    if (str_ServiceType.equalsIgnoreCase("pickup")) {
-                        if (str_EditButtonClicked != null) {
-                            Log.e("YK", "not null");
-                            Log.e("BN", "str_ServiceType->" + str_ServiceType);
-
-                            startActivity(new Intent(BookService.this, ServiceStation.class));
-                        } else {
-                            startActivity(new Intent(BookService.this, ServiceStation.class));
-                            prefEdit.putString("ss_name", null);
-                            prefEdit.putString("ss_id", null);
-                            prefEdit.putString("ss_image", null);
-                            prefEdit.putString("ss_addr", null);
-                            prefEdit.putString("ss_diagno_charge", null);
-                            prefEdit.putString("ss_pickup_charge", null);
-                            prefEdit.putString("ss_modular_reprogramming_charge", null);
-                            prefEdit.putString("edit_ss_id", null);
-                            prefEdit.putString("edit_ss_book_id", null);
-                            prefEdit.putString("edit_ss_serviceArray", null);
-                            prefEdit.putString("edit_ss_image", null);
-                            prefEdit.putString("edit_ss_name", null);
-                            prefEdit.putString("edit_ss_addr", null);
-                            prefEdit.putString("edit_ss_date", null);
-                            SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(context);
-                            SharedPreferences.Editor editor = sharedPrefs.edit();
-                            Gson gson = new Gson();
-                            String json = gson.toJson(null);
-                            String json_id = gson.toJson(null);
-                            editor.putString("key", json);
-                            editor.putString("key_id", json_id);
-                            editor.commit();
-                        }
-                    } else if (str_ServiceType.equalsIgnoreCase("diagnostics")) {
-                        if (str_EditButtonClicked != null) {
-                            Intent i = new Intent(BookService.this, BookServiceDiagno.class);
-                            i.putExtra("str_fromEdit", "edit");
-                            startActivity(i);
-
-
-                        } else {
-                            startActivity(new Intent(BookService.this, BookServiceDiagno.class));
-                        }
-
-                    }
-
-                }
-                else if(btn_viewBookings.getText().toString().trim().equalsIgnoreCase("view bookings")){
-                    startActivity(new Intent(BookService.this, ViewBookingList.class));
-                }
-*/
-            }
-        });
 
     }
-
     //persmission method.
     public static void verifyStoragePermissions(Activity activity) {
 // Check if we have read or write permission
@@ -584,9 +500,8 @@ public class BookService extends Activity implements LocationListener, View.OnCl
         }
         return false;
     }
-
     public void onPause() {
-        Log.i("PP", "Hello");
+        Log.i("PP","Hello");
 
         super.onPause();
         if (mGoogleApiClient != null) {
@@ -644,7 +559,7 @@ public class BookService extends Activity implements LocationListener, View.OnCl
                     @Override
                     public boolean onMarkerClick(Marker marker) {
 
-                        Toast.makeText(BookService.this, completeAddresss, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(BookServiceEdit.this,completeAddresss, Toast.LENGTH_SHORT).show();
 
                         CameraPosition cameraPosition = new CameraPosition.Builder()
                                 .target(TutorialsPoint)      // Sets the center of the map to Mountain View
@@ -655,14 +570,14 @@ public class BookService extends Activity implements LocationListener, View.OnCl
                         gD.googleMapGeneral.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
 
 
-                        if (markerCurre.getTitle().toString().length() > 0) {
+                       if (markerCurre.getTitle().toString().length() > 0) {
 
                             markerCurre.showInfoWindow();
                         }
 
                         return true;
 
-                        //return false;
+                         //return false;
 
                     }
                 });
@@ -742,22 +657,13 @@ public class BookService extends Activity implements LocationListener, View.OnCl
                 Log.i("KALAI" + position.target.latitude, "" + position.target.longitude);
                 //  mLocationMarkerText.setText("Lat : " + position.target.latitude + "," + "Long : " + position.target.longitude);
 
-              /*  if(gD.prefs.getString("pickUp_address",null)!=null){
-                    Log.i("BNCom_onC", "completeAddresss->" + completeAddresss);
-                    Log.i("BNCom_onC", "pickUp_addressLat->" + gD.prefs.getString("pickUp_addressLat",null));
-                    Log.i("BNCom_onC", "pickUp_addressLong->" + gD.prefs.getString("pickUp_addressLong",null));
-                    updateLocationNew(Double.parseDouble(gD.prefs.getString("pickUp_addressLat",null)),Double.parseDouble(gD.prefs.getString("pickUp_addressLat",null)));
-                }
-                else{
-                    updateLocation(position.target);
-                }*/
 
-                updateLocation(position.target);
+               updateLocation(position.target);
+
 
             }
         });
     }
-
     @Override
     protected void onStart() {
         super.onStart();
@@ -772,10 +678,11 @@ public class BookService extends Activity implements LocationListener, View.OnCl
         }
     }
 
+
     private void updateLocation(LatLng centerLatLng) {
         try {
             if (centerLatLng != null) {
-                Geocoder geocoder = new Geocoder(BookService.this,
+                Geocoder geocoder = new Geocoder(BookServiceEdit.this,
                         Locale.getDefault());
                 Log.i("TT", "latitude & longitude" + centerLatLng);
                 Log.i("TT", "latitude ***" + centerLatLng.latitude);
@@ -810,8 +717,6 @@ public class BookService extends Activity implements LocationListener, View.OnCl
 
                         String completeAddress = addressIndex0 + "," + addressIndex1;
                         completeAddresss = addressIndex0 + "," + addressIndex1;
-                       /* txt_pickUpAddress.setText(completeAddresss);
-                        txt_pickUpAddress.setVisibility(View.VISIBLE);*/
 
                         if (addressIndex2 != null) {
                             completeAddress += "," + addressIndex2;
@@ -847,12 +752,15 @@ public class BookService extends Activity implements LocationListener, View.OnCl
 
                             Log.i("TT", "latitude ***" + centerLatLng.latitude);
                             Log.i("TT", " longitude ****" + centerLatLng.longitude);
-                            BookService.sharedpreferences = getSharedPreferences("myprefer", Context.MODE_PRIVATE);
+                            BookServiceEdit.sharedpreferences = getSharedPreferences("myprefer", Context.MODE_PRIVATE);
 
-                            SharedPreferences.Editor editor = BookService.sharedpreferences.edit();
+                            SharedPreferences.Editor editor = BookServiceEdit.sharedpreferences.edit();
                             editor.putString("Lat", String.valueOf(centerLatLng.latitude));
                             editor.putString("Long", String.valueOf(centerLatLng.longitude));
                             editor.commit();
+
+
+
 
 
                             //  GetProviders get_providers = new GetProviders(String.valueOf(centerLatLng.latitude), String.valueOf(centerLatLng.longitude), "", "");

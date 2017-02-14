@@ -34,11 +34,9 @@ public class GeneralData {
 
     public GeneralData(Context con) {
         context = con;
-        prefs = con.getSharedPreferences("Registerprefs", Context.MODE_PRIVATE);
+        prefs = context.getSharedPreferences("Registerprefs", Context.MODE_PRIVATE);
 
     }
-
-
     public void showAlertDialog(final Context context, String strTitle, String strContent) {
         View itemView1;
         final AlertDialog.Builder builder = new AlertDialog.Builder(context);

@@ -108,7 +108,6 @@
         android:textColor="@color/white" />
 </LinearLayout>
 
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -180,11 +179,21 @@
             </LinearLayout>
 
         </LinearLayout>
-
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="Book a service"
+            android:id="@+id/txt_PickUpAddr"
+            android:textAllCaps="true"
+            android:visibility="gone"
+            android:layout_margin="10dp"
+            android:textColor="@color/black"
+            android:textSize="12dp" />
       <LinearLayout
             android:layout_width="match_parent"
           android:id="@+id/ll_map"
-          android:visibility="gone"
+          android:visibility="visible"
             android:layout_height="match_parent"
             android:background="@color/edit_fill_grey">
           <RelativeLayout

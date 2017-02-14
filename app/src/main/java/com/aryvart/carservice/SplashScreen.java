@@ -3,6 +3,7 @@ package com.aryvart.carservice;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
@@ -18,6 +19,9 @@ public class SplashScreen extends Activity {
         setContentView(R.layout.splash_screen);
         context = this;
         gD = new GeneralData(context);
+   /*     SharedPreferences.Editor prefEdit = gD.prefs.edit();
+        prefEdit.putString("pickUp_address", null);
+        prefEdit.commit();*/
         Thread timethread = new Thread() {
 
             public void run() {
