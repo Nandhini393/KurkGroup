@@ -194,10 +194,18 @@ public class BookServiceDiagno extends Activity {
                 TextView txt_carModel = (TextView) itemView1.findViewById(R.id.txt_car_model);
                 TextView txt_carNum = (TextView) itemView1.findViewById(R.id.txt_car_num);
                 TextView txt_carType = (TextView) itemView1.findViewById(R.id.txt_car_type);
-                txt_name.setText(gD.prefs.getString("name", null));
-                txt_carModel.setText(gD.prefs.getString("car_model", null));
-                txt_carNum.setText(gD.prefs.getString("car_number", null));
-                txt_carType.setText(gD.prefs.getString("car_type", null));
+                if (gD.prefs.getString("name", null) != null&&gD.prefs.getString("car_model", null)!=null&&gD.prefs.getString("car_number", null)!=null&&gD.prefs.getString("car_type", null)!=null) {
+
+                   Log.i("PP","name" +gD.prefs.getString("name", null));
+                    Log.i("PP","car_model" +gD.prefs.getString("car_model", null));
+                    Log.i("PP","car_type" +gD.prefs.getString("car_type", null));
+                    Log.i("PP","car_number" +gD.prefs.getString("car_number", null));
+
+                    txt_name.setText(gD.prefs.getString("name", null));
+                    txt_carModel.setText(gD.prefs.getString("car_model", null));
+                    txt_carNum.setText(gD.prefs.getString("car_number", null));
+                    txt_carType.setText(gD.prefs.getString("car_type", null));
+                }
                 altDialog.show();
             }
         });

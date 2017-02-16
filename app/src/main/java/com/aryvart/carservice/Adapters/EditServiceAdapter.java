@@ -2,6 +2,7 @@ package com.aryvart.carservice.Adapters;
 
 import android.content.Context;
 import android.graphics.Typeface;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -81,9 +82,34 @@ ImageLoader img_carImage;
         holder.txt_edit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-               myInterface.getEditService(serviceBean.getStr_serviceId(),serviceBean.getStr_serviceName(),serviceBean.getStr_serviceAddr(),serviceBean.getStr_date(),
-                       serviceBean.getN_image(),serviceBean.getStr_serviceBookingId(),serviceBean.getStr_Response(),
-                       serviceBean.getStr_ServiceType(),serviceBean.getPickup_charge(),serviceBean.getStr_diagnosis_charge(),serviceBean.getModular_reprogramming_charge());
+
+                if(serviceBean.getStr_enableCancelBooking().equalsIgnoreCase("0"))
+                {
+                    myInterface.getEditService(serviceBean.getStr_serviceId(),serviceBean.getStr_serviceName(),serviceBean.getStr_serviceAddr(),serviceBean.getStr_date(),
+                            serviceBean.getN_image(),serviceBean.getStr_serviceBookingId(),serviceBean.getStr_Response(),
+                            serviceBean.getStr_ServiceType(),serviceBean.getPickup_charge(),serviceBean.getStr_diagnosis_charge(),serviceBean.getModular_reprogramming_charge(),serviceBean.getStr_pickUpAddress(),serviceBean.getStr_enableCancelBooking());
+
+                }
+                else if(serviceBean.getStr_enableCancelBooking().equalsIgnoreCase("1")){
+                    View itemView1;
+                    final AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                    builder.setCancelable(true);
+                    itemView1 = LayoutInflater.from(context)
+                            .inflate(R.layout.forget_pass_popup, null);
+                    final AlertDialog altDialog = builder.create();
+                    altDialog.setView(itemView1);
+                    Button btn_ok = (Button) itemView1.findViewById(R.id.btn_ok);
+                    TextView txt_content = (TextView) itemView1.findViewById(R.id.txt_content);
+                    txt_content.setText("You can't edit this service now");
+                    btn_ok.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            altDialog.dismiss();
+                        }
+                    });
+                    altDialog.show();
+                }
+
             }
         });
 

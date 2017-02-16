@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 
 import com.aryvart.carservice.GenericClasses.GeneralData;
 
@@ -27,6 +28,12 @@ public class SplashScreen extends Activity {
             public void run() {
                 try {
                     sleep(3000);
+
+
+                    Log.i("PP--","name" +gD.prefs.getString("name", null));
+                    Log.i("PP--","car_model" +gD.prefs.getString("car_model", null));
+                    Log.i("PP--","car_type" +gD.prefs.getString("car_type", null));
+                    Log.i("PP--","car_number" +gD.prefs.getString("car_number", null));
                     if(gD.prefs.getString("car_number",null)!=null&&gD.prefs.getString("password",null)!=null)
                     {
                         Intent nextpage = new Intent(SplashScreen.this, BookService.class);

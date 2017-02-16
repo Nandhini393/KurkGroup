@@ -23,6 +23,24 @@ public class CommonBean implements Comparable<CommonBean> {
     String str_BookStatus;
     String str_date;
     String str_ServiceType;
+    String str_pickUpAddress;
+    String str_enableCancelBooking;
+
+    public String getStr_enableCancelBooking() {
+        return str_enableCancelBooking;
+    }
+
+    public void setStr_enableCancelBooking(String str_enableCancelBooking) {
+        this.str_enableCancelBooking = str_enableCancelBooking;
+    }
+
+    public String getStr_pickUpAddress() {
+        return str_pickUpAddress;
+    }
+
+    public void setStr_pickUpAddress(String str_pickUpAddress) {
+        this.str_pickUpAddress = str_pickUpAddress;
+    }
 
     public String getStr_ServiceType() {
         return str_ServiceType;

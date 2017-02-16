@@ -110,6 +110,11 @@ public class CancelBookingList extends Activity implements EditBookInterface {
                                         drawerBean.setPickup_charge(providersServiceJSONobject.getString("pickup_charge"));
                                         drawerBean.setModular_reprogramming_charge(providersServiceJSONobject.getString("modular_reprogramming_charge"));
 
+                                        drawerBean.setStr_pickUpAddress(providersServiceJSONobject.getString("pickup_address"));
+                                        drawerBean.setStr_enableCancelBooking(providersServiceJSONobject.getString("enable"));
+
+
+
                                         beanArrayList.add(drawerBean);
 
                                     }
@@ -189,7 +194,8 @@ public class CancelBookingList extends Activity implements EditBookInterface {
 
     @Override
     public void getEditService(String str_stationId, String str_name, String str_address,
-                               String str_date, String str_image, String str_bookingId, String str_serviceArray,String str_ServiceType,String str_pickUpAmt,String str_diagnoAmt,String str_modularAmt) {
+                               String str_date, String str_image, String str_bookingId, String str_serviceArray,
+                               String str_ServiceType,String str_pickUpAmt,String str_diagnoAmt,String str_modularAmt,String str_pickUpAdress,String str_enableCancelBook) {
 
         Log.e("NN_edit", "str_stationId->" + str_stationId);
         Log.e("NN_edit", "str_bookingId->" + str_bookingId);
@@ -202,6 +208,8 @@ public class CancelBookingList extends Activity implements EditBookInterface {
         i.putExtra("edit_ss_pickUpAmt", str_pickUpAmt);
         i.putExtra("edit_ss_diagnoAmt", str_diagnoAmt);
         i.putExtra("edit_ss_modularAmt", str_modularAmt);
+        i.putExtra("edit_ss_pickUpAddress", str_pickUpAdress);
+        i.putExtra("edit_ss_enableCancelBook", str_enableCancelBook);
         startActivity(i);
     }
 

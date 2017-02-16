@@ -122,6 +122,10 @@ public class EditBookingList extends Activity implements EditBookInterface {
                                         drawerBean.setPickup_charge(providersServiceJSONobject.getString("pickup_charge"));
                                         drawerBean.setModular_reprogramming_charge(providersServiceJSONobject.getString("modular_reprogramming_charge"));
 
+                                        drawerBean.setStr_pickUpAddress(providersServiceJSONobject.getString("pickup_address"));
+                                        drawerBean.setStr_enableCancelBooking(providersServiceJSONobject.getString("enable"));
+
+
                                         String image = GeneralData.LOCAL_IP_IMAGE + providersServiceJSONobject.getString("image");
                                         drawerBean.setN_image(image);
                                         beanArrayList.add(drawerBean);
@@ -204,7 +208,8 @@ public class EditBookingList extends Activity implements EditBookInterface {
 
     @Override
     public void getEditService(String str_stationId,String str_name,String str_address,String str_date,String str_image, String str_bookingId, String str_serviceArray
-                               ,String str_ServiceType,String str_pickUpAmt,String str_diagnoAmt,String str_modularAmt) {
+                               ,String str_ServiceType,String str_pickUpAmt,
+                               String str_diagnoAmt,String str_modularAmt,String str_pickUpAddress,String str_enableCancelBook) {
         Log.e("NN_edit", "str_stationId->" + str_stationId);
         Log.e("NN_edit", "str_bookingId->" + str_bookingId);
         Log.e("NN_edit", "str_serviceArray->" + str_serviceArray);
@@ -224,9 +229,14 @@ public class EditBookingList extends Activity implements EditBookInterface {
         prefEdit.putString("edit_ss_diagnoAmt", str_diagnoAmt);
         prefEdit.putString("edit_ss_modularAmt", str_modularAmt);
 
+        prefEdit.putString("edit_ss_pickUpAddress", str_pickUpAddress);
+        prefEdit.putString("edit_ss_enableCancelBook", str_enableCancelBook);
+
         i.putExtra("from_edit","value");
         String [] date =str_date.split(" ");
         String str_dateOnly=date[0];
+        Log.e("NN_edit", "str_ServiceType->" + str_ServiceType);
+        Log.e("NN_edit", "edit_ss_pickUpAddress->" + str_pickUpAddress);
         Log.e("NN_edit", "str_dateOnly->" + str_dateOnly);
         prefEdit.putString("edit_ss_date", str_dateOnly);
         prefEdit.commit();

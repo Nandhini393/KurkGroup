@@ -45,6 +45,7 @@ import com.aryvart.carservice.GenericClasses.GeneralData;
 import com.aryvart.carservice.Interfaces.ChooseServiceInterface;
 import com.aryvart.carservice.Interfaces.ServiceStationInterface;
 import com.aryvart.carservice.R;
+import com.aryvart.carservice.ServiceConfirmation;
 import com.aryvart.carservice.imageCache.ImageLoader;
 import com.google.gson.Gson;
 
@@ -132,7 +133,7 @@ public class ServiceStation_Edit extends Activity implements ServiceStationInter
 
             Log.i("PP", "str_from_edit" + str_from_edit);
         }
-
+        Log.i("BN_edit", "str_serviceType-->" + gD.prefs.getString("edit_ss_serviceType", null));
         if (gD.prefs.getString("edit_ss_serviceArray", null) != null) {
 
             ll_dispStastions.setVisibility(View.VISIBLE);
@@ -220,72 +221,78 @@ public class ServiceStation_Edit extends Activity implements ServiceStationInter
                     } else if (txt_date.getText().toString().trim().length() == 0) {
                         Toast.makeText(ServiceStation_Edit.this, "Select your service date", Toast.LENGTH_SHORT).show();
                     } else {
-                        Intent i = new Intent(ServiceStation_Edit.this, ChooseService_Edit.class);
-                        //  i.putExtra("edit_ss_id",gD.prefs.getString("edit_ss_id", null));
+                        if (gD.prefs.getString("edit_ss_serviceType", null).equalsIgnoreCase("modular")||gD.prefs.getString("edit_ss_serviceType", null).equalsIgnoreCase("modularpickup")) {
+                            startActivity(new Intent(ServiceStation_Edit.this,ServiceConfirmation_Edit.class));
+                            finish();
+                        }
+                        else{
+                            Intent i = new Intent(ServiceStation_Edit.this, ChooseService_Edit.class);
+                            //  i.putExtra("edit_ss_id",gD.prefs.getString("edit_ss_id", null));
 
-                        if (str_from_edit != null) {
-                            if (str_from_edit.equalsIgnoreCase("value")) {
-                                if (gD.prefs.getString("edit_ss_serviceArray", null) != null) {
+                            if (str_from_edit != null) {
+                                if (str_from_edit.equalsIgnoreCase("value")) {
+                                    if (gD.prefs.getString("edit_ss_serviceArray", null) != null) {
 
 
-                                    Log.e("NN_editC", "str_serviceArray->" + gD.prefs.getString("edit_ss_serviceArray", null));
-                                    beanArrayList = new ArrayList<CommonBean>();
-                                    beanIdList = new ArrayList<String>();
+                                        Log.e("NN_editC", "str_serviceArray->" + gD.prefs.getString("edit_ss_serviceArray", null));
+                                        beanArrayList = new ArrayList<CommonBean>();
+                                        beanIdList = new ArrayList<String>();
 
-                                    try {
-                                        JSONObject jsobj = new JSONObject(gD.prefs.getString("edit_ss_serviceArray", null));
+                                        try {
+                                            JSONObject jsobj = new JSONObject(gD.prefs.getString("edit_ss_serviceArray", null));
 
-                                        Log.i("HH", "strResp : " + gD.prefs.getString("edit_ss_serviceArray", null));
-                                        // if (jsobj.getString("code").equalsIgnoreCase("2")) {
-                                        JSONArray services_stations = jsobj.getJSONArray("services");
-                                        str_EditBookingId = jsobj.getString("booking_id");
-                                        if (str_EditServiceId == null) {
-                                            str_EditServiceId = jsobj.getString("station_id");
-                                        }
-                                        if (gD.prefs.getString("edit_ss_serviceArray", null).length() > 0) {
-
-                                            for (int j = 0; j < services_stations.length(); j++) {
-                                                CommonBean drawerBean = new CommonBean();
-                                                drawerBean.setStr_serviceName(services_stations.getJSONObject(j).getString("service_name"));
-                                                drawerBean.setN_serviceId(Integer.parseInt(services_stations.getJSONObject(j).getString("service_id")));
-                                                drawerBean.setF_price(Integer.parseInt(services_stations.getJSONObject(j).getString("service_rate")));
-                                                beanArrayList.add(drawerBean);
-                                                beanIdList.add(services_stations.getJSONObject(j).getString("service_id"));
-
+                                            Log.i("HH", "strResp : " + gD.prefs.getString("edit_ss_serviceArray", null));
+                                            // if (jsobj.getString("code").equalsIgnoreCase("2")) {
+                                            JSONArray services_stations = jsobj.getJSONArray("services");
+                                            str_EditBookingId = jsobj.getString("booking_id");
+                                            if (str_EditServiceId == null) {
+                                                str_EditServiceId = jsobj.getString("station_id");
                                             }
+                                            if (gD.prefs.getString("edit_ss_serviceArray", null).length() > 0) {
+
+                                                for (int j = 0; j < services_stations.length(); j++) {
+                                                    CommonBean drawerBean = new CommonBean();
+                                                    drawerBean.setStr_serviceName(services_stations.getJSONObject(j).getString("service_name"));
+                                                    drawerBean.setN_serviceId(Integer.parseInt(services_stations.getJSONObject(j).getString("service_id")));
+                                                    drawerBean.setF_price(Integer.parseInt(services_stations.getJSONObject(j).getString("service_rate")));
+                                                    beanArrayList.add(drawerBean);
+                                                    beanIdList.add(services_stations.getJSONObject(j).getString("service_id"));
+
+                                                }
+                                            }
+
+                                            Log.i("HH_edit", "lang_list_new : " + beanArrayList.toString());
+                                            Log.i("HH_edit", "alCatId : " + beanIdList);
+
+                                            //Set the values
+                                            SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(context);
+                                            SharedPreferences.Editor editor = sharedPrefs.edit();
+                                            Gson gson = new Gson();
+
+                                            String json = gson.toJson(beanArrayList);
+                                            String json_id = gson.toJson(beanIdList);
+                                            editor.putString("key", json);
+                                            editor.putString("key_id", json_id);
+                                            editor.commit();
+
+
+                                        } catch (Exception e) {
+                                            e.printStackTrace();
                                         }
-
-                                        Log.i("HH_edit", "lang_list_new : " + beanArrayList.toString());
-                                        Log.i("HH_edit", "alCatId : " + beanIdList);
-
-                                        //Set the values
-                                        SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(context);
-                                        SharedPreferences.Editor editor = sharedPrefs.edit();
-                                        Gson gson = new Gson();
-
-                                        String json = gson.toJson(beanArrayList);
-                                        String json_id = gson.toJson(beanIdList);
-                                        editor.putString("key", json);
-                                        editor.putString("key_id", json_id);
-                                        editor.commit();
-
-
-                                    } catch (Exception e) {
-                                        e.printStackTrace();
                                     }
+
+
                                 }
+                            } else {
+                                Log.i("HH_edit", "else--> : ");
 
 
                             }
-                        } else {
-                            Log.i("HH_edit", "else--> : ");
 
+                            startActivity(i);
+                            finish();
 
                         }
-
-
-                        startActivity(i);
-                        finish();
 
                     }
                 } else {

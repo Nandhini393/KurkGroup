@@ -1,12 +1,15 @@
 package com.aryvart.carservice.Adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Typeface;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -14,6 +17,7 @@ import android.widget.TextView;
 import com.aryvart.carservice.Bean.CommonBean;
 import com.aryvart.carservice.Interfaces.EditBookInterface;
 import com.aryvart.carservice.R;
+import com.aryvart.carservice.SignIn;
 import com.aryvart.carservice.imageCache.ImageLoader;
 
 import java.util.List;
@@ -79,15 +83,38 @@ ImageLoader img_carImage;
         holder.txt_cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-               myInterface.getEditService(serviceBean.getStr_serviceId(),"","","","",
-                       serviceBean.getStr_serviceBookingId(),serviceBean.getStr_Response(), serviceBean.getStr_ServiceType(),
-                       serviceBean.getPickup_charge(),serviceBean.getStr_diagnosis_charge(),serviceBean.getModular_reprogramming_charge());
+
+                if(serviceBean.getStr_enableCancelBooking().equalsIgnoreCase("0")){
+                    myInterface.getEditService(serviceBean.getStr_serviceId(),"","","","",
+                            serviceBean.getStr_serviceBookingId(),serviceBean.getStr_Response(), serviceBean.getStr_ServiceType(),
+                            serviceBean.getPickup_charge(),serviceBean.getStr_diagnosis_charge(),serviceBean.getModular_reprogramming_charge(),serviceBean.getStr_pickUpAddress(),serviceBean.getStr_enableCancelBooking());
+
+                }
+                else if(serviceBean.getStr_enableCancelBooking().equalsIgnoreCase("1")){
+                    View itemView1;
+                    final AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                    builder.setCancelable(true);
+                    itemView1 = LayoutInflater.from(context)
+                            .inflate(R.layout.forget_pass_popup, null);
+                    final AlertDialog altDialog = builder.create();
+                    altDialog.setView(itemView1);
+                    Button btn_ok = (Button) itemView1.findViewById(R.id.btn_ok);
+                    TextView txt_content = (TextView) itemView1.findViewById(R.id.txt_content);
+                    txt_content.setText("You can't cancel this service now");
+                    btn_ok.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            altDialog.dismiss();
+                        }
+                    });
+                    altDialog.show();
+                }
+
             }
         });
 
         return rowView;
     }
-
 
     class ViewHolder {
         public ImageView img_profile;

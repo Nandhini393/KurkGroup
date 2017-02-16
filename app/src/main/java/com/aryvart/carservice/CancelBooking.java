@@ -15,6 +15,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.android.volley.DefaultRetryPolicy;
@@ -55,8 +56,9 @@ public class CancelBooking extends Activity implements ChooseServiceInterface {
     String str_EditBookingId, str_EditServiceId, str_EditServiceArrayResp;
     ListView list_serviceDisplay;
     Button btn_cancelBooking;
-    TextView txt_AdditionAmtCharge, txt_AddAmtText,txt_header,txt_carNumText,txt_serviceListText,txt_amtText,txt_pickUpText,txt_overAllAmtText;
-
+    TextView txt_AdditionAmtCharge, txt_AddAmtText,txt_header,txt_carNumText,txt_serviceListText,txt_amtText,txt_pickUpText,txt_overAllAmtText,txt_modularText,txt_modularAmt;
+    Float f_overallAmount;
+    RelativeLayout rl_modularLay;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -86,6 +88,11 @@ public class CancelBooking extends Activity implements ChooseServiceInterface {
         txt_pickUpText=(TextView)findViewById(R.id.pickUpText);
         txt_overAllAmtText=(TextView)findViewById(R.id.txt_overAllText);
 
+        rl_modularLay = (RelativeLayout) findViewById(R.id.rl_modularAmt);
+        txt_modularText = (TextView) findViewById(R.id.txt_modularText);
+        txt_modularAmt = (TextView) findViewById(R.id.txt_modularAmt);
+
+
         Typeface typeFace1 = Typeface.createFromAsset(getAssets(), "fonts/Oswald-Bold.otf");
         txt_header.setTypeface(typeFace1);
         btn_cancelBooking.setTypeface(typeFace1);
@@ -101,6 +108,8 @@ public class CancelBooking extends Activity implements ChooseServiceInterface {
         txt_AddAmtText.setTypeface(typeFace3);
         txt_AdditionAmtCharge.setTypeface(typeFace3);
         txt_overAllAmt.setTypeface(typeFace3);
+        txt_modularAmt.setTypeface(typeFace3);
+        txt_modularText.setTypeface(typeFace3);
 
         // str_EditServiceId = getIntent().getStringExtra("edit_ss_id");
         str_EditServiceArrayResp = getIntent().getStringExtra("edit_ss_serviceArray");
@@ -108,17 +117,8 @@ public class CancelBooking extends Activity implements ChooseServiceInterface {
         Log.e("NN_edit", "edit_ss_serviceType->" + getIntent().getStringExtra("edit_ss_serviceType"));
         Log.e("NN_edit", "edit_ss_diagnoAmt->" + getIntent().getStringExtra("edit_ss_diagnoAmt"));
         Log.e("NN_edit", "edit_ss_pickUpAmt->" + getIntent().getStringExtra("edit_ss_pickUpAmt"));
-
-       if (getIntent().getStringExtra("edit_ss_serviceType").equalsIgnoreCase("diagnostics")) {
-            txt_AddAmtText.setText("");
-            txt_AdditionAmtCharge.setText("");
-        }
-
-         if (getIntent().getStringExtra("edit_ss_serviceType").equalsIgnoreCase("pickup")) {
-            txt_AddAmtText.setText("Pick up service Charge");
-            txt_AdditionAmtCharge.setText("" + Float.parseFloat(getIntent().getStringExtra("edit_ss_pickUpAmt")));
-        }
-
+        Log.e("NN_edit", "edit_ss_pickUpAddress->" + getIntent().getStringExtra("edit_ss_pickUpAddress"));
+        Log.e("NN_edit", "edit_ss_modularAmt->" + getIntent().getStringExtra("edit_ss_modularAmt"));
 
         if (str_EditServiceArrayResp != null) {
             Log.e("NN_edit", "str_serviceArray->" + str_EditServiceArrayResp);
@@ -127,7 +127,7 @@ public class CancelBooking extends Activity implements ChooseServiceInterface {
 
             try {
                 JSONObject jsobj = new JSONObject(str_EditServiceArrayResp);
-                Float f_overallAmount = Float.valueOf(jsobj.getString("rate"));
+                 f_overallAmount = Float.valueOf(jsobj.getString("rate"));
                 str_EditBookingId = jsobj.getString("booking_id");
                 Log.i("HH", "f_overallAmount : " + f_overallAmount);
                 Log.i("HH", "str_EditBookingId : " + str_EditBookingId);
@@ -156,6 +156,46 @@ public class CancelBooking extends Activity implements ChooseServiceInterface {
                 e.printStackTrace();
             }
         }
+
+        if (getIntent().getStringExtra("edit_ss_serviceType").equalsIgnoreCase("diagnostics")) {
+            rl_modularLay.setVisibility(View.GONE);
+            list_serviceDisplay.setVisibility(View.VISIBLE);
+            txt_AddAmtText.setText("Diagnostics service Charge");
+            txt_AdditionAmtCharge.setText("" + Float.parseFloat(getIntent().getStringExtra("edit_ss_diagnoAmt")));
+        }
+
+        else if (getIntent().getStringExtra("edit_ss_serviceType").equalsIgnoreCase("pickup")) {
+            rl_modularLay.setVisibility(View.GONE);
+            list_serviceDisplay.setVisibility(View.VISIBLE);
+            txt_AddAmtText.setText("Pick up service Charge");
+            txt_AdditionAmtCharge.setText("" + Float.parseFloat(getIntent().getStringExtra("edit_ss_pickUpAmt")));
+        }
+        else if (getIntent().getStringExtra("edit_ss_serviceType").equalsIgnoreCase("modular")) {
+             txt_AddAmtText.setText("");
+            txt_AdditionAmtCharge.setText("");
+            rl_modularLay.setVisibility(View.VISIBLE);
+            list_serviceDisplay.setVisibility(View.GONE);
+            txt_modularAmt.setText(""+f_overallAmount);
+
+        }
+        else if (getIntent().getStringExtra("edit_ss_serviceType").equalsIgnoreCase("modularpickup")) {
+            rl_modularLay.setVisibility(View.VISIBLE);
+            list_serviceDisplay.setVisibility(View.GONE);
+            txt_modularAmt.setText(""+f_overallAmount);
+
+             txt_AddAmtText.setText("Pick up service Charge");
+              txt_AdditionAmtCharge.setText("" + Float.parseFloat(getIntent().getStringExtra("edit_ss_pickUpAmt")));
+        }
+        else if (getIntent().getStringExtra("edit_ss_serviceType").equalsIgnoreCase("pickupNA")) {
+            txt_AddAmtText.setText("");
+            txt_AdditionAmtCharge.setText("");
+        }
+        else if (getIntent().getStringExtra("edit_ss_serviceType").equalsIgnoreCase("diagnoNA")) {
+             txt_AddAmtText.setText("");
+            txt_AdditionAmtCharge.setText("");
+        }
+
+
         btn_cancelBooking.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
