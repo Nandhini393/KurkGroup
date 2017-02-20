@@ -71,6 +71,12 @@ public class ViewBookingList extends Activity implements EditBookInterface {
 
     }
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finish();
+    }
+
     public void displayEditServicenCall() {
         gD.showAlertDialog(context, "Loading", "Please wait..");
         StringRequest stringRequest = new StringRequest(Request.Method.POST, GeneralData.LOCAL_IP + "booking_list.php",

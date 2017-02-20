@@ -70,7 +70,11 @@ public class CancelBookingList extends Activity implements EditBookInterface {
         registerReceiver(myReceiver, filter1);
 
     }
-
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finish();
+    }
     public void displayEditServicenCall() {
         gD.showAlertDialog(context, "Loading", "Please wait..");
         StringRequest stringRequest = new StringRequest(Request.Method.POST, GeneralData.LOCAL_IP + "booking_data.php",
@@ -211,6 +215,7 @@ public class CancelBookingList extends Activity implements EditBookInterface {
         i.putExtra("edit_ss_pickUpAddress", str_pickUpAdress);
         i.putExtra("edit_ss_enableCancelBook", str_enableCancelBook);
         startActivity(i);
+        finish();
     }
 
     @Override

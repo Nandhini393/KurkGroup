@@ -194,8 +194,11 @@ public class CancelBooking extends Activity implements ChooseServiceInterface {
              txt_AddAmtText.setText("");
             txt_AdditionAmtCharge.setText("");
         }
+        else if (getIntent().getStringExtra("edit_ss_serviceType").equalsIgnoreCase("diagnosispickup")) {
+            txt_AddAmtText.setText("Pick up service Charge\n\nDiagnostics service Charge\n");
+            txt_AdditionAmtCharge.setText("" + Float.parseFloat(getIntent().getStringExtra("edit_ss_pickUpAmt"))+"\n\n"+Float.parseFloat(getIntent().getStringExtra("edit_ss_diagnoAmt"))+"\n");
 
-
+        }
         btn_cancelBooking.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -211,6 +214,12 @@ public class CancelBooking extends Activity implements ChooseServiceInterface {
                 }
             }
         });
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finish();
     }
 
     @Override

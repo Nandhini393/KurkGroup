@@ -71,10 +71,11 @@ public class ServiceConfirmation_Edit extends Activity implements ChooseServiceI
     Float f_overall_amount, f_pickupCharge, f_diagnoCharge;
     Button btn_confirm, btn_edit, btn_cancel;
     float nRate = 0;
-    String strFrom = "insert",str_ServiceType;
-    TextView txt_yourChoiceText, txt_amtText, txt_header, txt_totalText, txt_pickUpText, txt_overAllText, txt_carNumText,txt_modularText, txt_modularAmt, txt_AddrText, txt_address;
+    String strFrom = "insert", str_ServiceType;
+    TextView txt_yourChoiceText, txt_amtText, txt_header, txt_totalText, txt_pickUpText, txt_diagnoText, txt_overAllText, txt_carNumText, txt_modularText, txt_modularAmt, txt_AddrText, txt_address;
     LinearLayout ll_cbPickLay, ll_cbDiagnoLay, ll_addressLay;
     RelativeLayout rl_modularLay;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -99,6 +100,7 @@ public class ServiceConfirmation_Edit extends Activity implements ChooseServiceI
         txt_header = (TextView) findViewById(R.id.txt_header);
         txt_totalText = (TextView) findViewById(R.id.txt_totalText);
         txt_pickUpText = (TextView) findViewById(R.id.pickUpText);
+        txt_diagnoText = (TextView) findViewById(R.id.diagnoText);
         txt_overAllText = (TextView) findViewById(R.id.txt_overAllText);
         txt_carNumText = (TextView) findViewById(R.id.txt_carNumText);
 
@@ -113,7 +115,6 @@ public class ServiceConfirmation_Edit extends Activity implements ChooseServiceI
         txt_AddrText = (TextView) findViewById(R.id.txt_addressText);
         txt_address = (TextView) findViewById(R.id.txt_address);
         ll_addressLay = (LinearLayout) findViewById(R.id.ll_address);
-
 
 
         Typeface typeFace1 = Typeface.createFromAsset(getAssets(), "fonts/Oswald-Bold.otf");
@@ -140,7 +141,8 @@ public class ServiceConfirmation_Edit extends Activity implements ChooseServiceI
         txt_modularAmt.setTypeface(typeFace3);
         txt_modularText.setTypeface(typeFace3);
         txt_AddrText.setTypeface(typeFace3);
-
+        txt_diagnoText.setTypeface(typeFace3);
+        txt_diagnoCharge.setTypeface(typeFace3);
        /* f_pickupCharge = Float.parseFloat(gD.prefs.getString("ss_pickup_charge", null));
         f_diagnoCharge = Float.parseFloat(gD.prefs.getString("ss_diagno_charge", null));
         if(f_pickupCharge!=null){
@@ -150,11 +152,11 @@ public class ServiceConfirmation_Edit extends Activity implements ChooseServiceI
 
         txt_carRegNum.setText(gD.prefs.getString("car_number", null));
 
-        Log.e("JN_", gD.prefs.getString("edit_ss_serviceType", null));
-        Log.e("JN_", gD.prefs.getString("edit_ss_pickUpAmt", null));
-        Log.e("JN_", gD.prefs.getString("edit_ss_diagnoAmt", null));
-        Log.e("JN_", gD.prefs.getString("edit_ss_modularAmt", null));
-        Log.e("JN_", gD.prefs.getString("edit_ss_pickUpAddress", null));
+        Log.e("JN_", "edit_ss_serviceType-->" + gD.prefs.getString("edit_ss_serviceType", null));
+        Log.e("JN_", "edit_ss_pickUpAmt-->" + gD.prefs.getString("edit_ss_pickUpAmt", null));
+        Log.e("JN_", "edit_ss_diagnoAmt-->" + gD.prefs.getString("edit_ss_diagnoAmt", null));
+        Log.e("JN_", "edit_ss_modularAmt-->" + gD.prefs.getString("edit_ss_modularAmt", null));
+        Log.e("JN_", "edit_ss_pickUpAddress-->" + gD.prefs.getString("edit_ss_pickUpAddress", null));
 
 
         f_pickupCharge = Float.parseFloat(gD.prefs.getString("edit_ss_pickUpAmt", null));
@@ -223,37 +225,53 @@ public class ServiceConfirmation_Edit extends Activity implements ChooseServiceI
 
         if (gD.prefs.getString("edit_ss_serviceType", null).equalsIgnoreCase("pickup")) {
 
-            str_ServiceType="pickup";
+            txt_pickUpCharge.setVisibility(View.VISIBLE);
+            txt_pickUpText.setVisibility(View.VISIBLE);
+
+            txt_diagnoText.setVisibility(View.GONE);
+            txt_diagnoCharge.setVisibility(View.GONE);
+
+            str_ServiceType = "pickup";
+
             cb_pickUp.setChecked(true);
             rl_modularLay.setVisibility(View.GONE);
             listConfirm.setVisibility(View.VISIBLE);
             ll_cbDiagnoLay.setVisibility(View.GONE);
-            if (gD.prefs.getString("edit_ss_pickUpAddress", null) != null) {
-                ll_addressLay.setVisibility(View.VISIBLE);
-                txt_address.setText(gD.prefs.getString("edit_ss_pickUpAddress", null));
-            }
+
+            ll_addressLay.setVisibility(View.VISIBLE);
+            txt_address.setText(gD.prefs.getString("edit_ss_pickUpAddress", null));
+
             f_overall_amount = nRate + Float.parseFloat(gD.prefs.getString("edit_ss_pickUpAmt", null));
             Log.e("NN", "overall amount->" + String.valueOf(f_overall_amount));
             txt_overallAmount.setText("" + f_overall_amount);
-        }
-        else if (gD.prefs.getString("edit_ss_serviceType", null).equalsIgnoreCase("diagnostics")) {
+        } else if (gD.prefs.getString("edit_ss_serviceType", null).equalsIgnoreCase("diagnostics")) {
+            txt_diagnoText.setVisibility(View.VISIBLE);
+            txt_diagnoCharge.setVisibility(View.VISIBLE);
+
+            txt_pickUpCharge.setVisibility(View.GONE);
+            txt_pickUpText.setVisibility(View.GONE);
+
             rl_modularLay.setVisibility(View.GONE);
             listConfirm.setVisibility(View.VISIBLE);
             ll_addressLay.setVisibility(View.GONE);
             txt_address.setText(gD.prefs.getString("edit_ss_pickUpAddress", null));
 
             //added diagno
-               cb_diagno.setChecked(true);
-            str_ServiceType="diagnostics";
-                f_overall_amount = nRate + Float.parseFloat(gD.prefs.getString("edit_ss_diagnoAmt", null));
-                Log.e("NN", "overall amount->" + String.valueOf(f_overall_amount));
-                txt_overallAmount.setText("" + f_overall_amount);
+            cb_diagno.setChecked(true);
+            str_ServiceType = "diagnostics";
+            f_overall_amount = nRate + Float.parseFloat(gD.prefs.getString("edit_ss_diagnoAmt", null));
+            Log.e("NN", "overall amount->" + String.valueOf(f_overall_amount));
+            txt_overallAmount.setText("" + f_overall_amount);
           /*  f_overall_amount = nRate;
             Log.e("NN", "overall amount->" + String.valueOf(f_overall_amount));
             txt_overallAmount.setText("" + f_overall_amount);*/
 
         } else if (gD.prefs.getString("edit_ss_serviceType", null).equalsIgnoreCase("modular")) {
-            str_ServiceType="modular";
+            str_ServiceType = "modular";
+
+            txt_pickUpCharge.setVisibility(View.GONE);
+            txt_pickUpText.setVisibility(View.GONE);
+
             rl_modularLay.setVisibility(View.VISIBLE);
             listConfirm.setVisibility(View.GONE);
             ll_cbDiagnoLay.setVisibility(View.GONE);
@@ -271,16 +289,19 @@ public class ServiceConfirmation_Edit extends Activity implements ChooseServiceI
             Log.e("NN", "overall amount->" + String.valueOf(f_overall_amount));
             txt_overallAmount.setText("" + f_overall_amount);
         } else if (gD.prefs.getString("edit_ss_serviceType", null).equalsIgnoreCase("modularpickup")) {
-            str_ServiceType="modularpickup";
+            str_ServiceType = "modularpickup";
+
+            txt_pickUpCharge.setVisibility(View.VISIBLE);
+            txt_pickUpText.setVisibility(View.VISIBLE);
+
             rl_modularLay.setVisibility(View.VISIBLE);
             listConfirm.setVisibility(View.GONE);
             ll_cbDiagnoLay.setVisibility(View.GONE);
             cb_pickUp.setChecked(true);
 
-            if (gD.prefs.getString("edit_ss_pickUpAddress", null) != null) {
                 ll_addressLay.setVisibility(View.VISIBLE);
-                txt_address.setText(gD.prefs.getString("edit_ss_pickUpAddress", null));
-            }
+            txt_address.setText(gD.prefs.getString("edit_ss_pickUpAddress", null));
+
            /* if (gD.prefs.getString("pickUp_address", null) != null) {
                 ll_addressLay.setVisibility(View.VISIBLE);
                 txt_address.setText(gD.prefs.getString("pickUp_address", null));
@@ -291,10 +312,12 @@ public class ServiceConfirmation_Edit extends Activity implements ChooseServiceI
             f_overall_amount = nRate + Float.parseFloat(gD.prefs.getString("edit_ss_pickUpAmt", null));
             Log.e("NN", "overall amount->" + String.valueOf(f_overall_amount));
             txt_overallAmount.setText("" + f_overall_amount);
-        }
-        else  if (gD.prefs.getString("edit_ss_serviceType", null).equalsIgnoreCase("pickupNA")) {
+        } else if (gD.prefs.getString("edit_ss_serviceType", null).equalsIgnoreCase("pickupNA")) {
 
-            str_ServiceType="pickupNA";
+            str_ServiceType = "pickupNA";
+            txt_pickUpCharge.setVisibility(View.GONE);
+            txt_pickUpText.setVisibility(View.GONE);
+
             rl_modularLay.setVisibility(View.GONE);
             listConfirm.setVisibility(View.VISIBLE);
             ll_cbDiagnoLay.setVisibility(View.GONE);
@@ -303,10 +326,13 @@ public class ServiceConfirmation_Edit extends Activity implements ChooseServiceI
             f_overall_amount = nRate;
             Log.e("NN", "overall amount->" + String.valueOf(f_overall_amount));
             txt_overallAmount.setText("" + f_overall_amount);
-        }
-        else  if (gD.prefs.getString("edit_ss_serviceType", null).equalsIgnoreCase("diagnoNA")) {
+        } else if (gD.prefs.getString("edit_ss_serviceType", null).equalsIgnoreCase("diagnoNA")) {
 
-            str_ServiceType="diagnoNA";
+            str_ServiceType = "diagnoNA";
+
+            txt_diagnoCharge.setVisibility(View.GONE);
+            txt_diagnoText.setVisibility(View.GONE);
+
             rl_modularLay.setVisibility(View.GONE);
             listConfirm.setVisibility(View.VISIBLE);
             ll_addressLay.setVisibility(View.GONE);
@@ -316,7 +342,23 @@ public class ServiceConfirmation_Edit extends Activity implements ChooseServiceI
             f_overall_amount = nRate;
             Log.e("NN", "overall amount->" + String.valueOf(f_overall_amount));
             txt_overallAmount.setText("" + f_overall_amount);
+        } else if (gD.prefs.getString("edit_ss_serviceType", null).equalsIgnoreCase("diagnosispickup")) {
+
+            ll_addressLay.setVisibility(View.VISIBLE);
+            txt_address.setText(gD.prefs.getString("edit_ss_pickUpAddress", null));
+            str_ServiceType = "diagnosispickup";
+
+            txt_pickUpCharge.setVisibility(View.VISIBLE);
+            txt_pickUpText.setVisibility(View.VISIBLE);
+
+
+            txt_diagnoCharge.setVisibility(View.VISIBLE);
+            txt_diagnoText.setVisibility(View.VISIBLE);
+
+            cb_diagno.setChecked(true);
+            cb_pickUp.setChecked(true);
         }
+
 
         //Checkbox
         cb_pickUp.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -324,50 +366,79 @@ public class ServiceConfirmation_Edit extends Activity implements ChooseServiceI
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (buttonView.isChecked()) {
                     cb_diagno.setChecked(false);
+                    txt_pickUpText.setVisibility(View.VISIBLE);
+                    txt_pickUpCharge.setVisibility(View.VISIBLE);
 
                    /* SharedPreferences.Editor prefEdit = gD.prefs.edit();
                     prefEdit.putString("edit_ss_serviceType", "pickup");
                     prefEdit.commit();*/
+                    f_overall_amount = nRate + Float.parseFloat(gD.prefs.getString("edit_ss_pickUpAmt", null));
+                    Log.e("NN", "overall amount->" + String.valueOf(f_overall_amount));
+                    txt_overallAmount.setText("" + f_overall_amount);
+
                     if (gD.prefs.getString("edit_ss_pickUpAddress", null) != null) {
                         ll_addressLay.setVisibility(View.VISIBLE);
                         txt_address.setText(gD.prefs.getString("edit_ss_pickUpAddress", null));
                     }
-                    cb_diagno.setChecked(false);
+                  //  cb_diagno.setChecked(false);
 
 
                     if (gD.prefs.getString("edit_ss_serviceType", null) != null) {
                         if (gD.prefs.getString("edit_ss_serviceType", null).equalsIgnoreCase("modular")) {
-                            str_ServiceType="modularpickup";
-                        } else {
-                            str_ServiceType="pickup";
+                            str_ServiceType = "modularpickup";
+                        }
+                        else if (gD.prefs.getString("edit_ss_serviceType", null).equalsIgnoreCase("diagnostics")) {
+                            str_ServiceType="diagnosispickup";
+                        }
+                        else {
+                            str_ServiceType = "pickup";
                         }
 
                     }
+                    if (cb_diagno.isChecked()) {
+                        str_ServiceType = "diagnosispickup";
+                        f_overall_amount = nRate + Float.parseFloat(gD.prefs.getString("edit_ss_pickUpAmt", null)) + Float.parseFloat(gD.prefs.getString("edit_ss_diagnoAmt", null));
+                        Log.e("NN", "overall amount->" + String.valueOf(f_overall_amount));
+                        txt_overallAmount.setText("" + f_overall_amount);
+                    }
 
-                    f_overall_amount = nRate + Float.parseFloat(gD.prefs.getString("edit_ss_pickUpAmt", null));
-                    Log.e("NN", "overall amount->" + String.valueOf(f_overall_amount));
-                    txt_overallAmount.setText("" + f_overall_amount);
                 } else {
-
+                    txt_pickUpText.setVisibility(View.GONE);
+                    txt_pickUpCharge.setVisibility(View.GONE);
 
                   /*  SharedPreferences.Editor prefEdit = gD.prefs.edit();
                     prefEdit.putString("edit_ss_serviceType", "diagnostics");
                     prefEdit.commit();
 */
                     ll_addressLay.setVisibility(View.GONE);
+                    txt_address.setText(gD.prefs.getString("edit_ss_pickUpAddress", null));
+
 
                     if (gD.prefs.getString("edit_ss_serviceType", null).equalsIgnoreCase("modular")) {
-                        str_ServiceType="modular";
-                        txt_address.setText(gD.prefs.getString("edit_ss_pickUpAddress", null));
+                        str_ServiceType = "modular";
+                        //txt_address.setText(gD.prefs.getString("edit_ss_pickUpAddress", null));
 
-                    } else {
-                        str_ServiceType="pickupNA";
-                        txt_address.setText(gD.prefs.getString("edit_ss_pickUpAddress", null));
+                    }
+                    else if (gD.prefs.getString("edit_ss_serviceType", null).equalsIgnoreCase("diagnostics")) {
+                        str_ServiceType="diagnosispickup";
+                    }
+
+                    else {
+
+                        str_ServiceType = "pickupNA";
+                        // txt_address.setText(gD.prefs.getString("edit_ss_pickUpAddress", null));
                     }
                     f_overall_amount = nRate;
                     Log.e("NN", "overall amount->" + String.valueOf(f_overall_amount));
                     txt_overallAmount.setText("" + f_overall_amount);
 
+
+                    if (cb_diagno.isChecked()) {
+                        str_ServiceType = "diagnostics";
+                        f_overall_amount = nRate + Float.parseFloat(gD.prefs.getString("edit_ss_diagnoAmt", null));
+                        Log.e("NN", "overall amount->" + String.valueOf(f_overall_amount));
+                        txt_overallAmount.setText("" + f_overall_amount);
+                    }
                       /*  SharedPreferences.Editor prefEdit = gD.prefs.edit();
                         prefEdit.putString("edit_ss_serviceType", "diagnostics");
                         prefEdit.commit();
@@ -382,17 +453,34 @@ public class ServiceConfirmation_Edit extends Activity implements ChooseServiceI
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (buttonView.isChecked()) {
-                    cb_pickUp.setChecked(false);
-                    str_ServiceType="diagnostics";
+                    txt_diagnoText.setVisibility(View.VISIBLE);
+                    txt_diagnoCharge.setVisibility(View.VISIBLE);
+                   // cb_pickUp.setChecked(false);
+                    str_ServiceType = "diagnostics";
                     f_overall_amount = nRate + Float.parseFloat(gD.prefs.getString("edit_ss_diagnoAmt", null));
                     Log.e("NN", "overall amount->" + String.valueOf(f_overall_amount));
                     txt_overallAmount.setText("" + f_overall_amount);
-                }
-                else {
-                    str_ServiceType="diagnoNA";
+
+                    if (cb_pickUp.isChecked()) {
+                        str_ServiceType = "diagnosispickup";
+                        f_overall_amount = nRate + Float.parseFloat(gD.prefs.getString("edit_ss_pickUpAmt", null)) + Float.parseFloat(gD.prefs.getString("edit_ss_diagnoAmt", null));
+                        Log.e("NN", "overall amount->" + String.valueOf(f_overall_amount));
+                        txt_overallAmount.setText("" + f_overall_amount);
+                    }
+                } else {
+                    txt_diagnoText.setVisibility(View.GONE);
+                    txt_diagnoCharge.setVisibility(View.GONE);
+                    str_ServiceType = "diagnoNA";
                     f_overall_amount = nRate;
                     Log.e("NN", "overall amount->" + String.valueOf(f_overall_amount));
                     txt_overallAmount.setText("" + f_overall_amount);
+
+                    if (cb_pickUp.isChecked()) {
+                        str_ServiceType = "pickup";
+                        f_overall_amount = nRate + Float.parseFloat(gD.prefs.getString("edit_ss_pickUpAmt", null));
+                        Log.e("NN", "overall amount->" + String.valueOf(f_overall_amount));
+                        txt_overallAmount.setText("" + f_overall_amount);
+                    }
                 }
             }
         });
@@ -414,15 +502,15 @@ public class ServiceConfirmation_Edit extends Activity implements ChooseServiceI
 
                */
 
-                Log.e("NN", "reg_id-->" + gD.prefs.getString("reg_id", null) + "\t" + "services->" + str_category_id + "\t" + "overall amount-->" + nRate + "\t" + "bookingid-->" + gD.prefs.getString("edit_ss_book_id", null) +
+                Log.e("NNE", "reg_id-->" + gD.prefs.getString("reg_id", null) + "\t" + "services->" + str_category_id + "\t" + "overall amount-->" + nRate + "\t" + "bookingid-->" + gD.prefs.getString("edit_ss_book_id", null) +
                         "  charge-->" + gD.prefs.getString("str_serviceType", null) + "  rateOverallFinal-->" + String.valueOf(f_overall_amount) + "   date-->" + gD.prefs.getString("ss_date", null) +
-                        "  stationid-->" + gD.prefs.getString("ss_id", null) + "   pickup address-->" + txt_address.getText().toString().trim() + "  serviceTypeConfi-->" + str_ServiceType.toString().trim());
+                        "  stationid-->" + gD.prefs.getString("edit_ss_id", null) + "   pickup address-->" + txt_address.getText().toString().trim()+"   pickupSharedPref-->" + gD.prefs.getString("edit_ss_pickUpAddress", null)+"  serviceTypeConfi-->" + str_ServiceType.toString().trim());
 
                 ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
                 NetworkInfo netInfo = connectivityManager.getActiveNetworkInfo();
                 boolean isConnected = netInfo != null && netInfo.isConnectedOrConnecting();
                 if (isConnected) {
-                    serviceConfirmCall();
+                 serviceConfirmCall();
                 } else {
                     Snackbar.make(findViewById(android.R.id.content), "No Internet Connection", Snackbar.LENGTH_LONG)
                             .show();
@@ -451,7 +539,6 @@ public class ServiceConfirmation_Edit extends Activity implements ChooseServiceI
                 editor.putString("key", json);
                 editor.putString("key_id", json_id);
                 editor.commit();
-
                 SharedPreferences.Editor prefEdit = gD.prefs.edit();
                 prefEdit.putString("edit_ss_id", null);
                 prefEdit.putString("edit_ss_book_id", null);
@@ -464,9 +551,9 @@ public class ServiceConfirmation_Edit extends Activity implements ChooseServiceI
                 prefEdit.putString("edit_ss_pickUpAmt", null);
                 prefEdit.putString("edit_ss_diagnoAmt", null);
                 prefEdit.putString("edit_ss_modularAmt", null);
-                prefEdit.putString("edit_ss_pickUpAddress", null);
                 prefEdit.commit();
                 startActivity(new Intent(ServiceConfirmation_Edit.this, BookService.class));
+                finish();
             }
         });
     }
@@ -548,7 +635,6 @@ public class ServiceConfirmation_Edit extends Activity implements ChooseServiceI
                                 prefEdit.putString("edit_ss_pickUpAmt", null);
                                 prefEdit.putString("edit_ss_diagnoAmt", null);
                                 prefEdit.putString("edit_ss_modularAmt", null);
-
                                 prefEdit.commit();
                             }
                         } catch (Exception e) {
@@ -602,7 +688,7 @@ public class ServiceConfirmation_Edit extends Activity implements ChooseServiceI
                 params.put("rate", String.valueOf(f_overall_amount));
                 params.put("date", gD.prefs.getString("edit_ss_date", null));
                 params.put("stationid", gD.prefs.getString("edit_ss_id", null));
-
+                params.put("address", txt_address.getText().toString().trim());
 
                 return params;
             }

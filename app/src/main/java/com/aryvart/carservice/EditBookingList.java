@@ -79,7 +79,11 @@ public class EditBookingList extends Activity implements EditBookInterface {
         registerReceiver(myReceiver, filter1);
 
     }
-
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finish();
+    }
     public void displayEditServicenCall() {
         gD.showAlertDialog(context, "Loading", "Please wait..");
         StringRequest stringRequest = new StringRequest(Request.Method.POST, GeneralData.LOCAL_IP + "booking_data.php",
@@ -241,6 +245,7 @@ public class EditBookingList extends Activity implements EditBookInterface {
         prefEdit.putString("edit_ss_date", str_dateOnly);
         prefEdit.commit();
         startActivity(i);
+        finish();
     }
 
     @Override

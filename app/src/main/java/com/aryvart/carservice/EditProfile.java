@@ -169,7 +169,11 @@ public class EditProfile extends Activity {
             }
         });
     }
-
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finish();
+    }
     //email validation
     public boolean isValidEmail(CharSequence strEmail) {
         boolean isvalid = false;

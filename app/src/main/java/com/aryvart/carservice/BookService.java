@@ -1,6 +1,7 @@
 package com.aryvart.carservice;
 
 import android.Manifest;
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.ActivityManager;
 import android.content.Context;
@@ -15,6 +16,7 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
@@ -216,164 +218,6 @@ public class BookService extends Activity implements LocationListener, View.OnCl
 
 
 
-
-
-
-
-
-
-
-      /*  if (str_EditButtonClicked != null) {
-            if( gD.prefs.getString("str_serviceType", null).equalsIgnoreCase("pickup")){
-                txt_pickUpText.setTextColor(Color.parseColor("#0987ff"));
-                txt_diagnoText.setTextColor(Color.parseColor("#000000"));
-            }
-            else if( gD.prefs.getString("str_serviceType", null).equalsIgnoreCase("diagnostics")){
-                txt_diagnoText.setTextColor(Color.parseColor("#0987ff"));
-                txt_pickUpText.setTextColor(Color.parseColor("#000000"));
-            }
-
-            btn_bookService.setVisibility(View.GONE);
-            btn_viewBookings.setText("next");
-          *//*  completeAddresss = gD.prefs.getString("pickUp_address", null);
-            txt_pickUpAddress.setVisibility(View.VISIBLE);
-            if (gD.prefs.getString("pickUp_address", null) != null) {
-                txt_pickUpAddress.setText("Your Address : " + completeAddresss);
-            }*//*
-            Log.e("YK", "not null");
-        } else {
-            btn_bookService.setVisibility(View.VISIBLE);
-            btn_viewBookings.setText("view bookings");
-            Log.e("YK", "null");
-            *//*txt_pickUpAddress.setVisibility(View.GONE);
-            txt_pickUpAddress.setText("");*//*
-        }*/
-
-        myLinearLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                myDrawerLayout.setClickable(false);
-                myDrawerLayout.setEnabled(false);
-                myDrawerLayout.setFocusableInTouchMode(false);
-                myDrawerLayout.setFocusable(false);
-
-            }
-        });
-
-        img_menu.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                myDrawerLayout.openDrawer(myLinearLayout);
-
-            }
-        });
-
-
-
-        ll_diagno.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                str_ServiceType = "diagnostics";
-                txt_diagnoText.setTextColor(Color.parseColor("#0987ff"));
-                txt_pickUpText.setTextColor(Color.parseColor("#000000"));
-                ll_Map.setVisibility(View.VISIBLE);
-
-               /* txt_diagnoText.setTextColor(Color.parseColor("#0987ff"));
-                txt_pickUpText.setTextColor(Color.parseColor("#000000"));
-                str_ServiceType="diagnostics";
-                btn_bookService.setVisibility(View.VISIBLE);
-                SharedPreferences.Editor prefEdit = gD.prefs.edit();
-                prefEdit.putString("str_serviceType",str_ServiceType);
-                prefEdit.commit();*/
-            }
-        });
-        ll_pickUP.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ll_Map.setVisibility(View.VISIBLE);
-                txt_pickUpText.setTextColor(Color.parseColor("#0987ff"));
-                txt_diagnoText.setTextColor(Color.parseColor("#000000"));
-                //  btn_bookService.setVisibility(View.VISIBLE);
-                str_ServiceType = "pickup";
-
-            }
-        });
-
-
-
-        ll_updateProfile.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(BookService.this, EditProfile.class));
-            }
-        });
-        ll_cancelService.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(BookService.this, CancelBookingList.class));
-            }
-        });
-        ll_editBooking.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(BookService.this, EditBookingList.class));
-            }
-        });
-        ll_viewBooking.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(BookService.this, ViewBookingList.class));
-            }
-        });
-        final SharedPreferences.Editor prefEditer = gD.prefs.edit();
-
-
-        ll_logOut.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-
-                View itemView1;
-                final AlertDialog.Builder builder = new AlertDialog.Builder(context);
-                builder.setCancelable(true);
-                itemView1 = LayoutInflater.from(context)
-                        .inflate(R.layout.logout_popup, null);
-                final AlertDialog altDialog = builder.create();
-                altDialog.setView(itemView1);
-                Button btn_yes = (Button) itemView1.findViewById(R.id.btn_yes);
-                Button btn_no = (Button) itemView1.findViewById(R.id.btn_no);
-                btn_yes.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
-                        NetworkInfo netInfo = connectivityManager.getActiveNetworkInfo();
-                        boolean isConnected = netInfo != null && netInfo.isConnectedOrConnecting();
-
-                        if (isConnected) {
-
-                            prefEditer.putString("car_number", null);
-                            prefEditer.putString("password", null);
-                            prefEditer.commit();
-                            startActivity(new Intent(BookService.this, SignIn.class));
-                            finish();
-                        } else {
-                            Toast.makeText(BookService.this, "No internet connection", Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                });
-                btn_no.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        altDialog.dismiss();
-                    }
-                });
-                altDialog.show();
-
-
-            }
-        });
-
-
         //map coding
 
 
@@ -457,6 +301,165 @@ public class BookService extends Activity implements LocationListener, View.OnCl
                 .addConnectionCallbacks(this)
                 .addOnConnectionFailedListener(this)
                 .build();
+
+
+
+
+
+
+
+
+      /*  if (str_EditButtonClicked != null) {
+            if( gD.prefs.getString("str_serviceType", null).equalsIgnoreCase("pickup")){
+                txt_pickUpText.setTextColor(Color.parseColor("#0987ff"));
+                txt_diagnoText.setTextColor(Color.parseColor("#000000"));
+            }
+            else if( gD.prefs.getString("str_serviceType", null).equalsIgnoreCase("diagnostics")){
+                txt_diagnoText.setTextColor(Color.parseColor("#0987ff"));
+                txt_pickUpText.setTextColor(Color.parseColor("#000000"));
+            }
+
+            btn_bookService.setVisibility(View.GONE);
+            btn_viewBookings.setText("next");
+          *//*  completeAddresss = gD.prefs.getString("pickUp_address", null);
+            txt_pickUpAddress.setVisibility(View.VISIBLE);
+            if (gD.prefs.getString("pickUp_address", null) != null) {
+                txt_pickUpAddress.setText("Your Address : " + completeAddresss);
+            }*//*
+            Log.e("YK", "not null");
+        } else {
+            btn_bookService.setVisibility(View.VISIBLE);
+            btn_viewBookings.setText("view bookings");
+            Log.e("YK", "null");
+            *//*txt_pickUpAddress.setVisibility(View.GONE);
+            txt_pickUpAddress.setText("");*//*
+        }*/
+
+        myLinearLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                myDrawerLayout.setClickable(false);
+                myDrawerLayout.setEnabled(false);
+                myDrawerLayout.setFocusableInTouchMode(false);
+                myDrawerLayout.setFocusable(false);
+
+            }
+        });
+
+        img_menu.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                myDrawerLayout.openDrawer(myLinearLayout);
+
+            }
+        });
+
+
+        ll_diagno.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                str_ServiceType = "diagnostics";
+                txt_diagnoText.setTextColor(Color.parseColor("#0987ff"));
+                txt_pickUpText.setTextColor(Color.parseColor("#000000"));
+                ll_Map.setVisibility(View.VISIBLE);
+
+               /* txt_diagnoText.setTextColor(Color.parseColor("#0987ff"));
+                txt_pickUpText.setTextColor(Color.parseColor("#000000"));
+                str_ServiceType="diagnostics";
+                btn_bookService.setVisibility(View.VISIBLE);
+                SharedPreferences.Editor prefEdit = gD.prefs.edit();
+                prefEdit.putString("str_serviceType",str_ServiceType);
+                prefEdit.commit();*/
+            }
+        });
+        ll_pickUP.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ll_Map.setVisibility(View.VISIBLE);
+                txt_pickUpText.setTextColor(Color.parseColor("#0987ff"));
+                txt_diagnoText.setTextColor(Color.parseColor("#000000"));
+                //  btn_bookService.setVisibility(View.VISIBLE);
+                str_ServiceType = "pickup";
+
+            }
+        });
+
+
+
+        ll_updateProfile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(BookService.this, EditProfile.class));
+            }
+        });
+        ll_cancelService.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(BookService.this, CancelBookingList.class));
+            }
+        });
+        ll_editBooking.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(BookService.this, EditBookingList.class));
+            }
+        });
+        ll_viewBooking.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(BookService.this, ViewBookingList.class));
+            }
+        });
+        final SharedPreferences.Editor prefEditer = gD.prefs.edit();
+
+
+        ll_logOut.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+
+                View itemView1;
+                final AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                builder.setCancelable(true);
+                itemView1 = LayoutInflater.from(context)
+                        .inflate(R.layout.logout_popup, null);
+                final AlertDialog altDialog = builder.create();
+                altDialog.setView(itemView1);
+                Button btn_yes = (Button) itemView1.findViewById(R.id.btn_yes);
+                Button btn_no = (Button) itemView1.findViewById(R.id.btn_no);
+                btn_yes.setOnClickListener(new View.OnClickListener() {
+                    @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
+                    @Override
+                    public void onClick(View v) {
+                        ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+                        NetworkInfo netInfo = connectivityManager.getActiveNetworkInfo();
+                        boolean isConnected = netInfo != null && netInfo.isConnectedOrConnecting();
+
+                        if (isConnected) {
+
+                            prefEditer.putString("car_number", null);
+                            prefEditer.putString("password", null);
+                            prefEditer.commit();
+                            startActivity(new Intent(BookService.this, SignIn.class));
+                            finish();
+                            finishAffinity();
+                        } else {
+                            Toast.makeText(BookService.this, "No internet connection", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+                btn_no.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        altDialog.dismiss();
+                    }
+                });
+                altDialog.show();
+
+
+            }
+        });
+
 
 
         final SharedPreferences.Editor prefEdit = gD.prefs.edit();

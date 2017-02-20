@@ -54,7 +54,15 @@ public class SignIn extends Activity {
     EditText ed_password, ed_carNum;
     TextView txt_login, txt_reg, txt_fogetPass;
     GeneralData gD;
-
+    //permission to access external storage
+    private static final int REQUEST_EXTERNAL_STORAGE = 1;
+    private static String[] PERMISSIONS_STORAGE = {
+            Manifest.permission.READ_EXTERNAL_STORAGE,
+            Manifest.permission.WRITE_EXTERNAL_STORAGE,
+            Manifest.permission.INTERNET, Manifest.permission.ACCESS_NETWORK_STATE,
+            Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.CALL_PHONE,
+            Manifest.permission.CAMERA, Manifest.permission.SEND_SMS, Manifest.permission.ACCESS_WIFI_STATE
+    };
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -77,7 +85,7 @@ public class SignIn extends Activity {
         txt_reg.setTypeface(typeFace1);
         ed_carNum.setHint(getResources().getString(R.string.login_car_reg_num).toUpperCase());
         ed_password.setHint(getResources().getString(R.string.login_pass).toUpperCase());
-
+        verifyStoragePermissions(this);
         txt_login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -144,6 +152,31 @@ public class SignIn extends Activity {
 
             }
         });
+    }
+    //persmission method.
+    public static void verifyStoragePermissions(Activity activity) {
+// Check if we have read or write permission
+        int writePermission = ActivityCompat.checkSelfPermission(activity, Manifest.permission.WRITE_EXTERNAL_STORAGE);
+        int readPermission = ActivityCompat.checkSelfPermission(activity, Manifest.permission.READ_EXTERNAL_STORAGE);
+
+        int internetPermission = ActivityCompat.checkSelfPermission(activity, Manifest.permission.INTERNET);
+        int access_network_Permission = ActivityCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_NETWORK_STATE);
+        int access_fine_loc_Permission = ActivityCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_FINE_LOCATION);
+        int access_coarse_loc_Permission = ActivityCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_COARSE_LOCATION);
+        int wifiPermission = ActivityCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_WIFI_STATE);
+
+        if (writePermission != PackageManager.PERMISSION_GRANTED || readPermission != PackageManager.PERMISSION_GRANTED || internetPermission != PackageManager.PERMISSION_GRANTED ||
+                access_network_Permission != PackageManager.PERMISSION_GRANTED ||
+                access_fine_loc_Permission != PackageManager.PERMISSION_GRANTED ||
+                access_coarse_loc_Permission != PackageManager.PERMISSION_GRANTED ||
+                wifiPermission != PackageManager.PERMISSION_GRANTED) {
+// We don't have permission so prompt the user
+            ActivityCompat.requestPermissions(
+                    activity,
+                    PERMISSIONS_STORAGE,
+                    REQUEST_EXTERNAL_STORAGE
+            );
+        }
     }
 
     public void signInCall() {
