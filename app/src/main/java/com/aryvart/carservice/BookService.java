@@ -477,7 +477,7 @@ public class BookService extends Activity implements LocationListener, View.OnCl
                 } else if (completeAddresss == null) {
                     Log.e("BN", "completeAddresss is null");
                     Toast.makeText(BookService.this, "Enter your address", Toast.LENGTH_SHORT).show();
-                } else {
+                }else {
                     Log.e("BN", "completeAddresss->" + completeAddresss);
                     prefEdit.putString("pickUp_address", completeAddresss);
                     prefEdit.putString("str_serviceType", str_ServiceType);

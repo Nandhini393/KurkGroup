@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.graphics.Typeface;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -256,6 +257,8 @@ public class ServiceConfirmation extends Activity implements ChooseServiceInterf
             rl_modularLay.setVisibility(View.GONE);
             listConfirm.setVisibility(View.VISIBLE);
             ll_addressLay.setVisibility(View.GONE);
+            txt_pickUpCharge.setVisibility(View.GONE);
+            txt_pickUpText.setVisibility(View.GONE);
             txt_address.setText(gD.prefs.getString("pickUp_address", null));
                /* //not added diagno
                 f_overall_amount = nRate;
@@ -264,6 +267,9 @@ public class ServiceConfirmation extends Activity implements ChooseServiceInterf
 
             //added diagno
             cb_diagno.setChecked(true);
+            //cb_diagno.setEnabled(false);
+
+            cb_diagno.setTextColor(Color.parseColor("#000000"));
             str_ServiceType="diagnostics";
             f_overall_amount = nRate + Float.parseFloat(gD.prefs.getString("ss_diagno_charge", null));
             Log.e("NN", "overall amount->" + String.valueOf(f_overall_amount));
@@ -311,6 +317,8 @@ public class ServiceConfirmation extends Activity implements ChooseServiceInterf
             txt_overallAmount.setText("" + f_overall_amount);
         }
 
+
+
         //Checkbox
         cb_pickUp.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -328,17 +336,17 @@ public class ServiceConfirmation extends Activity implements ChooseServiceInterf
                         txt_address.setText(gD.prefs.getString("pickUp_address", null));
                     }
                   //  cb_diagno.setChecked(false);
-                    if (gD.prefs.getString("str_serviceType", null) != null) {
+
                         if (gD.prefs.getString("str_serviceType", null).equalsIgnoreCase("modular")) {
                             str_ServiceType="modularpickup";
                         } else if (gD.prefs.getString("str_serviceType", null).equalsIgnoreCase("diagnostics")) {
-                            str_ServiceType="diagnosispickup";
+                            str_ServiceType="diagnopickup";
                         }
                         else if (gD.prefs.getString("str_serviceType", null).equalsIgnoreCase("pickup")){
                             str_ServiceType="pickup";
                         }
 
-                    }
+
                     if(cb_diagno.isChecked()){
                         str_ServiceType="diagnosispickup";
                         f_overall_amount = nRate + Float.parseFloat(gD.prefs.getString("ss_pickup_charge", null))+Float.parseFloat(gD.prefs.getString("ss_diagno_charge", null));
@@ -351,12 +359,13 @@ public class ServiceConfirmation extends Activity implements ChooseServiceInterf
                     txt_pickUpCharge.setVisibility(View.GONE);
                     ll_addressLay.setVisibility(View.GONE);
                     txt_address.setText(gD.prefs.getString("pickUp_address", null));
+
                     if (gD.prefs.getString("str_serviceType", null).equalsIgnoreCase("modular")) {
                         str_ServiceType="modular";
 
                     }
                     else if (gD.prefs.getString("str_serviceType", null).equalsIgnoreCase("diagnostics")) {
-                        str_ServiceType="diagnostics";
+                        str_ServiceType="diagnosispickupNA";
                     }
                     else if (gD.prefs.getString("str_serviceType", null).equalsIgnoreCase("pickup")) {
                         str_ServiceType="pickupNA";
@@ -412,6 +421,8 @@ public class ServiceConfirmation extends Activity implements ChooseServiceInterf
                     Log.e("NN", "overall amount->" + String.valueOf(f_overall_amount));
                     txt_overallAmount.setText("" + f_overall_amount);
 
+
+
                     if(cb_pickUp.isChecked()){
                         str_ServiceType="diagnosispickup";
                         f_overall_amount = nRate + Float.parseFloat(gD.prefs.getString("ss_pickup_charge", null))+Float.parseFloat(gD.prefs.getString("ss_diagno_charge", null));
@@ -428,8 +439,12 @@ public class ServiceConfirmation extends Activity implements ChooseServiceInterf
                     Log.e("NN", "overall amount->" + String.valueOf(f_overall_amount));
                     txt_overallAmount.setText("" + f_overall_amount);
 
+                    if (gD.prefs.getString("str_serviceType", null).equalsIgnoreCase("diagnostics")) {
+                        str_ServiceType="diagnosispickupNA";
+                    }
+
                     if(cb_pickUp.isChecked()){
-                        str_ServiceType="pickup";
+                        str_ServiceType="diagnopickup";
                         f_overall_amount = nRate + Float.parseFloat(gD.prefs.getString("ss_pickup_charge", null));
                         Log.e("NN", "overall amount->" + String.valueOf(f_overall_amount));
                         txt_overallAmount.setText("" + f_overall_amount);
@@ -462,7 +477,7 @@ public class ServiceConfirmation extends Activity implements ChooseServiceInterf
                 boolean isConnected = netInfo != null && netInfo.isConnectedOrConnecting();
                 if (isConnected) {
 
-                 //serviceConfirmCall();
+                serviceConfirmCall();
 
 
 
@@ -569,7 +584,7 @@ public class ServiceConfirmation extends Activity implements ChooseServiceInterf
                                 gD.altDialog.dismiss();
                                 View itemView1;
                                 final AlertDialog.Builder builder = new AlertDialog.Builder(context);
-                                builder.setCancelable(true);
+                                builder.setCancelable(false);
                                 itemView1 = LayoutInflater.from(context)
                                         .inflate(R.layout.forget_pass_popup, null);
                                 final AlertDialog altDialog = builder.create();

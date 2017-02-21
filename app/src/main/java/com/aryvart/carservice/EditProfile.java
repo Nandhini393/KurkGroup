@@ -264,7 +264,7 @@ public class EditProfile extends Activity {
                                 gD.altDialog.dismiss();
                                 View itemView1;
                                 final AlertDialog.Builder builder = new AlertDialog.Builder(context);
-                                builder.setCancelable(true);
+                                builder.setCancelable(false);
                                 itemView1 = LayoutInflater.from(context)
                                         .inflate(R.layout.forget_pass_popup, null);
                                 final AlertDialog altDialog = builder.create();

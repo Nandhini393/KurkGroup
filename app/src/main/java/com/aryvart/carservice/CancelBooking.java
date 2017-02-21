@@ -199,6 +199,17 @@ public class CancelBooking extends Activity implements ChooseServiceInterface {
             txt_AdditionAmtCharge.setText("" + Float.parseFloat(getIntent().getStringExtra("edit_ss_pickUpAmt"))+"\n\n"+Float.parseFloat(getIntent().getStringExtra("edit_ss_diagnoAmt"))+"\n");
 
         }
+        else if (getIntent().getStringExtra("edit_ss_serviceType").equalsIgnoreCase("diagnopickup")) {
+            txt_AddAmtText.setText("Pick up service Charge");
+            txt_AdditionAmtCharge.setText("" + Float.parseFloat(getIntent().getStringExtra("edit_ss_pickUpAmt")));
+
+        }
+        else if (getIntent().getStringExtra("edit_ss_serviceType").equalsIgnoreCase("diagnosispickupNA")) {
+            txt_AddAmtText.setText("");
+            txt_AdditionAmtCharge.setText("");
+
+        }
+
         btn_cancelBooking.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -251,7 +262,7 @@ public class CancelBooking extends Activity implements ChooseServiceInterface {
                                 gD.altDialog.dismiss();
                                 View itemView1;
                                 final AlertDialog.Builder builder = new AlertDialog.Builder(context);
-                                builder.setCancelable(true);
+                                builder.setCancelable(false);
                                 itemView1 = LayoutInflater.from(context)
                                         .inflate(R.layout.forget_pass_popup, null);
                                 final AlertDialog altDialog = builder.create();
