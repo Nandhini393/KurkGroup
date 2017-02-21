@@ -85,11 +85,13 @@ public class ServiceStation extends Activity implements ServiceStationInterface 
     TextView txt_headerName, txt_title;
     LinearLayout ll_dispStastions;
     ImageView img_StationImage;
-    TextView txt_ssAddr, txt_ssName,txt_selectStationText,txt_error;
+    TextView txt_ssAddr, txt_ssName, txt_selectStationText, txt_error;
     ImageLoader imgLoader;
-    String str_StationName, str_StationId, str_StationImage, str_StationAddr, str_PickupCharge, str_ModularCharge, str_DiagnoCharge,str_ChoosenStationId;
+    String str_StationName, str_StationId, str_StationImage, str_StationAddr, str_PickupCharge, str_ModularCharge, str_DiagnoCharge, str_ChoosenStationId;
     JSONArray jsonArrServiceStations;
+    //intercon checking
     IntentFilter filter1;
+int year,month,day;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -111,8 +113,11 @@ public class ServiceStation extends Activity implements ServiceStationInterface 
         img_StationImage = (ImageView) findViewById(R.id.img_profile);
         txt_ssName = (TextView) findViewById(R.id.txt_comp_name);
         txt_ssAddr = (TextView) findViewById(R.id.txt_address);
-        txt_selectStationText=(TextView)findViewById(R.id.txt_SelectStationText);
-        txt_error=(TextView)findViewById(R.id.txt_error);
+        txt_selectStationText = (TextView) findViewById(R.id.txt_SelectStationText);
+        txt_error = (TextView) findViewById(R.id.txt_error);
+
+        // ** fonts and typefaces **//
+
         Typeface typeFace1 = Typeface.createFromAsset(getAssets(), "fonts/Oswald-Bold.otf");
         txt_headerName.setTypeface(typeFace1);
         txt_next.setTypeface(typeFace1);
@@ -126,33 +131,43 @@ public class ServiceStation extends Activity implements ServiceStationInterface 
         txt_title.setText(spannableString);
         txt_title.setTypeface(typeFace1);
 
+
+
+        final Calendar c = Calendar.getInstance();
+       /* hour = c.get(Calendar.HOUR_OF_DAY);
+        minute = c.get(Calendar.MINUTE);*/
+//updateTime(hour, minute, "data");
+
+        year = c.get(Calendar.YEAR);
+
+        month = c.get(Calendar.MONTH);
+        day = c.get(Calendar.DAY_OF_MONTH);
+        showDate(year, month + 1, day);
+
+
+        //** internet conn ** //
+
         filter1 = new IntentFilter("android.net.conn.CONNECTIVITY_CHANGE");
         registerReceiver(myReceiver, filter1);
 
 
-
-        Log.i("BN", "id" +  gD.prefs.getString("pickUp_address",null));
-        Log.i("BN", "str_serviceType-->" +    gD.prefs.getString("str_serviceType", null));
-
+        Log.i("BN", "id" + gD.prefs.getString("pickUp_address", null));
+        Log.i("BN", "str_serviceType-->" + gD.prefs.getString("str_serviceType", null));
         Log.i("PP1", "id" + gD.prefs.getString("ss_id", null));
-
         Log.i("PP1", "ss_image" + gD.prefs.getString("ss_image", null));
-
         Log.i("PP1", "ss_addr" + gD.prefs.getString("ss_addr", null));
-
         Log.i("PP1", "ss_name" + gD.prefs.getString("ss_name", null));
-
         Log.i("PP1", "ss_date" + gD.prefs.getString("ss_date", null));
 
         if (gD.prefs.getString("ss_addr", null) != null && gD.prefs.getString("ss_image", null) != null && gD.prefs.getString("ss_name", null) != null) {
 
             str_StationId = gD.prefs.getString("ss_id", null);
-            str_StationName= gD.prefs.getString("ss_name", null);
-            str_StationImage= gD.prefs.getString("ss_image", null);
-            str_StationAddr= gD.prefs.getString("ss_addr", null);
-            str_DiagnoCharge= gD.prefs.getString("ss_diagno_charge", null);
-            str_PickupCharge= gD.prefs.getString("ss_pickup_charge", null);
-            str_ModularCharge= gD.prefs.getString("ss_modular_reprogramming_charge", null);
+            str_StationName = gD.prefs.getString("ss_name", null);
+            str_StationImage = gD.prefs.getString("ss_image", null);
+            str_StationAddr = gD.prefs.getString("ss_addr", null);
+            str_DiagnoCharge = gD.prefs.getString("ss_diagno_charge", null);
+            str_PickupCharge = gD.prefs.getString("ss_pickup_charge", null);
+            str_ModularCharge = gD.prefs.getString("ss_modular_reprogramming_charge", null);
 
 
             ll_dispStastions.setVisibility(View.VISIBLE);
@@ -173,26 +188,6 @@ public class ServiceStation extends Activity implements ServiceStationInterface 
             Log.i("PP", "ss_date" + gD.prefs.getString("ss_date", null));
 
         }
-      /*  if (gD.prefs.getString("edit_ss_serviceArray", null) != null) {
-            ll_dispStastions.setVisibility(View.VISIBLE);
-            str_ServiceStationId =gD.prefs.getString("edit_ss_id", null);
-            imgLoader.DisplayImage(gD.prefs.getString("edit_ss_image", null), img_StationImage);
-            txt_ssAddr.setText(gD.prefs.getString("edit_ss_addr", null));
-            txt_ssName.setText(gD.prefs.getString("edit_ss_name", null));
-            txt_date.setText(gD.prefs.getString("edit_ss_date", null));
-
-            Log.i("PP","edit_ss_id" +gD.prefs.getString("edit_ss_id", null));
-
-            Log.i("PP","edit_ss_image" +gD.prefs.getString("edit_ss_image", null));
-
-            Log.i("PP","edit_ss_addr" +gD.prefs.getString("edit_ss_addr", null));
-
-            Log.i("PP","edit_ss_name" +gD.prefs.getString("edit_ss_name", null));
-
-            Log.i("PP","edit_ss_date" +gD.prefs.getString("edit_ss_date", null));
-
-
-        }*/
 
         ll_selectServiceStation.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -202,46 +197,43 @@ public class ServiceStation extends Activity implements ServiceStationInterface 
                 boolean isConnected = netInfo != null && netInfo.isConnectedOrConnecting();
 
 
-                    if (count == 0) {
-                        if (isConnected) {
-                            Log.i("OO", "Hiiii 1");
-                            listView.setVisibility(View.VISIBLE);
-                            txt_error.setVisibility(View.GONE);
-                            if (str_StationName != null) {
-                                Log.i("OO", "Hiiii 2");
-                                if (!str_StationName.equalsIgnoreCase("select services")) {
-                                    Log.i("OO", "Hiiii 3");
-                                    LoadLayout_sel(jsonArrServiceStations, str_StationName);
-                                } else {
-                                    Log.i("OO", "Hiiii 4");
-                                    LoadLayout(jsonArrServiceStations);
-                                }
+                if (count == 0) {
+                    if (isConnected) {
+                        Log.i("OO", "Hiiii 1");
+                        listView.setVisibility(View.VISIBLE);
+                        txt_error.setVisibility(View.GONE);
+                        if (str_StationName != null) {
+                            Log.i("OO", "Hiiii 2");
+                            if (!str_StationName.equalsIgnoreCase("select services")) {
+                                Log.i("OO", "Hiiii 3");
+                                LoadLayout_sel(jsonArrServiceStations, str_StationName);
                             } else {
-                                Log.i("OO", "Hiiii 5");
+                                Log.i("OO", "Hiiii 4");
                                 LoadLayout(jsonArrServiceStations);
                             }
+                        } else {
+                            Log.i("OO", "Hiiii 5");
+                            LoadLayout(jsonArrServiceStations);
                         }
-                        else{
-                            listView.setVisibility(View.GONE);
-                            txt_error.setVisibility(View.VISIBLE);
-                            txt_error.setText("No response from server.Check your internet connection");
-                            txt_error.setTextColor(Color.parseColor("#ff0000"));
-                        }
-                        // prepareMovieData();
-                        count = 1;
-                    } else if (count == 1) {
-                        if (isConnected) {
-                            listView.setVisibility(View.GONE);
-
-                        }
-                        else{
-                            listView.setVisibility(View.GONE);
-                            txt_error.setVisibility(View.GONE);
-                            txt_error.setText("No response from server.Check your internet connection");
-                            txt_error.setTextColor(Color.parseColor("#ff0000"));
-                        }
-                        count = 0;
+                    } else {
+                        listView.setVisibility(View.GONE);
+                        txt_error.setVisibility(View.VISIBLE);
+                        txt_error.setText("No response from server.Check your internet connection");
+                        txt_error.setTextColor(Color.parseColor("#ff0000"));
                     }
+                    count = 1;
+                } else if (count == 1) {
+                    if (isConnected) {
+                        listView.setVisibility(View.GONE);
+
+                    } else {
+                        listView.setVisibility(View.GONE);
+                        txt_error.setVisibility(View.GONE);
+                        txt_error.setText("No response from server.Check your internet connection");
+                        txt_error.setTextColor(Color.parseColor("#ff0000"));
+                    }
+                    count = 0;
+                }
 
             }
         });
@@ -258,16 +250,6 @@ public class ServiceStation extends Activity implements ServiceStationInterface 
                 prefEdit.putString("ss_pickup_charge", null);
                 prefEdit.putString("ss_modular_reprogramming_charge", null);
 
-
-             /*   prefEdit.putString("edit_ss_id", null);
-                prefEdit.putString("edit_ss_book_id", null);
-                prefEdit.putString("edit_ss_serviceArray", null);
-                prefEdit.putString("edit_ss_image", null);
-                prefEdit.putString("edit_ss_name", null);
-                prefEdit.putString("edit_ss_addr", null);
-                prefEdit.putString("edit_ss_date", null);
-
-*/
                 SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(context);
                 SharedPreferences.Editor editor = sharedPrefs.edit();
                 Gson gson = new Gson();
@@ -282,12 +264,19 @@ public class ServiceStation extends Activity implements ServiceStationInterface 
                 finish();
             }
         });
+
+
+        // ** calendar btn ** //
+
         img_calen.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 showDialog(0);
             }
         });
+
+        //** next btn ** //
+
         txt_next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -316,20 +305,17 @@ public class ServiceStation extends Activity implements ServiceStationInterface 
                         Toast.makeText(ServiceStation.this, "Select your service date", Toast.LENGTH_SHORT).show();
                     } else {
 
-                        if (gD.prefs.getString("str_serviceType", null).equalsIgnoreCase("modular")||gD.prefs.getString("str_serviceType", null).equalsIgnoreCase("modularpickup")) {
-                            startActivity(new Intent(ServiceStation.this,ServiceConfirmation.class));
+                        if (gD.prefs.getString("str_serviceType", null).equalsIgnoreCase("modular") || gD.prefs.getString("str_serviceType", null).equalsIgnoreCase("modularpickup")) {
+                            startActivity(new Intent(ServiceStation.this, ServiceConfirmation.class));
                             finish();
-                        }
-                        else{
+                        } else {
                             Intent i = new Intent(ServiceStation.this, ChooseService.class);
-                            //  i.putExtra("edit_ss_serviceArray",gD.prefs.getString("edit_ss_serviceArray", null));
                             startActivity(i);
                             finish();
                             Log.i("HH_n", "str_ChoosenStationId : " + str_ChoosenStationId);
-                            Log.i("HH_n", "sharedPref : " +gD.prefs.getString("ss_id", null) );
+                            Log.i("HH_n", "sharedPref : " + gD.prefs.getString("ss_id", null));
 
-                            if (str_ChoosenStationId!=null && (gD.prefs.getString("ss_id", null))!=null)
-                            {
+                            if (str_ChoosenStationId != null && (gD.prefs.getString("ss_id", null)) != null) {
                                 if (str_ChoosenStationId.equalsIgnoreCase(gD.prefs.getString("ss_id", null))) {
                                     Log.i("HH_n1", "choosen : " + str_ChoosenStationId);
                                     Log.i("HH_n1", "sharedPref : " + gD.prefs.getString("ss_id", null));
@@ -351,26 +337,11 @@ public class ServiceStation extends Activity implements ServiceStationInterface 
                             }
                         }
 
-                   /* if (str_StationId.equalsIgnoreCase(str_ServiceStationId)) {
-                        Log.i("HH", "choosen : " + str_StationId);
-                        Log.i("HH", "sharedPref : " + str_ServiceStationId);
-                        Log.i("HH", "equal");
-                    } else {
-                        Log.i("HH", "choosen : " + str_StationId);
-                        Log.i("HH", "sharedPref : " +str_ServiceStationId);
-                        Log.i("HH", "not equal ");
-
-                    }*/
-
-
-
 
                     }
 
                     prefEdit.commit();
-                }
-                else
-                {
+                } else {
                     Snackbar.make(findViewById(android.R.id.content), "No Internet Connection", Snackbar.LENGTH_LONG)
                             .show();
                 }
@@ -392,16 +363,6 @@ public class ServiceStation extends Activity implements ServiceStationInterface 
         prefEdit.putString("ss_pickup_charge", null);
         prefEdit.putString("ss_modular_reprogramming_charge", null);
 
-
-             /*   prefEdit.putString("edit_ss_id", null);
-                prefEdit.putString("edit_ss_book_id", null);
-                prefEdit.putString("edit_ss_serviceArray", null);
-                prefEdit.putString("edit_ss_image", null);
-                prefEdit.putString("edit_ss_name", null);
-                prefEdit.putString("edit_ss_addr", null);
-                prefEdit.putString("edit_ss_date", null);
-
-*/
         SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(context);
         SharedPreferences.Editor editor = sharedPrefs.edit();
         Gson gson = new Gson();
@@ -413,23 +374,29 @@ public class ServiceStation extends Activity implements ServiceStationInterface 
         prefEdit.commit();
         finish();
     }
-//calendar
+
+
+    //*** calendar code ** //
 
     @Override
     protected Dialog onCreateDialog(int id) {
         // TODO Auto-generated method stub
 
+      //current year
         Calendar calendar = Calendar.getInstance();
         calendar.set(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
 
 
-        Calendar c = Calendar.getInstance();
-        c.set(1945, c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH));
-
-
         DatePickerDialog datePickerDialog = new DatePickerDialog(this, myDateListener, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
-        datePickerDialog.getDatePicker().setMinDate(System.currentTimeMillis());
+        datePickerDialog.getDatePicker().setMinDate(calendar.getTimeInMillis());
         datePickerDialog.show();
+
+
+       /* Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.DATE, 0);
+        DatePickerDialog datePickerDialog = new DatePickerDialog(this, myDateListener, year, month, day);
+        datePickerDialog.getDatePicker().setMinDate(calendar.getTimeInMillis());
+        datePickerDialog.show();*/
 
         return null;
 
@@ -450,10 +417,12 @@ public class ServiceStation extends Activity implements ServiceStationInterface 
                 .append(month).append("-").append(day));
     }
 
+    // ** listview interface ** to diaplay and get specific service station values //
+
     @Override
     public void getServiceStationAddress(String str_id, String str_image, String str_name, String str_address, String str_diagno_charge, String str_pickUP_charge, String str_modular_charge) {
 
-        str_ChoosenStationId=str_id;
+        str_ChoosenStationId = str_id;
         listView.setVisibility(View.GONE);
         ll_dispStastions.setVisibility(View.VISIBLE);
         imgLoader.DisplayImage(str_image, img_StationImage);
@@ -471,8 +440,12 @@ public class ServiceStation extends Activity implements ServiceStationInterface 
         str_ModularCharge = str_modular_charge;
         str_DiagnoCharge = str_diagno_charge;
 
-        //Toast.makeText(ServiceStation.this, "id-" + str_id + "\n" + "name-" + str_name, Toast.LENGTH_SHORT).show();
+
     }
+
+
+    // ** service station display REST call ** //
+
 
     public void displayServiceStationCall() {
         //gD.showAlertDialog(context, "Loading", "Please wait");
@@ -487,12 +460,12 @@ public class ServiceStation extends Activity implements ServiceStationInterface 
                             ArrayList<CommonBean> beanArrayList = new ArrayList<CommonBean>();
 
                             JSONObject jsobj = new JSONObject(response);
-                           // gD.altDialog.dismiss();
+                            // gD.altDialog.dismiss();
                             Log.i("HH", "strResp : " + response);
                             if (jsobj.getString("code").equalsIgnoreCase("2")) {
                                 JSONArray services_stations = jsobj.getJSONArray("service_stations");
 
-                                jsonArrServiceStations= jsobj.getJSONArray("service_stations");
+                                jsonArrServiceStations = jsobj.getJSONArray("service_stations");
 
                                 if (services_stations.length() > 0) {
                                     for (int i = 0; i < services_stations.length(); i++) {
@@ -578,6 +551,10 @@ public class ServiceStation extends Activity implements ServiceStationInterface 
 
     }
 
+
+    // ** saving service station list in JSONArray (LoadLAyout)  ** //
+
+
     private ArrayList<CommonBean> LoadLayout(JSONArray providerServicesMonth) {
         ArrayList<CommonBean> beanArrayList = new ArrayList<CommonBean>();
         JSONObject jsobj = null;
@@ -613,6 +590,10 @@ public class ServiceStation extends Activity implements ServiceStationInterface 
 
     }
 
+
+    // ** LoadLayout to high light the already selected service station ** //
+
+
     private ArrayList<CommonBean> LoadLayout_sel(JSONArray providerServicesMonth, String str) {
         ArrayList<CommonBean> beanArrayList = new ArrayList<CommonBean>();
         JSONObject jsobj = null;
@@ -636,7 +617,7 @@ public class ServiceStation extends Activity implements ServiceStationInterface 
                     }
                 }
 
-                mAdapter = new ServiceStationAdapter(context, beanArrayList, (ServiceStationInterface) context,str);
+                mAdapter = new ServiceStationAdapter(context, beanArrayList, (ServiceStationInterface) context, str);
                 listView.setAdapter(mAdapter);
                 mAdapter.notifyDataSetChanged();
 
@@ -647,7 +628,10 @@ public class ServiceStation extends Activity implements ServiceStationInterface 
         return beanArrayList;
 
     }
-    //internet con broadcast receiver
+
+
+    // ** internet con broadcast receiver ** //
+
     @Override
     protected void onDestroy() {
         super.onDestroy();

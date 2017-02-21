@@ -98,6 +98,7 @@ public class ServiceStation_Edit extends Activity implements ServiceStationInter
         context = this;
         gD = new GeneralData(context);
         imgLoader = new ImageLoader(context);
+
         listView = (ListView) findViewById(R.id.listview);
         img_calen = (ImageView) findViewById(R.id.img_calen);
         txt_date = (TextView) findViewById(R.id.txt_set_date);
@@ -112,6 +113,8 @@ public class ServiceStation_Edit extends Activity implements ServiceStationInter
         img_StationImage = (ImageView) findViewById(R.id.img_profile);
         txt_ssName = (TextView) findViewById(R.id.txt_comp_name);
         txt_ssAddr = (TextView) findViewById(R.id.txt_address);
+
+
         Typeface typeFace1 = Typeface.createFromAsset(getAssets(), "fonts/Oswald-Bold.otf");
         txt_headerName.setTypeface(typeFace1);
         txt_next.setTypeface(typeFace1);
@@ -125,15 +128,10 @@ public class ServiceStation_Edit extends Activity implements ServiceStationInter
         txt_title.setText(spannableString);
         txt_title.setTypeface(typeFace1);
 
+        // ** value passed from edit booking list ** //
 
         str_from_edit = getIntent().getStringExtra("from_edit");
 
-        if (str_from_edit != null) {
-
-
-            Log.i("PP", "str_from_edit" + str_from_edit);
-        }
-        Log.i("BN_edit", "str_serviceType-->" + gD.prefs.getString("edit_ss_serviceType", null));
         if (gD.prefs.getString("edit_ss_serviceArray", null) != null) {
 
             ll_dispStastions.setVisibility(View.VISIBLE);
@@ -155,19 +153,12 @@ public class ServiceStation_Edit extends Activity implements ServiceStationInter
 
         }
 
+        // ** choose service station - from edit can't change the service station ** //
+
         ll_selectServiceStation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Toast.makeText(ServiceStation_Edit.this, "You cant edit this service station", Toast.LENGTH_SHORT).show();
-               /* if (count == 0) {
-                    listView.setVisibility(View.VISIBLE);
-                    displayServiceStationCall();
-                    // prepareMovieData();
-                    count = 1;
-                } else if (count == 1) {
-                    listView.setVisibility(View.GONE);
-                    count = 0;
-                }*/
             }
         });
 
@@ -199,12 +190,21 @@ public class ServiceStation_Edit extends Activity implements ServiceStationInter
                 finish();
             }
         });
+
+
+        // ** calendar btn ** //
+
         img_calen.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 showDialog(0);
             }
         });
+
+
+        // ** next button ** //
+
+
         txt_next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -332,7 +332,10 @@ public class ServiceStation_Edit extends Activity implements ServiceStationInter
         prefEdit.commit();
         finish();
     }
-//calendar
+
+
+
+        // ** calendar code ** //
 
     @Override
     protected Dialog onCreateDialog(int id) {
@@ -347,7 +350,7 @@ public class ServiceStation_Edit extends Activity implements ServiceStationInter
 
 
         DatePickerDialog datePickerDialog = new DatePickerDialog(this, myDateListener, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
-        datePickerDialog.getDatePicker().setMinDate(System.currentTimeMillis());
+        datePickerDialog.getDatePicker().setMinDate(calendar.getTimeInMillis());
         datePickerDialog.show();
 
         return null;
@@ -369,10 +372,15 @@ public class ServiceStation_Edit extends Activity implements ServiceStationInter
                 .append(month).append("-").append(day));
     }
 
+
+
+
+    // ** listview interface ** to diaplay and get specific service station values(not needed as we are not going to edit the service station) //
+
+
     @Override
     public void getServiceStationAddress(String str_id, String str_image, String str_name, String str_address, String str_diagno_charge, String str_pickUP_charge, String str_modular_charge) {
 
-        // add coing for disable event
 
         str_ServiceStationId = str_id;
         listView.setVisibility(View.GONE);
@@ -381,8 +389,11 @@ public class ServiceStation_Edit extends Activity implements ServiceStationInter
         txt_ssAddr.setText(str_address);
         txt_ssName.setText(str_name);
 
-        //Toast.makeText(ServiceStation.this, "id-" + str_id + "\n" + "name-" + str_name, Toast.LENGTH_SHORT).show();
+
     }
+
+
+    // ** service station REST Call ** // - not used
 
     public void displayServiceStationCall() {
         StringRequest stringRequest = new StringRequest(Request.Method.POST, GeneralData.LOCAL_IP + "service_station.php",

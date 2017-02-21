@@ -69,7 +69,6 @@ import java.util.Set;
 public class ChooseService extends Activity implements ChooseServiceInterface {
     Context context;
     //Listview
-    private List<CommonBean> chooseList = new ArrayList<>();
     private ListView listView, list_serviceDisplay;
     private ChooseServiceAdapter mAdapter;
     //form field
@@ -87,9 +86,8 @@ public class ChooseService extends Activity implements ChooseServiceInterface {
     JSONArray jsonArray_my_profile;
     String strChoosenService;
     GeneralData gD;
-    String str_EditBookingId, str_EditServiceId, str_EditServiceArrayResp;
+    String str_EditServiceId;
     ArrayList<CommonBean> beanArrayList;
-    ArrayList<String> beanIdList;
     ArrayList<String> arrayList_id;
     ArrayList<CommonBean> arrayList;
     TextView txt_amt, txt_choice, txt_header, txt_selectServiceText, txt_errorMsg;
@@ -150,9 +148,6 @@ public class ChooseService extends Activity implements ChooseServiceInterface {
         Type type = new TypeToken<ArrayList<CommonBean>>() {
         }.getType();
         arrayList = gson.fromJson(json, type);
-
-// Log.e("NNOP", String.valueOf(arrayList));
-
         String json_id = sharedPrefs.getString("key_id", null);
         Type type_id = new TypeToken<ArrayList<String>>() {
         }.getType();
@@ -174,61 +169,6 @@ public class ChooseService extends Activity implements ChooseServiceInterface {
 
         }
 
-   /*     str_EditServiceArrayResp = getIntent().getStringExtra("edit_ss_serviceArray");
-
-
-       if (str_EditServiceArrayResp != null) {
-           ll_displayServicList.setVisibility(View.VISIBLE);
-
-
-           SharedPreferences sharedPrefss = PreferenceManager.getDefaultSharedPreferences(context);
-           SharedPreferences.Editor editor = sharedPrefss.edit();
-           Gson gsons = new Gson();
-           String jsons = gsons.toJson(null);
-           String json_ids = gsons.toJson(null);
-           editor.putString("key", jsons);
-           editor.putString("key_id", json_ids);
-           editor.commit();
-            Log.e("NN_editC", "str_serviceArray->" + str_EditServiceArrayResp);
-           beanArrayList = new ArrayList<CommonBean>();
-           beanIdList = new ArrayList<String>();
-
-            try {
-                JSONObject jsobj = new JSONObject(str_EditServiceArrayResp);
-
-                Log.i("HH", "strResp : " + str_EditServiceArrayResp);
-                // if (jsobj.getString("code").equalsIgnoreCase("2")) {
-              JSONArray services_stations = jsobj.getJSONArray("services");
-                str_EditBookingId = jsobj.getString("booking_id");
-                if(str_EditServiceId==null){
-                    str_EditServiceId=jsobj.getString("station_id");
-                }
-                if (str_EditServiceArrayResp.length() > 0) {
-
-                    for (int i = 0; i < services_stations.length(); i++) {
-                        CommonBean drawerBean = new CommonBean();
-                        drawerBean.setStr_serviceName(services_stations.getJSONObject(i).getString("service_name"));
-                        drawerBean.setN_serviceId(Integer.parseInt(services_stations.getJSONObject(i).getString("service_id")));
-                        drawerBean.setF_price(Integer.parseInt(services_stations.getJSONObject(i).getString("service_rate")));
-                        beanArrayList.add(drawerBean);
-                        beanIdList.add(services_stations.getJSONObject(i).getString("service_id"));
-
-                    }
-                }
-                ChooseServiceDisplayAdapter mAdap = new ChooseServiceDisplayAdapter(context, beanArrayList, (ChooseServiceInterface) context);
-                list_serviceDisplay.setAdapter(mAdap);
-                mAdap.notifyDataSetChanged();
-                lang_list_new.addAll(beanArrayList);
-                alCatId.addAll(beanIdList);
-
-                Log.i("HH_edit", "lang_list_new : " + lang_list_new.toString());
-                Log.i("HH_edit", "alCatId : " + alCatId);
-
-
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }*/
 
         ll_oilChange.setOnClickListener(new View.OnClickListener() {
             @Override

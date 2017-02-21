@@ -63,12 +63,10 @@ public class BookServiceDiagno extends Activity {
     Button btn_bookService;
     ImageView img_menu, img_back;
     TextView txt_headerName;
-
-    LinearLayout  ll_diagno, ll_modular;
+    LinearLayout ll_diagno, ll_modular;
     GeneralData gD;
-    String str_ServiceType,str_FromEditBtn;
+    String str_ServiceType, str_FromEditBtn;
     TextView txt_diagnoText, txt_modularText;
-
 
 
     @Override
@@ -79,21 +77,19 @@ public class BookServiceDiagno extends Activity {
         txt_view_car_det = (TextView) findViewById(R.id.txt_click_car_model);
         btn_bookService = (Button) findViewById(R.id.btn_book_service);
         gD = new GeneralData(context);
-        str_FromEditBtn = getIntent().getStringExtra("str_fromEdit");
-        if (str_FromEditBtn != null) {
-            Log.e("YKD", "not null");
-        } else {
-            Log.e("YKD", "null");
-        }
+
+
+        str_FromEditBtn = getIntent().getStringExtra("str_fromEdit");  // ** not used now ** //
 
         img_back = (ImageView) findViewById(R.id.img_back);
         img_menu = (ImageView) findViewById(R.id.img_menu);
-
         ll_diagno = (LinearLayout) findViewById(R.id.ll_diagno);
         ll_modular = (LinearLayout) findViewById(R.id.ll_modular);
         txt_diagnoText = (TextView) findViewById(R.id.txt_diagno_text);
         txt_modularText = (TextView) findViewById(R.id.txt_modular_text);
         txt_headerName = (TextView) findViewById(R.id.txt_header);
+
+
         Typeface typeFace1 = Typeface.createFromAsset(getAssets(), "fonts/Oswald-Bold.otf");
         txt_headerName.setTypeface(typeFace1);
         txt_view_car_det.setTypeface(typeFace1);
@@ -109,53 +105,51 @@ public class BookServiceDiagno extends Activity {
             }
         });
 
+        // ** buton book service ** //
+
         btn_bookService.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (str_ServiceType == null) {
                     Log.e("BN", "str_ServiceType is null");
                     Toast.makeText(BookServiceDiagno.this, "Select your service type", Toast.LENGTH_SHORT).show();
-                }
-                else {
-                   /* if (str_FromEditBtn != null) {
-                        Log.e("YKD", "not null");
-                        startActivity(new Intent(BookServiceDiagno.this, ServiceStation.class));
-                        finish();
-                    } else {*/
-                        startActivity(new Intent(BookServiceDiagno.this, ServiceStation.class));
-                        Log.e("YKD", "null");
-                        SharedPreferences.Editor prefEdit = gD.prefs.edit();
-                        prefEdit.putString("ss_name", null);
-                        prefEdit.putString("ss_id", null);
-                        prefEdit.putString("ss_image", null);
-                        prefEdit.putString("ss_addr", null);
-                        prefEdit.putString("ss_diagno_charge", null);
-                        prefEdit.putString("ss_pickup_charge", null);
-                        prefEdit.putString("ss_modular_reprogramming_charge", null);
-                        prefEdit.putString("edit_ss_id", null);
-                        prefEdit.putString("edit_ss_book_id", null);
-                        prefEdit.putString("edit_ss_serviceArray", null);
-                        prefEdit.putString("edit_ss_image", null);
-                        prefEdit.putString("edit_ss_name", null);
-                        prefEdit.putString("edit_ss_addr", null);
-                        prefEdit.putString("edit_ss_date", null);
-                        SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(context);
-                        SharedPreferences.Editor editor = sharedPrefs.edit();
-                        Gson gson = new Gson();
-                        String json = gson.toJson(null);
-                        String json_id = gson.toJson(null);
-                        editor.putString("key", json);
-                        editor.putString("key_id", json_id);
-                        editor.commit();
-                        prefEdit.commit();
-                        finish();
-                    //}
+                } else {
+                    startActivity(new Intent(BookServiceDiagno.this, ServiceStation.class));
+                    Log.e("YKD", "null");
+                    SharedPreferences.Editor prefEdit = gD.prefs.edit();
+                    prefEdit.putString("ss_name", null);
+                    prefEdit.putString("ss_id", null);
+                    prefEdit.putString("ss_image", null);
+                    prefEdit.putString("ss_addr", null);
+                    prefEdit.putString("ss_diagno_charge", null);
+                    prefEdit.putString("ss_pickup_charge", null);
+                    prefEdit.putString("ss_modular_reprogramming_charge", null);
+                    prefEdit.putString("edit_ss_id", null);
+                    prefEdit.putString("edit_ss_book_id", null);
+                    prefEdit.putString("edit_ss_serviceArray", null);
+                    prefEdit.putString("edit_ss_image", null);
+                    prefEdit.putString("edit_ss_name", null);
+                    prefEdit.putString("edit_ss_addr", null);
+                    prefEdit.putString("edit_ss_date", null);
+                    SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(context);
+                    SharedPreferences.Editor editor = sharedPrefs.edit();
+                    Gson gson = new Gson();
+                    String json = gson.toJson(null);
+                    String json_id = gson.toJson(null);
+                    editor.putString("key", json);
+                    editor.putString("key_id", json_id);
+                    editor.commit();
+                    prefEdit.commit();
+                    finish();
                     Log.e("BN", "str_ServiceType->" + str_ServiceType);
 
                 }
 
             }
         });
+
+        //** diagnostics button ** //
+
         ll_diagno.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -168,18 +162,26 @@ public class BookServiceDiagno extends Activity {
                 prefEdit.commit();
             }
         });
+
+        //** modular reprogramming button ** //
+
         ll_modular.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 txt_modularText.setTextColor(Color.parseColor("#0987ff"));
                 txt_diagnoText.setTextColor(Color.parseColor("#000000"));
-               // btn_bookService.setVisibility(View.VISIBLE);
+                // btn_bookService.setVisibility(View.VISIBLE);
                 str_ServiceType = "modular";
                 SharedPreferences.Editor prefEdit = gD.prefs.edit();
                 prefEdit.putString("str_serviceType", str_ServiceType);
                 prefEdit.commit();
             }
         });
+
+
+        // ** car detail popup ** //
+
+
         txt_view_car_det.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -194,12 +196,12 @@ public class BookServiceDiagno extends Activity {
                 TextView txt_carModel = (TextView) itemView1.findViewById(R.id.txt_car_model);
                 TextView txt_carNum = (TextView) itemView1.findViewById(R.id.txt_car_num);
                 TextView txt_carType = (TextView) itemView1.findViewById(R.id.txt_car_type);
-                if (gD.prefs.getString("name", null) != null&&gD.prefs.getString("car_model", null)!=null&&gD.prefs.getString("car_number", null)!=null&&gD.prefs.getString("car_type", null)!=null) {
+                if (gD.prefs.getString("name", null) != null && gD.prefs.getString("car_model", null) != null && gD.prefs.getString("car_number", null) != null && gD.prefs.getString("car_type", null) != null) {
 
-                   Log.i("PP","name" +gD.prefs.getString("name", null));
-                    Log.i("PP","car_model" +gD.prefs.getString("car_model", null));
-                    Log.i("PP","car_type" +gD.prefs.getString("car_type", null));
-                    Log.i("PP","car_number" +gD.prefs.getString("car_number", null));
+                    Log.i("PP", "name" + gD.prefs.getString("name", null));
+                    Log.i("PP", "car_model" + gD.prefs.getString("car_model", null));
+                    Log.i("PP", "car_type" + gD.prefs.getString("car_type", null));
+                    Log.i("PP", "car_number" + gD.prefs.getString("car_number", null));
 
                     txt_name.setText(gD.prefs.getString("name", null));
                     txt_carModel.setText(gD.prefs.getString("car_model", null));
