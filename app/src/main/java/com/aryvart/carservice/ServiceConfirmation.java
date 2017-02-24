@@ -231,6 +231,10 @@ public class ServiceConfirmation extends Activity implements ChooseServiceInterf
             rl_modularLay.setVisibility(View.GONE);
             listConfirm.setVisibility(View.VISIBLE);
             ll_cbDiagnoLay.setVisibility(View.GONE);
+
+            txt_pickUpCharge.setVisibility(View.VISIBLE);
+            txt_pickUpText.setVisibility(View.VISIBLE);
+
             if (gD.prefs.getString("pickUp_address", null) != null) {
                 ll_addressLay.setVisibility(View.VISIBLE);
                 txt_address.setText(gD.prefs.getString("pickUp_address", null));
@@ -243,8 +247,12 @@ public class ServiceConfirmation extends Activity implements ChooseServiceInterf
             rl_modularLay.setVisibility(View.GONE);
             listConfirm.setVisibility(View.VISIBLE);
             ll_addressLay.setVisibility(View.GONE);
-            txt_pickUpCharge.setVisibility(View.GONE);
-            txt_pickUpText.setVisibility(View.GONE);
+
+            txt_pickUpCharge.setVisibility(View.INVISIBLE);
+            txt_pickUpText.setVisibility(View.INVISIBLE);
+            txt_diagnoText.setVisibility(View.VISIBLE);
+            txt_diagnoCharge.setVisibility(View.VISIBLE);
+
             txt_address.setText(gD.prefs.getString("pickUp_address", null));
                /* //not added diagno
                 f_overall_amount = nRate;
@@ -266,6 +274,9 @@ public class ServiceConfirmation extends Activity implements ChooseServiceInterf
             listConfirm.setVisibility(View.GONE);
             ll_cbDiagnoLay.setVisibility(View.GONE);
 
+            txt_pickUpCharge.setVisibility(View.INVISIBLE);
+            txt_pickUpText.setVisibility(View.INVISIBLE);
+
             ll_addressLay.setVisibility(View.GONE);
             txt_address.setText(gD.prefs.getString("pickUp_address", null));
            /* if (gD.prefs.getString("pickUp_address", null) != null) {
@@ -278,6 +289,7 @@ public class ServiceConfirmation extends Activity implements ChooseServiceInterf
             str_cbStatus = "modular";
             f_overall_amount = nRate;
             Log.e("NN", "overall amount->" + String.valueOf(f_overall_amount));
+            txt_total_amt.setText("" + nRate);
             txt_overallAmount.setText("" + f_overall_amount);
         } else if (gD.prefs.getString("str_serviceType", null).equalsIgnoreCase("modularpickup")) {
             str_ServiceType = "modularpickup";
@@ -300,6 +312,7 @@ public class ServiceConfirmation extends Activity implements ChooseServiceInterf
             str_cbStatus = "modularpickup";
             f_overall_amount = nRate + Float.parseFloat(gD.prefs.getString("ss_pickup_charge", null));
             Log.e("NN", "overall amount->" + String.valueOf(f_overall_amount));
+            txt_total_amt.setText("" + nRate);
             txt_overallAmount.setText("" + f_overall_amount);
         }
 
@@ -339,8 +352,8 @@ public class ServiceConfirmation extends Activity implements ChooseServiceInterf
                     }
 
                 } else {
-                    txt_pickUpText.setVisibility(View.GONE);
-                    txt_pickUpCharge.setVisibility(View.GONE);
+                    txt_pickUpText.setVisibility(View.INVISIBLE);
+                    txt_pickUpCharge.setVisibility(View.INVISIBLE);
                     ll_addressLay.setVisibility(View.GONE);
                     txt_address.setText(gD.prefs.getString("pickUp_address", null));
 
@@ -412,8 +425,8 @@ public class ServiceConfirmation extends Activity implements ChooseServiceInterf
                     }
 
                 } else {
-                    txt_diagnoText.setVisibility(View.GONE);
-                    txt_diagnoCharge.setVisibility(View.GONE);
+                    txt_diagnoText.setVisibility(View.INVISIBLE);
+                    txt_diagnoCharge.setVisibility(View.INVISIBLE);
                     Log.i("BN_SCon", "str_serviceType-->" + gD.prefs.getString("str_serviceType", null));
                     str_ServiceType = "diagnoNA";
                     f_overall_amount = nRate;
@@ -519,7 +532,7 @@ public class ServiceConfirmation extends Activity implements ChooseServiceInterf
                 prefEdit.putString("ss_pickup_charge", null);
                 prefEdit.putString("ss_modular_reprogramming_charge", null);
                 prefEdit.putString("pickUp_address", null);
-                gD.strAddress=null;
+                gD.strAddress = null;
                 prefEdit.commit();
                 startActivity(new Intent(ServiceConfirmation.this, BookService.class));
                 finish();
@@ -601,7 +614,7 @@ public class ServiceConfirmation extends Activity implements ChooseServiceInterf
                                 prefEdit.putString("ss_pickup_charge", null);
                                 prefEdit.putString("ss_modular_reprogramming_charge", null);
                                 prefEdit.putString("pickUp_address", null);
-                                gD.strAddress=null;
+                                gD.strAddress = null;
                                 prefEdit.commit();
                             }
                         } catch (Exception e) {

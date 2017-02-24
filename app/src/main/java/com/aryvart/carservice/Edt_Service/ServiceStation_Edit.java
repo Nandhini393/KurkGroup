@@ -201,7 +201,12 @@ public class ServiceStation_Edit extends Activity implements ServiceStationInter
             }
         });
 
-
+        txt_date.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showDialog(0);
+            }
+        });
         // ** next button ** //
 
 

@@ -125,6 +125,13 @@ public class ChooseService_Edit extends Activity implements ChooseServiceInterfa
         //  str_EditBookingId=gD.prefs.getString("edit_ss_id", null);
         //for saving dats in sharedpreference
 
+        strChoosenService = "1";
+        getServicesCall(strChoosenService);
+        txt_oilService.setTextColor(Color.parseColor("#0987ff"));
+        txt_fullService.setTextColor(Color.parseColor("#000000"));
+
+
+
 
         SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(context);
         Gson gson = new Gson();

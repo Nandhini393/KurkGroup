@@ -74,7 +74,9 @@ public class DisplayServicesAdapter extends BaseAdapter {
         holder.txt_service_name1.setText(serviceBean.getStr_serviceName());
         holder.txt_service_rate1.setText("" + serviceBean.getF_price());
         Log.i("AS", "IF : "+ serviceBean.getF_price());
-
+        n_rate+=serviceBean.getF_price();
+        Log.i("AS!", "IF : "+n_rate);
+        myInterface.delChoosenService(0,"", Float.valueOf(n_rate));
         return rowView;
     }
 

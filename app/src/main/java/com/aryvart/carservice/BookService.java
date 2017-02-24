@@ -26,6 +26,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -974,8 +975,48 @@ String strAddress;
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        finish();
+
+
     }
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            final AlertDialog.Builder builder = new AlertDialog.Builder(context);
+            builder.setCancelable(true);
+            View itemView1 = LayoutInflater.from(context)
+                    .inflate(R.layout.logout_popup, null);
+            final AlertDialog altDialog = builder.create();
+            altDialog.setView(itemView1);
+            TextView txt_content = (TextView) itemView1.findViewById(R.id.txt_content);
+            Button btn_yes = (Button) itemView1.findViewById(R.id.btn_yes);
+            Button btn_no = (Button) itemView1.findViewById(R.id.btn_no);
+            txt_content.setText("Do you wish to exit the app?");
+            btn_yes.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+                    NetworkInfo netInfo = connectivityManager.getActiveNetworkInfo();
+                    boolean isConnected = netInfo != null && netInfo.isConnectedOrConnecting();
+
+                    if (isConnected) {
+                        finish();
+                    } else {
+                        Toast.makeText(BookService.this, "No internet connection", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
+            btn_no.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    altDialog.dismiss();
+                }
+            });
+            altDialog.show();
+        }
+        return true;
+
+}
 
     @Override
     public void onClick(View v) {

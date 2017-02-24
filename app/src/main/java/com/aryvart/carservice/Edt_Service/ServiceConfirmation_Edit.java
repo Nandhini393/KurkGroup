@@ -228,8 +228,8 @@ public class ServiceConfirmation_Edit extends Activity implements ChooseServiceI
             txt_pickUpCharge.setVisibility(View.VISIBLE);
             txt_pickUpText.setVisibility(View.VISIBLE);
 
-            txt_diagnoText.setVisibility(View.GONE);
-            txt_diagnoCharge.setVisibility(View.GONE);
+            txt_diagnoText.setVisibility(View.INVISIBLE);
+            txt_diagnoCharge.setVisibility(View.INVISIBLE);
 
             str_ServiceType = "pickup";
 
@@ -248,8 +248,8 @@ public class ServiceConfirmation_Edit extends Activity implements ChooseServiceI
             txt_diagnoText.setVisibility(View.VISIBLE);
             txt_diagnoCharge.setVisibility(View.VISIBLE);
 
-            txt_pickUpCharge.setVisibility(View.GONE);
-            txt_pickUpText.setVisibility(View.GONE);
+            txt_pickUpCharge.setVisibility(View.INVISIBLE);
+            txt_pickUpText.setVisibility(View.INVISIBLE);
 
             rl_modularLay.setVisibility(View.GONE);
             listConfirm.setVisibility(View.VISIBLE);
@@ -269,8 +269,8 @@ public class ServiceConfirmation_Edit extends Activity implements ChooseServiceI
         } else if (gD.prefs.getString("edit_ss_serviceType", null).equalsIgnoreCase("modular")) {
             str_ServiceType = "modular";
 
-            txt_pickUpCharge.setVisibility(View.GONE);
-            txt_pickUpText.setVisibility(View.GONE);
+            txt_pickUpCharge.setVisibility(View.INVISIBLE);
+            txt_pickUpText.setVisibility(View.INVISIBLE);
 
             rl_modularLay.setVisibility(View.VISIBLE);
             listConfirm.setVisibility(View.GONE);
@@ -288,6 +288,7 @@ public class ServiceConfirmation_Edit extends Activity implements ChooseServiceI
             f_overall_amount = nRate;
             Log.e("NN", "overall amount->" + String.valueOf(f_overall_amount));
             txt_overallAmount.setText("" + f_overall_amount);
+            txt_total_amt.setText(""+nRate);
         } else if (gD.prefs.getString("edit_ss_serviceType", null).equalsIgnoreCase("modularpickup")) {
             str_ServiceType = "modularpickup";
 
@@ -311,12 +312,13 @@ public class ServiceConfirmation_Edit extends Activity implements ChooseServiceI
             txt_modularAmt.setText("" + nRate);
             f_overall_amount = nRate + Float.parseFloat(gD.prefs.getString("edit_ss_pickUpAmt", null));
             Log.e("NN", "overall amount->" + String.valueOf(f_overall_amount));
+            txt_total_amt.setText(""+nRate);
             txt_overallAmount.setText("" + f_overall_amount);
         } else if (gD.prefs.getString("edit_ss_serviceType", null).equalsIgnoreCase("pickupNA")) {
 
             str_ServiceType = "pickupNA";
-            txt_pickUpCharge.setVisibility(View.GONE);
-            txt_pickUpText.setVisibility(View.GONE);
+            txt_pickUpCharge.setVisibility(View.INVISIBLE);
+            txt_pickUpText.setVisibility(View.INVISIBLE);
             txt_address.setText(gD.prefs.getString("edit_ss_pickUpAddress", null));
             rl_modularLay.setVisibility(View.GONE);
             listConfirm.setVisibility(View.VISIBLE);
@@ -330,8 +332,8 @@ public class ServiceConfirmation_Edit extends Activity implements ChooseServiceI
 
             str_ServiceType = "diagnoNA";
 
-            txt_diagnoCharge.setVisibility(View.GONE);
-            txt_diagnoText.setVisibility(View.GONE);
+            txt_diagnoCharge.setVisibility(View.INVISIBLE);
+            txt_diagnoText.setVisibility(View.INVISIBLE);
             txt_address.setText(gD.prefs.getString("edit_ss_pickUpAddress", null));
             rl_modularLay.setVisibility(View.GONE);
             listConfirm.setVisibility(View.VISIBLE);
@@ -371,8 +373,8 @@ public class ServiceConfirmation_Edit extends Activity implements ChooseServiceI
             txt_pickUpText.setVisibility(View.VISIBLE);
 
 
-            txt_diagnoCharge.setVisibility(View.GONE);
-            txt_diagnoText.setVisibility(View.GONE);
+            txt_diagnoCharge.setVisibility(View.INVISIBLE);
+            txt_diagnoText.setVisibility(View.INVISIBLE);
 
             cb_diagno.setChecked(false);
             cb_pickUp.setChecked(true);
@@ -384,12 +386,12 @@ public class ServiceConfirmation_Edit extends Activity implements ChooseServiceI
             txt_address.setText(gD.prefs.getString("edit_ss_pickUpAddress", null));
             str_ServiceType = "diagnosispickupNA";
 
-            txt_pickUpCharge.setVisibility(View.GONE);
-            txt_pickUpText.setVisibility(View.GONE);
+            txt_pickUpCharge.setVisibility(View.INVISIBLE);
+            txt_pickUpText.setVisibility(View.INVISIBLE);
 
 
-            txt_diagnoCharge.setVisibility(View.GONE);
-            txt_diagnoText.setVisibility(View.GONE);
+            txt_diagnoCharge.setVisibility(View.INVISIBLE);
+            txt_diagnoText.setVisibility(View.INVISIBLE);
 
             cb_diagno.setChecked(false);
             cb_pickUp.setChecked(false);
@@ -458,8 +460,8 @@ public class ServiceConfirmation_Edit extends Activity implements ChooseServiceI
                     }
 
                 } else {
-                    txt_pickUpText.setVisibility(View.GONE);
-                    txt_pickUpCharge.setVisibility(View.GONE);
+                    txt_pickUpText.setVisibility(View.INVISIBLE);
+                    txt_pickUpCharge.setVisibility(View.INVISIBLE);
 
                   /*  SharedPreferences.Editor prefEdit = gD.prefs.edit();
                     prefEdit.putString("edit_ss_serviceType", "diagnostics");
@@ -541,8 +543,8 @@ public class ServiceConfirmation_Edit extends Activity implements ChooseServiceI
                         txt_overallAmount.setText("" + f_overall_amount);
                     }
                 } else {
-                    txt_diagnoText.setVisibility(View.GONE);
-                    txt_diagnoCharge.setVisibility(View.GONE);
+                    txt_diagnoText.setVisibility(View.INVISIBLE);
+                    txt_diagnoCharge.setVisibility(View.INVISIBLE);
 
                     f_overall_amount = nRate;
                     Log.e("NN", "overall amount->" + String.valueOf(f_overall_amount));

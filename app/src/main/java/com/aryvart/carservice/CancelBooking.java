@@ -53,12 +53,13 @@ public class CancelBooking extends Activity implements ChooseServiceInterface {
     GeneralData gD;
     ImageView img_back;
     TextView txt_carRegNum, txt_overAllAmt;
-    String str_EditBookingId, str_EditServiceId, str_EditServiceArrayResp;
+    String str_EditBookingId, str_EditServiceArrayResp;
     ListView list_serviceDisplay;
     Button btn_cancelBooking;
-    TextView txt_AdditionAmtCharge, txt_AddAmtText,txt_header,txt_carNumText,txt_serviceListText,txt_amtText,txt_pickUpText,txt_overAllAmtText,txt_modularText,txt_modularAmt;
+    TextView txt_AdditionAmtCharge, txt_totalText, txt_total_amt, txt_AddAmtText, txt_header, txt_carNumText, txt_serviceListText, txt_amtText, txt_pickUpText, txt_overAllAmtText, txt_modularText, txt_modularAmt;
     Float f_overallAmount;
     RelativeLayout rl_modularLay;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -81,16 +82,19 @@ public class CancelBooking extends Activity implements ChooseServiceInterface {
         });
 
 
-        txt_header=(TextView)findViewById(R.id.txt_header);
-        txt_carNumText=(TextView)findViewById(R.id.txt_carNumText);
-        txt_serviceListText=(TextView)findViewById(R.id.txt_serviceListText);
-        txt_amtText=(TextView)findViewById(R.id.txt_amtText);
-        txt_pickUpText=(TextView)findViewById(R.id.pickUpText);
-        txt_overAllAmtText=(TextView)findViewById(R.id.txt_overAllText);
+        txt_header = (TextView) findViewById(R.id.txt_header);
+        txt_carNumText = (TextView) findViewById(R.id.txt_carNumText);
+        txt_serviceListText = (TextView) findViewById(R.id.txt_serviceListText);
+        txt_amtText = (TextView) findViewById(R.id.txt_amtText);
+        txt_pickUpText = (TextView) findViewById(R.id.pickUpText);
+        txt_overAllAmtText = (TextView) findViewById(R.id.txt_overAllText);
 
         rl_modularLay = (RelativeLayout) findViewById(R.id.rl_modularAmt);
         txt_modularText = (TextView) findViewById(R.id.txt_modularText);
         txt_modularAmt = (TextView) findViewById(R.id.txt_modularAmt);
+
+        txt_total_amt = (TextView) findViewById(R.id.txt_total_amt);
+        txt_totalText = (TextView) findViewById(R.id.txt_totalText);
 
 
         Typeface typeFace1 = Typeface.createFromAsset(getAssets(), "fonts/Oswald-Bold.otf");
@@ -110,6 +114,8 @@ public class CancelBooking extends Activity implements ChooseServiceInterface {
         txt_overAllAmt.setTypeface(typeFace3);
         txt_modularAmt.setTypeface(typeFace3);
         txt_modularText.setTypeface(typeFace3);
+        txt_total_amt.setTypeface(typeFace3);
+        txt_totalText.setTypeface(typeFace3);
 
         // str_EditServiceId = getIntent().getStringExtra("edit_ss_id");
         str_EditServiceArrayResp = getIntent().getStringExtra("edit_ss_serviceArray");
@@ -121,13 +127,14 @@ public class CancelBooking extends Activity implements ChooseServiceInterface {
         Log.e("NN_edit", "edit_ss_modularAmt->" + getIntent().getStringExtra("edit_ss_modularAmt"));
 
         if (str_EditServiceArrayResp != null) {
+            if (!getIntent().getStringExtra("edit_ss_serviceType").equalsIgnoreCase("modular") || !getIntent().getStringExtra("edit_ss_serviceType").equalsIgnoreCase("modularpickup")) {
             Log.e("NN_edit", "str_serviceArray->" + str_EditServiceArrayResp);
             ArrayList<CommonBean> beanArrayList = new ArrayList<CommonBean>();
             ArrayList<String> beanIdList = new ArrayList<String>();
 
             try {
                 JSONObject jsobj = new JSONObject(str_EditServiceArrayResp);
-                 f_overallAmount = Float.valueOf(jsobj.getString("rate"));
+                f_overallAmount = Float.valueOf(jsobj.getString("rate"));
                 str_EditBookingId = jsobj.getString("booking_id");
                 Log.i("HH", "f_overallAmount : " + f_overallAmount);
                 Log.i("HH", "str_EditBookingId : " + str_EditBookingId);
@@ -156,55 +163,51 @@ public class CancelBooking extends Activity implements ChooseServiceInterface {
                 e.printStackTrace();
             }
         }
+        }
 
         if (getIntent().getStringExtra("edit_ss_serviceType").equalsIgnoreCase("diagnostics")) {
             rl_modularLay.setVisibility(View.GONE);
             list_serviceDisplay.setVisibility(View.VISIBLE);
             txt_AddAmtText.setText("Diagnostics service Charge");
             txt_AdditionAmtCharge.setText("" + Float.parseFloat(getIntent().getStringExtra("edit_ss_diagnoAmt")));
-        }
-
-        else if (getIntent().getStringExtra("edit_ss_serviceType").equalsIgnoreCase("pickup")) {
+        } else if (getIntent().getStringExtra("edit_ss_serviceType").equalsIgnoreCase("pickup")) {
             rl_modularLay.setVisibility(View.GONE);
             list_serviceDisplay.setVisibility(View.VISIBLE);
             txt_AddAmtText.setText("Pick up service Charge");
             txt_AdditionAmtCharge.setText("" + Float.parseFloat(getIntent().getStringExtra("edit_ss_pickUpAmt")));
-        }
-        else if (getIntent().getStringExtra("edit_ss_serviceType").equalsIgnoreCase("modular")) {
-             txt_AddAmtText.setText("");
-            txt_AdditionAmtCharge.setText("");
-            rl_modularLay.setVisibility(View.VISIBLE);
-            list_serviceDisplay.setVisibility(View.GONE);
-            txt_modularAmt.setText(""+f_overallAmount);
-
-        }
-        else if (getIntent().getStringExtra("edit_ss_serviceType").equalsIgnoreCase("modularpickup")) {
-            rl_modularLay.setVisibility(View.VISIBLE);
-            list_serviceDisplay.setVisibility(View.GONE);
-            txt_modularAmt.setText(""+f_overallAmount);
-
-             txt_AddAmtText.setText("Pick up service Charge");
-              txt_AdditionAmtCharge.setText("" + Float.parseFloat(getIntent().getStringExtra("edit_ss_pickUpAmt")));
-        }
-        else if (getIntent().getStringExtra("edit_ss_serviceType").equalsIgnoreCase("pickupNA")) {
+        } else if (getIntent().getStringExtra("edit_ss_serviceType").equalsIgnoreCase("modular")) {
             txt_AddAmtText.setText("");
             txt_AdditionAmtCharge.setText("");
-        }
-        else if (getIntent().getStringExtra("edit_ss_serviceType").equalsIgnoreCase("diagnoNA")) {
-             txt_AddAmtText.setText("");
-            txt_AdditionAmtCharge.setText("");
-        }
-        else if (getIntent().getStringExtra("edit_ss_serviceType").equalsIgnoreCase("diagnosispickup")) {
-            txt_AddAmtText.setText("Pick up service Charge\n\nDiagnostics service Charge\n");
-            txt_AdditionAmtCharge.setText("" + Float.parseFloat(getIntent().getStringExtra("edit_ss_pickUpAmt"))+"\n\n"+Float.parseFloat(getIntent().getStringExtra("edit_ss_diagnoAmt"))+"\n");
+            rl_modularLay.setVisibility(View.VISIBLE);
+            list_serviceDisplay.setVisibility(View.GONE);
+            txt_total_amt.setText("" + Float.valueOf(getIntent().getStringExtra("edit_ss_modularAmt")));
+            txt_modularAmt.setText("" + Float.valueOf(getIntent().getStringExtra("edit_ss_modularAmt")));
 
-        }
-        else if (getIntent().getStringExtra("edit_ss_serviceType").equalsIgnoreCase("diagnopickup")) {
+        } else if (getIntent().getStringExtra("edit_ss_serviceType").equalsIgnoreCase("modularpickup")) {
+            rl_modularLay.setVisibility(View.VISIBLE);
+            list_serviceDisplay.setVisibility(View.GONE);
+            txt_total_amt.setText("" + Float.valueOf(getIntent().getStringExtra("edit_ss_modularAmt")));
+            txt_modularAmt.setText("" + Float.valueOf(getIntent().getStringExtra("edit_ss_modularAmt")));
+            txt_AddAmtText.setText("Pick up service Charge");
+            txt_AdditionAmtCharge.setText("" + Float.parseFloat(getIntent().getStringExtra("edit_ss_pickUpAmt")));
+            Float total=Float.valueOf(getIntent().getStringExtra("edit_ss_modularAmt"))+Float.parseFloat(getIntent().getStringExtra("edit_ss_pickUpAmt"));
+            txt_overAllAmt.setText(""+total);
+
+        } else if (getIntent().getStringExtra("edit_ss_serviceType").equalsIgnoreCase("pickupNA")) {
+            txt_AddAmtText.setText("");
+            txt_AdditionAmtCharge.setText("");
+        } else if (getIntent().getStringExtra("edit_ss_serviceType").equalsIgnoreCase("diagnoNA")) {
+            txt_AddAmtText.setText("");
+            txt_AdditionAmtCharge.setText("");
+        } else if (getIntent().getStringExtra("edit_ss_serviceType").equalsIgnoreCase("diagnosispickup")) {
+            txt_AddAmtText.setText("Pick up service Charge\n\nDiagnostics service Charge\n");
+            txt_AdditionAmtCharge.setText("" + Float.parseFloat(getIntent().getStringExtra("edit_ss_pickUpAmt")) + "\n\n" + Float.parseFloat(getIntent().getStringExtra("edit_ss_diagnoAmt")) + "\n");
+
+        } else if (getIntent().getStringExtra("edit_ss_serviceType").equalsIgnoreCase("diagnopickup")) {
             txt_AddAmtText.setText("Pick up service Charge");
             txt_AdditionAmtCharge.setText("" + Float.parseFloat(getIntent().getStringExtra("edit_ss_pickUpAmt")));
 
-        }
-        else if (getIntent().getStringExtra("edit_ss_serviceType").equalsIgnoreCase("diagnosispickupNA")) {
+        } else if (getIntent().getStringExtra("edit_ss_serviceType").equalsIgnoreCase("diagnosispickupNA")) {
             txt_AddAmtText.setText("");
             txt_AdditionAmtCharge.setText("");
 
@@ -218,8 +221,7 @@ public class CancelBooking extends Activity implements ChooseServiceInterface {
                 boolean isConnected = netInfo != null && netInfo.isConnectedOrConnecting();
                 if (isConnected) {
                     cancelBookingCall();
-                }
-                else {
+                } else {
                     Snackbar.make(findViewById(android.R.id.content), "No Internet Connection", Snackbar.LENGTH_LONG)
                             .show();
                 }
@@ -240,7 +242,7 @@ public class CancelBooking extends Activity implements ChooseServiceInterface {
 
     @Override
     public void delChoosenService(int str_id, String str_name, Float str_price) {
-
+        txt_total_amt.setText("" + str_price);
     }
 
     public void cancelBookingCall() {

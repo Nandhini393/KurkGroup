@@ -276,6 +276,13 @@ int year,month,day;
             }
         });
 
+
+        txt_date.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showDialog(0);
+            }
+        });
         //** next btn ** //
 
         txt_next.setOnClickListener(new View.OnClickListener() {

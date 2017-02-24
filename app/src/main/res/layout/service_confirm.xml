@@ -151,6 +151,7 @@
                         android:layout_marginRight="10dp"
                         android:fadeScrollbars="false"
                         android:layout_marginTop="5dp"
+                        android:visibility="visible"
                         android:divider="@null" />
 
                     <RelativeLayout
@@ -169,7 +170,7 @@
                             android:layout_alignParentLeft="true"
                             android:layout_centerInParent="true"
                             android:textColor="@color/black"
-                            android:text="Modular Reprogramming Amount"
+                            android:text="Modular Reprogramming"
                             android:textSize="13dp" />
 
                         <TextView
@@ -178,8 +179,8 @@
                             android:layout_height="wrap_content"
                             android:layout_alignParentRight="true"
                             android:layout_centerInParent="true"
-                            android:layout_marginRight="20dp"
-                            android:text=""
+                            android:layout_marginRight="10dp"
+                            android:text="523.55"
                             android:textAllCaps="true"
                             android:textSize="13dp" />
 
@@ -208,7 +209,6 @@
                         android:layout_height="wrap_content"
                         android:layout_alignParentLeft="true"
                         android:layout_centerInParent="true"
-                        android:layout_marginLeft="10dp"
                         android:text="Total amount"
                         android:textAllCaps="true"
                         android:textColor="@color/black"
@@ -220,7 +220,7 @@
                         android:layout_height="wrap_content"
                         android:layout_alignParentRight="true"
                         android:layout_centerInParent="true"
-                        android:layout_marginRight="5dp"
+                        android:layout_marginRight="10dp"
                         android:text=""
                         android:textColor="@color/black"
                         android:textSize="15dp" />
@@ -233,8 +233,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="20dp"
-                    android:layout_marginRight="20dp"
+                    android:layout_marginRight="10dp"
                     android:layout_marginTop="25dp"
+                    android:gravity="center"
                     android:orientation="horizontal"
                     android:weightSum="3">
 
@@ -242,7 +243,7 @@
                         android:id="@+id/cb_pickup"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1.2"
+                        android:layout_weight="1"
                         android:textSize="13dp"
                         android:textColor="@color/black"
                         android:button="@drawable/checkbox_selector"
@@ -251,8 +252,7 @@
                     <TextView
                         android:id="@+id/pickUpText"
                         android:layout_width="0dp"
-
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
                         android:layout_weight="1.4"
                         android:gravity="center|left"
                         android:text="Pickup charge"
@@ -262,10 +262,12 @@
                     <TextView
                         android:id="@+id/txt_pickup_amt"
                         android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="0.4"
-                        android:gravity="right"
+                        android:layout_height="match_parent"
+                        android:layout_weight="0.6"
+                        android:gravity="right|center"
                         android:text=""
+                        android:layout_gravity="center"
+                        android:layout_marginRight="20dp"
                         android:textColor="@color/black"
                         android:textSize="13dp" />
 
@@ -276,8 +278,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="20dp"
-                    android:layout_marginRight="20dp"
+                    android:layout_marginRight="10dp"
                     android:layout_marginTop="10dp"
+                    android:gravity="center"
                     android:orientation="horizontal"
                     android:weightSum="3">
 
@@ -294,7 +297,7 @@
                     <TextView
                         android:id="@+id/diagnoText"
                         android:layout_width="0dp"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
                         android:layout_gravity="left"
                         android:layout_weight="1.3"
                         android:gravity="center"
@@ -305,9 +308,10 @@
                     <TextView
                         android:id="@+id/txt_diagno_amt"
                         android:layout_width="0dp"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
                         android:layout_weight="0.6"
-                        android:gravity="right"
+                        android:layout_marginRight="20dp"
+                        android:gravity="right|center"
                         android:text=""
                         android:textColor="@color/black"
                         android:textSize="13dp"
@@ -321,8 +325,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="20dp"
-                    android:layout_marginRight="20dp"
-                    android:layout_marginTop="10dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginTop="25dp"
                     android:orientation="horizontal"
                     android:weightSum="2.5">
 
@@ -333,10 +337,11 @@
                         android:layout_marginRight="40dp"
                         android:layout_toLeftOf="@+id/txt_overall_amt"
                         android:layout_weight="2"
-                        android:gravity="center|right"
+                        android:gravity="center|left"
                         android:text="Overall amount"
+                        android:textAllCaps="true"
                         android:textColor="@color/black"
-                        android:textSize="13dp" />
+                        android:textSize="15dp" />
 
                     <TextView
                         android:id="@+id/txt_overall_amt"
@@ -347,8 +352,9 @@
                         android:layout_weight="0.5"
                         android:gravity="right"
                         android:text=""
+                        android:layout_marginRight="20dp"
                         android:textColor="@color/black"
-                        android:textSize="13dp" />
+                        android:textSize="15dp" />
                 </LinearLayout>
                 <LinearLayout
                     android:layout_width="match_parent"
