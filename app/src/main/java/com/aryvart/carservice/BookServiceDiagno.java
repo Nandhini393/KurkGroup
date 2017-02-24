@@ -66,7 +66,7 @@ public class BookServiceDiagno extends Activity {
     LinearLayout ll_diagno, ll_modular;
     GeneralData gD;
     String str_ServiceType, str_FromEditBtn;
-    TextView txt_diagnoText, txt_modularText;
+    TextView txt_diagnoText, txt_modularText, txt_bookServiceLabel;
 
 
     @Override
@@ -88,7 +88,7 @@ public class BookServiceDiagno extends Activity {
         txt_diagnoText = (TextView) findViewById(R.id.txt_diagno_text);
         txt_modularText = (TextView) findViewById(R.id.txt_modular_text);
         txt_headerName = (TextView) findViewById(R.id.txt_header);
-
+        txt_bookServiceLabel = (TextView) findViewById(R.id.txt_bookServiceLAbel);
 
         Typeface typeFace1 = Typeface.createFromAsset(getAssets(), "fonts/Oswald-Bold.otf");
         txt_headerName.setTypeface(typeFace1);
@@ -96,7 +96,7 @@ public class BookServiceDiagno extends Activity {
         btn_bookService.setTypeface(typeFace1);
         txt_diagnoText.setTypeface(typeFace1);
         txt_modularText.setTypeface(typeFace1);
-
+        txt_bookServiceLabel.setTypeface(typeFace1);
 
         img_back.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -107,7 +107,7 @@ public class BookServiceDiagno extends Activity {
 
         // ** buton book service ** //
 
-        btn_bookService.setOnClickListener(new View.OnClickListener() {
+ /*       btn_bookService.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (str_ServiceType == null) {
@@ -146,10 +146,10 @@ public class BookServiceDiagno extends Activity {
                 }
 
             }
-        });
+        });*/
 
         //** diagnostics button ** //
-
+        final SharedPreferences.Editor prefEdit1 = gD.prefs.edit();
         ll_diagno.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -160,6 +160,42 @@ public class BookServiceDiagno extends Activity {
                 SharedPreferences.Editor prefEdit = gD.prefs.edit();
                 prefEdit.putString("str_serviceType", str_ServiceType);
                 prefEdit.commit();
+
+                if (str_ServiceType == null) {
+                    Log.e("BN", "str_ServiceType is null");
+                    Toast.makeText(BookServiceDiagno.this, "Select your service type", Toast.LENGTH_SHORT).show();
+                } else {
+                    startActivity(new Intent(BookServiceDiagno.this, ServiceStation.class));
+                    Log.e("YKD", "null");
+
+                    prefEdit1.putString("ss_name", null);
+                    prefEdit1.putString("ss_id", null);
+                    prefEdit1.putString("ss_image", null);
+                    prefEdit1.putString("ss_addr", null);
+                    prefEdit1.putString("ss_diagno_charge", null);
+                    prefEdit1.putString("ss_pickup_charge", null);
+                    prefEdit1.putString("ss_modular_reprogramming_charge", null);
+                    prefEdit1.putString("edit_ss_id", null);
+                    prefEdit1.putString("edit_ss_book_id", null);
+                    prefEdit1.putString("edit_ss_serviceArray", null);
+                    prefEdit1.putString("edit_ss_image", null);
+                    prefEdit1.putString("edit_ss_name", null);
+                    prefEdit1.putString("edit_ss_addr", null);
+                    prefEdit1.putString("edit_ss_date", null);
+                    SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(context);
+                    SharedPreferences.Editor editor = sharedPrefs.edit();
+                    Gson gson = new Gson();
+                    String json = gson.toJson(null);
+                    String json_id = gson.toJson(null);
+                    editor.putString("key", json);
+                    editor.putString("key_id", json_id);
+                    editor.commit();
+                    prefEdit1.commit();
+                    finish();
+                    Log.e("BN", "str_ServiceType->" + str_ServiceType);
+
+                }
+
             }
         });
 
@@ -175,6 +211,41 @@ public class BookServiceDiagno extends Activity {
                 SharedPreferences.Editor prefEdit = gD.prefs.edit();
                 prefEdit.putString("str_serviceType", str_ServiceType);
                 prefEdit.commit();
+
+                if (str_ServiceType == null) {
+                    Log.e("BN", "str_ServiceType is null");
+                    Toast.makeText(BookServiceDiagno.this, "Select your service type", Toast.LENGTH_SHORT).show();
+                } else {
+                    startActivity(new Intent(BookServiceDiagno.this, ServiceStation.class));
+                    Log.e("YKD", "null");
+
+                    prefEdit1.putString("ss_name", null);
+                    prefEdit1.putString("ss_id", null);
+                    prefEdit1.putString("ss_image", null);
+                    prefEdit1.putString("ss_addr", null);
+                    prefEdit1.putString("ss_diagno_charge", null);
+                    prefEdit1.putString("ss_pickup_charge", null);
+                    prefEdit1.putString("ss_modular_reprogramming_charge", null);
+                    prefEdit1.putString("edit_ss_id", null);
+                    prefEdit1.putString("edit_ss_book_id", null);
+                    prefEdit1.putString("edit_ss_serviceArray", null);
+                    prefEdit1.putString("edit_ss_image", null);
+                    prefEdit1.putString("edit_ss_name", null);
+                    prefEdit1.putString("edit_ss_addr", null);
+                    prefEdit1.putString("edit_ss_date", null);
+                    SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(context);
+                    SharedPreferences.Editor editor = sharedPrefs.edit();
+                    Gson gson = new Gson();
+                    String json = gson.toJson(null);
+                    String json_id = gson.toJson(null);
+                    editor.putString("key", json);
+                    editor.putString("key_id", json_id);
+                    editor.commit();
+                    prefEdit1.commit();
+                    finish();
+                    Log.e("BN", "str_ServiceType->" + str_ServiceType);
+
+                }
             }
         });
 

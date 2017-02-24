@@ -158,7 +158,7 @@ public class ServiceStation_Edit extends Activity implements ServiceStationInter
         ll_selectServiceStation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(ServiceStation_Edit.this, "You cant edit this service station", Toast.LENGTH_SHORT).show();
+                Toast.makeText(ServiceStation_Edit.this, "You can't change the service station", Toast.LENGTH_SHORT).show();
             }
         });
 

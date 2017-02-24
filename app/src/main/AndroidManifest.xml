@@ -44,41 +44,41 @@
             android:windowSoftInputMode="stateHidden"></activity>
         <activity
             android:name=".ServiceStation"
-            android:windowSoftInputMode="stateHidden|adjustPan"></activity>
+            android:windowSoftInputMode="stateHidden"></activity>
         <activity
             android:name=".ChooseService"
-            android:windowSoftInputMode="stateHidden|adjustPan"></activity>
+            android:windowSoftInputMode="stateHidden"></activity>
         <activity
             android:name=".ForgetPassword"
-            android:windowSoftInputMode="stateHidden|adjustPan"></activity>
+            android:windowSoftInputMode="stateHidden"></activity>
         <activity
             android:name=".ServiceConfirmation"
-            android:windowSoftInputMode="stateHidden|adjustPan"></activity>
+            android:windowSoftInputMode="stateHidden"></activity>
         <activity
             android:name=".EditProfile"
             android:windowSoftInputMode="stateHidden"></activity>
         <activity
             android:name=".CancelBooking"
-            android:windowSoftInputMode="stateHidden|adjustPan"></activity>
+            android:windowSoftInputMode="stateHidden"></activity>
         <activity
             android:name=".CancelBookingList"
-            android:windowSoftInputMode="stateHidden|adjustPan"></activity>
+            android:windowSoftInputMode="stateHidden"></activity>
         <activity
             android:name=".EditBookingList"
-            android:windowSoftInputMode="stateHidden|adjustPan"></activity>
+            android:windowSoftInputMode="stateHidden"></activity>
         <activity
             android:name=".ViewBookingList"
-            android:windowSoftInputMode="stateHidden|adjustPan"></activity>
+            android:windowSoftInputMode="stateHidden"></activity>
         <activity
             android:name=".Edt_Service.ServiceStation_Edit"
-            android:windowSoftInputMode="stateHidden|adjustPan"></activity>
+            android:windowSoftInputMode="stateHidden"></activity>
         <activity
             android:name=".Edt_Service.ChooseService_Edit"
-            android:windowSoftInputMode="stateHidden|adjustPan"></activity>
+            android:windowSoftInputMode="stateHidden"></activity>
 
         <activity
             android:name=".Edt_Service.ServiceConfirmation_Edit"
-            android:windowSoftInputMode="stateHidden|adjustPan"></activity>
+            android:windowSoftInputMode="stateHidden"></activity>
 
         <meta-data
             android:name="com.google.android.gms.version"

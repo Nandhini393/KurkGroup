@@ -168,6 +168,7 @@
                         android:layout_margin="20dp"
                         android:dividerHeight="0.5dp"
                         android:visibility="gone"
+                        android:fadeScrollbars="false"
                         android:divider="@null"
                         android:background="#f5f5f5"
                          />
@@ -235,6 +236,7 @@
                             android:layout_marginLeft="20dp"
                             android:layout_marginRight="20dp"
                             android:divider="@null"
+                            android:fadeScrollbars="false"
                             android:layout_marginTop="5dp" />
                     </LinearLayout>
                 </LinearLayout>

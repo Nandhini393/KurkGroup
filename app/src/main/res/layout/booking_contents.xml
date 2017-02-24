@@ -14,22 +14,25 @@
 <LinearLayout
     android:layout_width="match_parent"
     android:orientation="horizontal"
+    android:weightSum="3"
     android:layout_height="wrap_content">
     <ImageView
-        android:layout_width="130dp"
+        android:layout_width="110dp"
         android:id="@+id/img_profile"
-        android:layout_height="100dp" />
+        android:layout_weight="0.2"
+        android:layout_height="90dp" />
     <LinearLayout
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:orientation="vertical"
-        android:layout_marginLeft="10dp"
+        android:layout_margin="5dp"
+        android:layout_weight="1.5"
         android:layout_gravity="center"
         android:layout_height="wrap_content">
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="New Text"
-        android:textSize="15dp"
+        android:textSize="13dp"
         android:textColor="@color/appColor"
         android:id="@+id/txt_comp_name"
         />
@@ -37,20 +40,22 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="New Text"
-        android:textSize="13dp"
+        android:textSize="12dp"
         android:layout_marginTop="5dp"
         android:id="@+id/txt_address"
         />
         </LinearLayout>
     <TextView
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="status"
+        android:text="completed"
         android:textSize="12dp"
+        android:layout_weight="1.3"
         android:id="@+id/txt_status"
         android:layout_marginRight="10dp"
-        android:gravity="right|center"
-        android:layout_gravity="center|right" />
+        android:layout_gravity="center|right"
+        android:gravity="right"
+        />
 </LinearLayout>
 
 </RelativeLayout>

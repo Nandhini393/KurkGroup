@@ -1,67 +1,76 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
-<RelativeLayout
     android:layout_width="match_parent"
-    android:orientation="horizontal"
-    android:padding="5dp"
-    android:id="@+id/rl_lay"
-    android:layout_height="wrap_content">
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
-       <!-- android:button="@android:color/transparent"-->
-  <!--  android:background="@drawable/radio_selector_orange"-->
-<RelativeLayout
-    android:layout_width="match_parent"
-    android:orientation="horizontal"
-    android:layout_height="wrap_content">
-    <ImageView
-        android:layout_width="130dp"
-        android:id="@+id/img_profile"
-        android:layout_height="100dp" />
-    <LinearLayout
+    <RelativeLayout
+        android:id="@+id/rl_lay"
         android:layout_width="match_parent"
-        android:orientation="vertical"
-        android:layout_marginLeft="10dp"
-        android:layout_marginTop="10dp"
-        android:gravity="center|left"
-       android:layout_centerInParent="true"
-        android:layout_toRightOf="@+id/img_profile"
-        android:layout_height="wrap_content">
-    <TextView
-        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="New Text"
+        android:orientation="horizontal"
+        android:padding="5dp">
 
-        android:textColor="@color/appColor"
-        android:id="@+id/txt_comp_name"
-         />
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="New Text"
-        android:layout_marginTop="5dp"
-        android:textSize="12dp"
-        android:id="@+id/txt_address"
-         />
+        <!-- android:button="@android:color/transparent"-->
+        <!--  android:background="@drawable/radio_selector_orange"-->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="3">
+
+            <ImageView
+                android:id="@+id/img_profile"
+                android:layout_width="110dp"
+                android:layout_height="90dp"
+                android:layout_weight="0.2" />
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_margin="5dp"
+                android:layout_toRightOf="@+id/img_profile"
+                android:layout_weight="1.8"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/txt_comp_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Text"
+                    android:textColor="@color/appColor"
+                    android:textSize="13dp" />
+
+                <TextView
+                    android:id="@+id/txt_address"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:text="Text"
+                    android:textSize="12dp" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/txt_edit"
+                android:layout_width="0dp"
+                android:layout_height="30dp"
+                android:layout_alignParentRight="true"
+                android:layout_centerInParent="true"
+                android:layout_gravity="center"
+                android:layout_marginRight="8dp"
+                android:layout_weight="1"
+                android:background="@color/appColor"
+                android:gravity="center"
+                android:padding="2dp"
+                android:text="Edit"
+                android:textColor="@color/white" />
         </LinearLayout>
-    <TextView
-        android:layout_width="60dp"
-        android:layout_height="30dp"
-        android:text="Edit"
-        android:padding="2dp"
-        android:gravity="center"
-        android:layout_alignParentRight="true"
-        android:background="@color/appColor"
-        android:id="@+id/txt_edit"
-        android:textColor="@color/white"
-        android:layout_marginRight="8dp"
-        android:layout_centerInParent="true" />
-</RelativeLayout>
 
-</RelativeLayout>
-<View
-    android:layout_width="match_parent"
-    android:background="#c0c0c0"
-    android:layout_height="0.5dp"></View>
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="#c0c0c0"></View>
 </LinearLayout>

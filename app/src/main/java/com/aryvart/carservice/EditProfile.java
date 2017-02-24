@@ -119,6 +119,7 @@ public class EditProfile extends Activity {
         img_back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                startActivity(new Intent(EditProfile.this,BookService.class));
                 finish();
             }
         });
@@ -275,6 +276,7 @@ public class EditProfile extends Activity {
                                 btn_ok.setOnClickListener(new View.OnClickListener() {
                                     @Override
                                     public void onClick(View v) {
+                                        startActivity(new Intent(EditProfile.this,BookService.class));
                                         finish();
                                         altDialog.dismiss();
                                     }

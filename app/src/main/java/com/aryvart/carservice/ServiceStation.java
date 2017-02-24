@@ -241,6 +241,7 @@ int year,month,day;
         img_back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 SharedPreferences.Editor prefEdit = gD.prefs.edit();
                 prefEdit.putString("ss_name", null);
                 prefEdit.putString("ss_id", null);
@@ -354,6 +355,8 @@ int year,month,day;
     @Override
     public void onBackPressed() {
         super.onBackPressed();
+
+
         SharedPreferences.Editor prefEdit = gD.prefs.edit();
         prefEdit.putString("ss_name", null);
         prefEdit.putString("ss_id", null);

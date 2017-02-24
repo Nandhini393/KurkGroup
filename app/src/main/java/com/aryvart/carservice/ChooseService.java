@@ -126,6 +126,12 @@ public class ChooseService extends Activity implements ChooseServiceInterface {
         Typeface typeFace = Typeface.createFromAsset(getAssets(), "fonts/Oswald-Regular.ttf");
         txt_selectServiceText.setTypeface(typeFace);
 
+        strChoosenService = "1";
+        getServicesCall(strChoosenService);
+        txt_oilService.setTextColor(Color.parseColor("#0987ff"));
+        txt_fullService.setTextColor(Color.parseColor("#000000"));
+
+
 
         str_EditServiceId = gD.prefs.getString("ss_id", null);
         Log.i("TTB", "str_EditServiceId" + str_EditServiceId);
@@ -141,6 +147,7 @@ public class ChooseService extends Activity implements ChooseServiceInterface {
 
         Log.i("PP2", "ss_date" + gD.prefs.getString("ss_date", null));
 
+        // **saving the value in shared pref for back and edit btn func**//
 
         SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(context);
         Gson gson = new Gson();
@@ -169,6 +176,7 @@ public class ChooseService extends Activity implements ChooseServiceInterface {
 
         }
 
+        // ** oil change layout click event ** //
 
         ll_oilChange.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -187,6 +195,8 @@ public class ChooseService extends Activity implements ChooseServiceInterface {
                 }
             }
         });
+
+
         ll_fullService.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -228,8 +238,7 @@ public class ChooseService extends Activity implements ChooseServiceInterface {
                             listView.setVisibility(View.VISIBLE);
                             txt_errorMsg.setVisibility(View.GONE);
                             LoadLayout(jsonArray_my_profile, "Response");
-                        }
-                        else {
+                        } else {
                             listView.setVisibility(View.GONE);
                             txt_errorMsg.setVisibility(View.VISIBLE);
                             txt_errorMsg.setText("No response from server.Check your internet connection");
@@ -244,8 +253,7 @@ public class ChooseService extends Activity implements ChooseServiceInterface {
                         if (isConnected) {
                             listView.setVisibility(View.GONE);
                             txt_errorMsg.setVisibility(View.GONE);
-                        }
-                        else {
+                        } else {
                             listView.setVisibility(View.GONE);
                             txt_errorMsg.setVisibility(View.GONE);
                             txt_errorMsg.setText("No response from server.Check your internet connection");
@@ -266,7 +274,7 @@ public class ChooseService extends Activity implements ChooseServiceInterface {
                 ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
                 NetworkInfo netInfo = connectivityManager.getActiveNetworkInfo();
                 boolean isConnected = netInfo != null && netInfo.isConnectedOrConnecting();
-                if(isConnected){
+                if (isConnected) {
                     if (lang_list_new.size() == 0) {
                         Toast.makeText(ChooseService.this, "Choose atleast one service", Toast.LENGTH_SHORT).show();
                     } else {
@@ -287,8 +295,7 @@ public class ChooseService extends Activity implements ChooseServiceInterface {
                         startActivity(i);
                         finish();
                     }
-                }
-                else {
+                } else {
                     Snackbar.make(findViewById(android.R.id.content), "No Internet Connection", Snackbar.LENGTH_LONG)
                             .show();
                 }
@@ -304,6 +311,9 @@ public class ChooseService extends Activity implements ChooseServiceInterface {
         startActivity(new Intent(ChooseService.this, ServiceStation.class));
         finish();
     }
+
+
+    // ** get service REST call for specific service station ** //
 
     public void getServicesCall(final String strFromChoosen) {
         Log.i("HH", "strFromChoosen : " + strFromChoosen);
@@ -321,8 +331,8 @@ public class ChooseService extends Activity implements ChooseServiceInterface {
                             Log.i("HH", "strResp : " + response);
                             if (jsobj.getString("code").equalsIgnoreCase("2")) {
 
-                                listView.setVisibility(View.VISIBLE);
-                                txt_errorMsg.setVisibility(View.GONE);
+                               /* listView.setVisibility(View.VISIBLE);
+                                txt_errorMsg.setVisibility(View.GONE);*/
 
                                 JSONArray profile_created_by = jsobj.getJSONArray("services");
                                 jsonArray_my_profile = jsobj.getJSONArray("services");
@@ -345,8 +355,9 @@ public class ChooseService extends Activity implements ChooseServiceInterface {
                                 //txt_drawer_error_msg.setVisibility(View.GONE);
 
                             } else {
-                                listView.setVisibility(View.GONE);
-                                txt_errorMsg.setVisibility(View.VISIBLE);
+                                Log.e("NN","No services available");
+                               /* listView.setVisibility(View.GONE);
+                                txt_errorMsg.setVisibility(View.VISIBLE);*/
                             }
 
                         } catch (Exception e) {
@@ -383,7 +394,10 @@ public class ChooseService extends Activity implements ChooseServiceInterface {
             protected Map<String, String> getParams() {
                 Map<String, String> params = new HashMap<String, String>();
 
-                // station_id,category_id
+
+                // ** strFromChoosen denotes the oil charge--> 1 and full service --> 2 **//
+
+
                 if (strFromChoosen != null) {
                     if (strFromChoosen.equalsIgnoreCase("1")) {
                         params.put("category_id", "1");
@@ -428,6 +442,9 @@ public class ChooseService extends Activity implements ChooseServiceInterface {
 
     }
 
+
+    // ** Load layout to save the services respose ** //
+
     private ArrayList<CommonBean> LoadLayout(JSONArray providerServicesMonth, String stridentifyEdit) {
         ArrayList<CommonBean> beanArrayList = new ArrayList<CommonBean>();
 
@@ -464,6 +481,9 @@ public class ChooseService extends Activity implements ChooseServiceInterface {
         return beanArrayList;
 
     }
+
+
+    // ** while selecting add data to arraylist ** //
 
     @Override
     public void getServiceStationAddress(String str_id, String str_name, Float f_price) {
@@ -554,6 +574,8 @@ public class ChooseService extends Activity implements ChooseServiceInterface {
         mAdap.notifyDataSetChanged();
 
     }
+
+    // ** while clicking cross btn delete from arraylist and also from the view ** //
 
     @Override
     public void delChoosenService(int str_id, String str_name, Float f_price) {

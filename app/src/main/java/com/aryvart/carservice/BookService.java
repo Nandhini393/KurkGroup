@@ -67,7 +67,7 @@ public class BookService extends Activity implements LocationListener, View.OnCl
     TextView txt_view_car_det;
     Button btn_bookService, btn_viewBookings;
     ImageView img_menu;
-    TextView txt_headerName;
+    TextView txt_headerName,txt_bookServiceLabel;
     String strname, strcartype, strcar_number, strcar_model, strpass;
 
     //Menu
@@ -111,7 +111,7 @@ public class BookService extends Activity implements LocationListener, View.OnCl
     public static boolean isGPSEnabled = false;
     public static boolean isNetworkEnabled = false;
     LocationManager locationManager;
-
+String strAddress;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -124,6 +124,7 @@ public class BookService extends Activity implements LocationListener, View.OnCl
 
         gD = new GeneralData(context);
         txt_view_car_det = (TextView) findViewById(R.id.txt_click_car_model);
+
         Log.i("PP--*", "name" + gD.prefs.getString("name", null));
         Log.i("PP--*", "car_model" + gD.prefs.getString("car_model", null));
         Log.i("PP--*", "car_type" + gD.prefs.getString("car_type", null));
@@ -162,7 +163,8 @@ public class BookService extends Activity implements LocationListener, View.OnCl
         txt_headerName = (TextView) findViewById(R.id.txt_header);
         btn_viewBookings = (Button) findViewById(R.id.btn_view_bookings);
         ll_Map = (LinearLayout) findViewById(R.id.ll_map);
-        txt_pickUpAddress = (TextView) findViewById(R.id.txt_PickUpAddr);
+        txt_bookServiceLabel=(TextView)findViewById(R.id.txt_bookServiceLAbel);
+      //  txt_pickUpAddress = (TextView) findViewById(R.id.txt_PickUpAddr);
         Typeface typeFace1 = Typeface.createFromAsset(getAssets(), "fonts/Oswald-Bold.otf");
         txt_headerName.setTypeface(typeFace1);
         txt_view_car_det.setTypeface(typeFace1);
@@ -170,6 +172,9 @@ public class BookService extends Activity implements LocationListener, View.OnCl
         txt_diagnoText.setTypeface(typeFace1);
         txt_pickUpText.setTypeface(typeFace1);
         btn_viewBookings.setTypeface(typeFace1);
+        txt_bookServiceLabel.setTypeface(typeFace1);
+
+
         marker_icon_view.setOnClickListener(this);
         Log.i("BN", "completeAddresss->" + gD.prefs.getString("pickUp_address", null));
         Log.i("BN_BS", "str_serviceType-->" + gD.prefs.getString("str_serviceType", null));
@@ -324,8 +329,26 @@ public class BookService extends Activity implements LocationListener, View.OnCl
             }
         });
 
+
+      /*  Log.e("BN!!", "completeAddresss"+gD.strAddress);
+
+        SharedPreferences.Editor prefEditAddr = gD.prefs.edit();
+        prefEditAddr.putString("pickUp_address", gD.strAddress);
+        prefEditAddr.commit();
+
+
+        if(gD.prefs.getString("pickUp_address",null)!=null){
+            Log.e("BN!", "completeAddresss"+gD.prefs.getString("pickUp_address",null));
+            strAddress=gD.prefs.getString("pickUp_address",null);
+        }
+        else{
+            Log.e("BN!", "completeAddresss is null");
+            strAddress="";
+        }*/
+
         // ** button diagnostics code ** //
 
+        final SharedPreferences.Editor prefEdit_D = gD.prefs.edit();
         ll_diagno.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -334,12 +357,44 @@ public class BookService extends Activity implements LocationListener, View.OnCl
                 txt_pickUpText.setTextColor(Color.parseColor("#000000"));
                 ll_Map.setVisibility(View.VISIBLE);
 
+                Log.i("BNCom_onBu", "completeAddresss->" + strAddress);
+                Log.i("BNCom_onBu", "str_ServiceType->" + str_ServiceType);
+                Log.e("BN!!d", "completeAddresss"+gD.strAddress);
+
+                if (str_ServiceType == null) {
+                    Log.e("BN", "str_ServiceType is null");
+                    Toast.makeText(BookService.this, "Select your service type", Toast.LENGTH_SHORT).show();
+                } else if (gD.strAddress == null) {
+                    Log.e("BN", "completeAddresss is null");
+                    Toast.makeText(BookService.this, "Enter your address", Toast.LENGTH_SHORT).show();
+                }else {
+
+
+
+
+                     if (str_ServiceType.equalsIgnoreCase("diagnostics")) {
+                         prefEdit_D.putString("pickUp_address", gD.strAddress);
+                         Log.e("BNd", "completeAddresss->" + gD.strAddress);
+                       /* if (str_EditButtonClicked != null) {
+                            Intent i = new Intent(BookService.this, BookServiceDiagno.class);
+                            i.putExtra("str_fromEdit", "edit");
+                            startActivity(i);
+                        } else {*/
+                        startActivity(new Intent(BookService.this, BookServiceDiagno.class));
+                        //}
+
+                    }
+
+                }
+
+                prefEdit_D.commit();
+
             }
         });
 
         // ** button pickup code ** //
 
-
+        final SharedPreferences.Editor prefEdit = gD.prefs.edit();
         ll_pickUP.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -347,7 +402,63 @@ public class BookService extends Activity implements LocationListener, View.OnCl
                 txt_pickUpText.setTextColor(Color.parseColor("#0987ff"));
                 txt_diagnoText.setTextColor(Color.parseColor("#000000"));
                 str_ServiceType = "pickup";
+                Log.e("BN!!p", "completeAddresss"+gD.strAddress);
+             /*   SharedPreferences.Editor prefEdit4 = gD.prefs.edit();
+                prefEdit4.putString("str_serviceType", str_ServiceType);
+                prefEdit4.commit();*/
 
+
+                prefEdit.putString("str_serviceType", str_ServiceType);
+
+
+                Log.i("BNCom_onBu", "str_ServiceType->" + str_ServiceType);
+
+                if (str_ServiceType == null) {
+                    Log.e("BN", "str_ServiceType is null");
+                    Toast.makeText(BookService.this, "Select your service type", Toast.LENGTH_SHORT).show();
+                } else if (gD.strAddress == null) {
+                    Log.e("BN", "completeAddresss is null");
+                    Toast.makeText(BookService.this, "Enter your address", Toast.LENGTH_SHORT).show();
+                }
+                else{
+
+                    prefEdit.putString("pickUp_address", gD.strAddress);
+                    Log.i("BNCom_onBu", "completeAddresss->" + strAddress);
+                    if (str_ServiceType.equalsIgnoreCase("pickup")) {
+                       /* if (str_EditButtonClicked != null) {
+                            Log.e("YK", "not null");
+                            Log.e("BN", "str_ServiceType->" + str_ServiceType);
+
+                            startActivity(new Intent(BookService.this, ServiceStation.class));
+                        } else {*/
+                        startActivity(new Intent(BookService.this, ServiceStation.class));
+                        prefEdit.putString("ss_name", null);
+                        prefEdit.putString("ss_id", null);
+                        prefEdit.putString("ss_image", null);
+                        prefEdit.putString("ss_addr", null);
+                        prefEdit.putString("ss_diagno_charge", null);
+                        prefEdit.putString("ss_pickup_charge", null);
+                        prefEdit.putString("ss_modular_reprogramming_charge", null);
+                        prefEdit.putString("edit_ss_id", null);
+                        prefEdit.putString("edit_ss_book_id", null);
+                        prefEdit.putString("edit_ss_serviceArray", null);
+                        prefEdit.putString("edit_ss_image", null);
+                        prefEdit.putString("edit_ss_name", null);
+                        prefEdit.putString("edit_ss_addr", null);
+                        prefEdit.putString("edit_ss_date", null);
+                        SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(context);
+                        SharedPreferences.Editor editor = sharedPrefs.edit();
+                        Gson gson = new Gson();
+                        String json = gson.toJson(null);
+                        String json_id = gson.toJson(null);
+                        editor.putString("key", json);
+                        editor.putString("key_id", json_id);
+                        editor.commit();
+                        //}
+                    }
+                }
+
+                prefEdit.commit();
             }
         });
 
@@ -359,6 +470,7 @@ public class BookService extends Activity implements LocationListener, View.OnCl
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(BookService.this, EditProfile.class));
+                finish();
             }
         });
         ll_cancelService.setOnClickListener(new View.OnClickListener() {
@@ -432,6 +544,7 @@ public class BookService extends Activity implements LocationListener, View.OnCl
 
 
         // ** button book service code ** //
+/*
 
         final SharedPreferences.Editor prefEdit = gD.prefs.edit();
         btn_bookService.setOnClickListener(new View.OnClickListener() {
@@ -454,12 +567,14 @@ public class BookService extends Activity implements LocationListener, View.OnCl
                     prefEdit.putString("str_serviceType", str_ServiceType);
 
                     if (str_ServiceType.equalsIgnoreCase("pickup")) {
-                       /* if (str_EditButtonClicked != null) {
+                       */
+/* if (str_EditButtonClicked != null) {
                             Log.e("YK", "not null");
                             Log.e("BN", "str_ServiceType->" + str_ServiceType);
 
                             startActivity(new Intent(BookService.this, ServiceStation.class));
-                        } else {*/
+                        } else {*//*
+
                         startActivity(new Intent(BookService.this, ServiceStation.class));
                         prefEdit.putString("ss_name", null);
                         prefEdit.putString("ss_id", null);
@@ -485,13 +600,15 @@ public class BookService extends Activity implements LocationListener, View.OnCl
                         editor.commit();
                         //}
                     } else if (str_ServiceType.equalsIgnoreCase("diagnostics")) {
-                       /* if (str_EditButtonClicked != null) {
+                       */
+/* if (str_EditButtonClicked != null) {
                             Intent i = new Intent(BookService.this, BookServiceDiagno.class);
                             i.putExtra("str_fromEdit", "edit");
                             startActivity(i);
 
 
-                        } else {*/
+                        } else {*//*
+
                         startActivity(new Intent(BookService.this, BookServiceDiagno.class));
                         //}
 
@@ -501,6 +618,7 @@ public class BookService extends Activity implements LocationListener, View.OnCl
                 prefEdit.commit();
             }
         });
+*/
 
 
         // ** button view bookings code ** //
@@ -782,6 +900,9 @@ public class BookService extends Activity implements LocationListener, View.OnCl
 
                         String completeAddress = addressIndex0 + "," + addressIndex1;
                         completeAddresss = addressIndex0 + "," + addressIndex1;
+                       /* SharedPreferences.Editor prefEditAddr = gD.prefs.edit();
+                        prefEditAddr.putString("pickUp_address", completeAddresss);
+                        prefEditAddr.commit();*/
                        /* txt_pickUpAddress.setText(completeAddresss);
                         txt_pickUpAddress.setVisibility(View.VISIBLE);*/
 
@@ -797,6 +918,12 @@ public class BookService extends Activity implements LocationListener, View.OnCl
 
                             editText.setText(completeAddresss);
                             text.setText(completeAddresss);
+
+
+                           /* SharedPreferences.Editor prefEditAddr = gD.prefs.edit();
+                            prefEditAddr.putString("pickUp_address", editText.getText().toString().trim());
+                            prefEditAddr.commit();*/
+
 
                             //Inflating the Popup using xml file
                             // popup.getMenuInflater().inflate(R.menu.popup_menu, popup.getMenu());
@@ -816,6 +943,9 @@ public class BookService extends Activity implements LocationListener, View.OnCl
                             gD.strAddress = completeAddress;
                             gD.strLatitutde = String.valueOf(centerLatLng.latitude);
                             gD.strLongitude = String.valueOf(centerLatLng.longitude);
+
+
+                            Log.i("TT", "gD.strAddress ***" + gD.strAddress);
 
                             Log.i("TT", "latitude ***" + centerLatLng.latitude);
                             Log.i("TT", " longitude ****" + centerLatLng.longitude);
@@ -841,6 +971,11 @@ public class BookService extends Activity implements LocationListener, View.OnCl
         }
     }
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finish();
+    }
 
     @Override
     public void onClick(View v) {
