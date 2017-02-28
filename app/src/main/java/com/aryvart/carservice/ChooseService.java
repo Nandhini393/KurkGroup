@@ -72,8 +72,8 @@ public class ChooseService extends Activity implements ChooseServiceInterface {
     private ListView listView, list_serviceDisplay;
     private ChooseServiceAdapter mAdapter;
     //form field
-    LinearLayout ll_oilChange, ll_fullService;
-    TextView txt_oilService, txt_fullService;
+    LinearLayout ll_oilChange, ll_fullService,ll_modularRep,ll_chooseSerLay;
+    TextView txt_oilService, txt_fullService,txt_modularRepText;
     Button btn_confirm;
     int count = 0;
     String str_ServiceStationId;
@@ -114,6 +114,11 @@ public class ChooseService extends Activity implements ChooseServiceInterface {
         txt_header = (TextView) findViewById(R.id.txt_header);
         txt_amt = (TextView) findViewById(R.id.txt_amt);
         txt_choice = (TextView) findViewById(R.id.txt_choice);
+
+        txt_modularRepText = (TextView) findViewById(R.id.txt_modularRepText);
+        ll_modularRep= (LinearLayout) findViewById(R.id.ll_modular_rep);
+        ll_chooseSerLay= (LinearLayout) findViewById(R.id.ll_chooseservice);
+
         Typeface typeFace1 = Typeface.createFromAsset(getAssets(), "fonts/Oswald-Bold.otf");
         txt_amt.setTypeface(typeFace1);
         txt_choice.setTypeface(typeFace1);
@@ -121,17 +126,32 @@ public class ChooseService extends Activity implements ChooseServiceInterface {
         txt_oilService.setTypeface(typeFace1);
         txt_fullService.setTypeface(typeFace1);
         btn_confirm.setTypeface(typeFace1);
+        txt_modularRepText.setTypeface(typeFace1);
 
 
         Typeface typeFace = Typeface.createFromAsset(getAssets(), "fonts/Oswald-Regular.ttf");
         txt_selectServiceText.setTypeface(typeFace);
 
-        strChoosenService = "1";
-        getServicesCall(strChoosenService);
-        txt_oilService.setTextColor(Color.parseColor("#0987ff"));
-        txt_fullService.setTextColor(Color.parseColor("#000000"));
 
 
+        if (gD.prefs.getString("str_serviceType", null).equalsIgnoreCase("modular")){
+
+            strChoosenService = "3";
+            txt_modularRepText.setTextColor(Color.parseColor("#0987ff"));
+            getServicesCall(strChoosenService);
+            ll_modularRep.setVisibility(View.VISIBLE);
+            ll_chooseSerLay.setVisibility(View.GONE);
+
+        }
+        else{
+
+            ll_modularRep.setVisibility(View.GONE);
+            ll_chooseSerLay.setVisibility(View.VISIBLE);
+            strChoosenService = "1";
+            getServicesCall(strChoosenService);
+            txt_oilService.setTextColor(Color.parseColor("#0987ff"));
+            txt_fullService.setTextColor(Color.parseColor("#000000"));
+        }
 
         str_EditServiceId = gD.prefs.getString("ss_id", null);
         Log.i("TTB", "str_EditServiceId" + str_EditServiceId);
@@ -404,6 +424,10 @@ public class ChooseService extends Activity implements ChooseServiceInterface {
                         params.put("station_id", str_EditServiceId);
                     } else if (strFromChoosen.equalsIgnoreCase("2")) {
                         params.put("category_id", "2");
+                        params.put("station_id", str_EditServiceId);
+                    }
+                    else if (strFromChoosen.equalsIgnoreCase("3")) {
+                        params.put("category_id", "3");
                         params.put("station_id", str_EditServiceId);
                     }
                 }

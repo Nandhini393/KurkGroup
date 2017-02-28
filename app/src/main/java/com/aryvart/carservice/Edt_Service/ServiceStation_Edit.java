@@ -83,7 +83,7 @@ public class ServiceStation_Edit extends Activity implements ServiceStationInter
     RelativeLayout ll_selectServiceStation;
     int count = 0;
     GeneralData gD;
-    TextView txt_headerName, txt_title;
+    TextView txt_headerName, txt_title,txt_selectStationText;
     LinearLayout ll_dispStastions;
     ImageView img_StationImage;
     TextView txt_ssAddr, txt_ssName;
@@ -113,7 +113,7 @@ public class ServiceStation_Edit extends Activity implements ServiceStationInter
         img_StationImage = (ImageView) findViewById(R.id.img_profile);
         txt_ssName = (TextView) findViewById(R.id.txt_comp_name);
         txt_ssAddr = (TextView) findViewById(R.id.txt_address);
-
+        txt_selectStationText = (TextView) findViewById(R.id.txt_SelectStationText);
 
         Typeface typeFace1 = Typeface.createFromAsset(getAssets(), "fonts/Oswald-Bold.otf");
         txt_headerName.setTypeface(typeFace1);
@@ -121,6 +121,7 @@ public class ServiceStation_Edit extends Activity implements ServiceStationInter
         Typeface typeFace = Typeface.createFromAsset(getAssets(), "fonts/Oswald-Regular.ttf");
         txt_date.setTypeface(typeFace);
 
+        txt_selectStationText.setTypeface(typeFace);
 
         String str_txt_span = "SELECT SHELL SERVICE STATION";
         SpannableString spannableString = new SpannableString(str_txt_span);
@@ -226,11 +227,11 @@ public class ServiceStation_Edit extends Activity implements ServiceStationInter
                     } else if (txt_date.getText().toString().trim().length() == 0) {
                         Toast.makeText(ServiceStation_Edit.this, "Select your service date", Toast.LENGTH_SHORT).show();
                     } else {
-                        if (gD.prefs.getString("edit_ss_serviceType", null).equalsIgnoreCase("modular")||gD.prefs.getString("edit_ss_serviceType", null).equalsIgnoreCase("modularpickup")) {
+                       /* if (gD.prefs.getString("edit_ss_serviceType", null).equalsIgnoreCase("modular")||gD.prefs.getString("edit_ss_serviceType", null).equalsIgnoreCase("modularpickup")) {
                             startActivity(new Intent(ServiceStation_Edit.this,ServiceConfirmation_Edit.class));
                             finish();
                         }
-                        else{
+                        else{*/
                             Intent i = new Intent(ServiceStation_Edit.this, ChooseService_Edit.class);
                             //  i.putExtra("edit_ss_id",gD.prefs.getString("edit_ss_id", null));
 
@@ -297,7 +298,7 @@ public class ServiceStation_Edit extends Activity implements ServiceStationInter
                             startActivity(i);
                             finish();
 
-                        }
+                       // }
 
                     }
                 } else {

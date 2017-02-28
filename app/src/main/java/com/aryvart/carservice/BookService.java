@@ -112,11 +112,11 @@ public class BookService extends Activity implements LocationListener, View.OnCl
     public static boolean isGPSEnabled = false;
     public static boolean isNetworkEnabled = false;
     LocationManager locationManager;
-String strAddress;
+    String strAddress;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.book_service);
+        setContentView(R.layout.test_map);
 
         context = this;
 
@@ -410,7 +410,7 @@ String strAddress;
 
 
                 prefEdit.putString("str_serviceType", str_ServiceType);
-
+                //prefEdit.putString("pickUp_address", gD.strAddress);
 
                 Log.i("BNCom_onBu", "str_ServiceType->" + str_ServiceType);
 
@@ -545,6 +545,57 @@ String strAddress;
 
 
         // ** button book service code ** //
+        final SharedPreferences.Editor prefBtnBook = gD.prefs.edit();
+
+        btn_bookService.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                str_ServiceType="bookservice";
+                txt_pickUpText.setTextColor(Color.parseColor("#000000"));
+                txt_diagnoText.setTextColor(Color.parseColor("#000000"));
+
+                if (str_ServiceType == null) {
+                    Log.e("BN", "str_ServiceType is null");
+                    Toast.makeText(BookService.this, "Select your service type", Toast.LENGTH_SHORT).show();
+                } else if (gD.strAddress == null) {
+                    Log.e("BN", "completeAddresss is null");
+                    Toast.makeText(BookService.this, "Enter your address", Toast.LENGTH_SHORT).show();
+                }
+
+                else{
+
+                    prefBtnBook.putString("str_serviceType", str_ServiceType);
+                    prefBtnBook.putString("pickUp_address", gD.strAddress);
+                    startActivity(new Intent(BookService.this, ServiceStation.class));
+
+                    prefBtnBook.putString("ss_name", null);
+                    prefBtnBook.putString("ss_id", null);
+                    prefBtnBook.putString("ss_image", null);
+                    prefBtnBook.putString("ss_addr", null);
+                    prefBtnBook.putString("ss_diagno_charge", null);
+                    prefBtnBook.putString("ss_pickup_charge", null);
+                    prefBtnBook.putString("ss_modular_reprogramming_charge", null);
+                    prefBtnBook.putString("edit_ss_id", null);
+                    prefBtnBook.putString("edit_ss_book_id", null);
+                    prefBtnBook.putString("edit_ss_serviceArray", null);
+                    prefBtnBook.putString("edit_ss_image", null);
+                    prefBtnBook.putString("edit_ss_name", null);
+                    prefBtnBook.putString("edit_ss_addr", null);
+                    prefBtnBook.putString("edit_ss_date", null);
+
+                    SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(context);
+                    SharedPreferences.Editor editor = sharedPrefs.edit();
+                    Gson gson = new Gson();
+                    String json = gson.toJson(null);
+                    String json_id = gson.toJson(null);
+                    editor.putString("key", json);
+                    editor.putString("key_id", json_id);
+                    editor.commit();
+
+                }
+                prefBtnBook.commit();
+            }
+        });
 /*
 
         final SharedPreferences.Editor prefEdit = gD.prefs.edit();

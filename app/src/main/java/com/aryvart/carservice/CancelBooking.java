@@ -165,27 +165,53 @@ public class CancelBooking extends Activity implements ChooseServiceInterface {
         }
         }
 
-        if (getIntent().getStringExtra("edit_ss_serviceType").equalsIgnoreCase("diagnostics")) {
+        // ** diagnostics ** //
+
+        if (getIntent().getStringExtra("edit_ss_serviceType").equalsIgnoreCase("diagnostics_D")) {
             rl_modularLay.setVisibility(View.GONE);
             list_serviceDisplay.setVisibility(View.VISIBLE);
             txt_AddAmtText.setText("Diagnostics service Charge");
             txt_AdditionAmtCharge.setText("" + Float.parseFloat(getIntent().getStringExtra("edit_ss_diagnoAmt")));
-        } else if (getIntent().getStringExtra("edit_ss_serviceType").equalsIgnoreCase("pickup")) {
+        }
+        else if (getIntent().getStringExtra("edit_ss_serviceType").equalsIgnoreCase("diagnosispickup_D")) {
+            txt_AddAmtText.setText("Pick up service Charge\n\nDiagnostics service Charge\n");
+            txt_AdditionAmtCharge.setText("" + Float.parseFloat(getIntent().getStringExtra("edit_ss_pickUpAmt")) + "\n\n" + Float.parseFloat(getIntent().getStringExtra("edit_ss_diagnoAmt")) + "\n");
+
+        }
+
+
+        // ** pickup ** //
+
+        else if (getIntent().getStringExtra("edit_ss_serviceType").equalsIgnoreCase("pickup_P")) {
             rl_modularLay.setVisibility(View.GONE);
             list_serviceDisplay.setVisibility(View.VISIBLE);
             txt_AddAmtText.setText("Pick up service Charge");
             txt_AdditionAmtCharge.setText("" + Float.parseFloat(getIntent().getStringExtra("edit_ss_pickUpAmt")));
-        } else if (getIntent().getStringExtra("edit_ss_serviceType").equalsIgnoreCase("modular")) {
+        }
+        else if (getIntent().getStringExtra("edit_ss_serviceType").equalsIgnoreCase("diagnosispickup_P")) {
+            txt_AddAmtText.setText("Pick up service Charge\n\nDiagnostics service Charge\n");
+            txt_AdditionAmtCharge.setText("" + Float.parseFloat(getIntent().getStringExtra("edit_ss_pickUpAmt")) + "\n\n" + Float.parseFloat(getIntent().getStringExtra("edit_ss_diagnoAmt")) + "\n");
+
+        }
+
+
+//** modular ** //
+
+        else if (getIntent().getStringExtra("edit_ss_serviceType").equalsIgnoreCase("modular")) {
             txt_AddAmtText.setText("");
             txt_AdditionAmtCharge.setText("");
-            rl_modularLay.setVisibility(View.VISIBLE);
-            list_serviceDisplay.setVisibility(View.GONE);
+
+            rl_modularLay.setVisibility(View.GONE);
+            list_serviceDisplay.setVisibility(View.VISIBLE);
+
             txt_total_amt.setText("" + Float.valueOf(getIntent().getStringExtra("edit_ss_modularAmt")));
             txt_modularAmt.setText("" + Float.valueOf(getIntent().getStringExtra("edit_ss_modularAmt")));
 
         } else if (getIntent().getStringExtra("edit_ss_serviceType").equalsIgnoreCase("modularpickup")) {
-            rl_modularLay.setVisibility(View.VISIBLE);
-            list_serviceDisplay.setVisibility(View.GONE);
+
+            rl_modularLay.setVisibility(View.GONE);
+            list_serviceDisplay.setVisibility(View.VISIBLE);
+
             txt_total_amt.setText("" + Float.valueOf(getIntent().getStringExtra("edit_ss_modularAmt")));
             txt_modularAmt.setText("" + Float.valueOf(getIntent().getStringExtra("edit_ss_modularAmt")));
             txt_AddAmtText.setText("Pick up service Charge");
@@ -193,17 +219,33 @@ public class CancelBooking extends Activity implements ChooseServiceInterface {
             Float total=Float.valueOf(getIntent().getStringExtra("edit_ss_modularAmt"))+Float.parseFloat(getIntent().getStringExtra("edit_ss_pickUpAmt"));
             txt_overAllAmt.setText(""+total);
 
-        } else if (getIntent().getStringExtra("edit_ss_serviceType").equalsIgnoreCase("pickupNA")) {
+        } else  if (getIntent().getStringExtra("edit_ss_serviceType").equalsIgnoreCase("diagnostics")) {
+            rl_modularLay.setVisibility(View.GONE);
+            list_serviceDisplay.setVisibility(View.VISIBLE);
+            txt_AddAmtText.setText("Diagnostics service Charge");
+            txt_AdditionAmtCharge.setText("" + Float.parseFloat(getIntent().getStringExtra("edit_ss_diagnoAmt")));
+        }
+        else if (getIntent().getStringExtra("edit_ss_serviceType").equalsIgnoreCase("diagnosispickup")) {
+            txt_AddAmtText.setText("Pick up service Charge\n\nDiagnostics service Charge\n");
+            txt_AdditionAmtCharge.setText("" + Float.parseFloat(getIntent().getStringExtra("edit_ss_pickUpAmt")) + "\n\n" + Float.parseFloat(getIntent().getStringExtra("edit_ss_diagnoAmt")) + "\n");
+
+        }
+
+
+
+
+        else if (getIntent().getStringExtra("edit_ss_serviceType").equalsIgnoreCase("pickupNA")) {
             txt_AddAmtText.setText("");
             txt_AdditionAmtCharge.setText("");
         } else if (getIntent().getStringExtra("edit_ss_serviceType").equalsIgnoreCase("diagnoNA")) {
             txt_AddAmtText.setText("");
             txt_AdditionAmtCharge.setText("");
-        } else if (getIntent().getStringExtra("edit_ss_serviceType").equalsIgnoreCase("diagnosispickup")) {
-            txt_AddAmtText.setText("Pick up service Charge\n\nDiagnostics service Charge\n");
-            txt_AdditionAmtCharge.setText("" + Float.parseFloat(getIntent().getStringExtra("edit_ss_pickUpAmt")) + "\n\n" + Float.parseFloat(getIntent().getStringExtra("edit_ss_diagnoAmt")) + "\n");
+        }
 
-        } else if (getIntent().getStringExtra("edit_ss_serviceType").equalsIgnoreCase("diagnopickup")) {
+
+
+
+        else if (getIntent().getStringExtra("edit_ss_serviceType").equalsIgnoreCase("diagnopickup")) {
             txt_AddAmtText.setText("Pick up service Charge");
             txt_AdditionAmtCharge.setText("" + Float.parseFloat(getIntent().getStringExtra("edit_ss_pickUpAmt")));
 

@@ -68,8 +68,8 @@ public class ChooseService_Edit extends Activity implements ChooseServiceInterfa
     private ListView listView, list_serviceDisplay;
     private ChooseServiceAdapter mAdapter;
     //form field
-    LinearLayout ll_oilChange, ll_fullService;
-    TextView txt_oilService, txt_fullService;
+    LinearLayout ll_oilChange, ll_fullService,ll_modularRep,ll_chooseSerLay;
+    TextView txt_oilService, txt_fullService,txt_modularRepText;
     Button btn_confirm;
     int count = 0;
     String str_ServiceStationId;
@@ -110,6 +110,12 @@ public class ChooseService_Edit extends Activity implements ChooseServiceInterfa
         txt_header=(TextView)findViewById(R.id.txt_header);
         txt_amt = (TextView) findViewById(R.id.txt_amt);
         txt_choice = (TextView) findViewById(R.id.txt_choice);
+
+
+        txt_modularRepText = (TextView) findViewById(R.id.txt_modularRepText);
+        ll_modularRep= (LinearLayout) findViewById(R.id.ll_modular_rep);
+        ll_chooseSerLay= (LinearLayout) findViewById(R.id.ll_chooseservice);
+
         Typeface typeFace1 = Typeface.createFromAsset(getAssets(), "fonts/Oswald-Bold.otf");
         txt_amt.setTypeface(typeFace1);
         txt_choice.setTypeface(typeFace1);
@@ -117,7 +123,7 @@ public class ChooseService_Edit extends Activity implements ChooseServiceInterfa
         txt_oilService.setTypeface(typeFace1);
         txt_fullService.setTypeface(typeFace1);
         btn_confirm.setTypeface(typeFace1);
-
+        txt_modularRepText.setTypeface(typeFace1);
 
         Typeface typeFace = Typeface.createFromAsset(getAssets(), "fonts/Oswald-Regular.ttf");
         txt_selectServiceText.setTypeface(typeFace);
@@ -125,12 +131,28 @@ public class ChooseService_Edit extends Activity implements ChooseServiceInterfa
         //  str_EditBookingId=gD.prefs.getString("edit_ss_id", null);
         //for saving dats in sharedpreference
 
-        strChoosenService = "1";
-        getServicesCall(strChoosenService);
-        txt_oilService.setTextColor(Color.parseColor("#0987ff"));
-        txt_fullService.setTextColor(Color.parseColor("#000000"));
 
 
+
+        if (gD.prefs.getString("edit_ss_serviceType", null).equalsIgnoreCase("modular")||gD.prefs.getString("edit_ss_serviceType", null).equalsIgnoreCase("modularpickup")
+                ||gD.prefs.getString("edit_ss_serviceType", null).equalsIgnoreCase("diagnostics")||gD.prefs.getString("edit_ss_serviceType", null).equalsIgnoreCase("diagnosispickup")){
+
+            strChoosenService = "3";
+            txt_modularRepText.setTextColor(Color.parseColor("#0987ff"));
+            getServicesCall(strChoosenService);
+            ll_modularRep.setVisibility(View.VISIBLE);
+            ll_chooseSerLay.setVisibility(View.GONE);
+
+        }
+        else{
+
+            ll_modularRep.setVisibility(View.GONE);
+            ll_chooseSerLay.setVisibility(View.VISIBLE);
+            strChoosenService = "1";
+            getServicesCall(strChoosenService);
+            txt_oilService.setTextColor(Color.parseColor("#0987ff"));
+            txt_fullService.setTextColor(Color.parseColor("#000000"));
+        }
 
 
         SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(context);
@@ -312,7 +334,7 @@ public class ChooseService_Edit extends Activity implements ChooseServiceInterfa
                     if (lang_list_new.size() == 0) {
                         Toast.makeText(ChooseService_Edit.this, "Choose atleast one service", Toast.LENGTH_SHORT).show();
                     } else {
-                        Intent i = new Intent(ChooseService_Edit.this, ServiceConfirmation_Edit.class);
+                        Intent i = new Intent(ChooseService_Edit.this, ServiceConfirmation_EditNew.class);
                         Log.i("HH", "array_list : " + lang_list_new);
 
                         //Set the values
@@ -426,6 +448,10 @@ public class ChooseService_Edit extends Activity implements ChooseServiceInterfa
                         params.put("station_id", gD.prefs.getString("edit_ss_id", null));
                     } else if (strFromChoosen.equalsIgnoreCase("2")) {
                         params.put("category_id", "2");
+                        params.put("station_id", gD.prefs.getString("edit_ss_id", null));
+                    }
+                    else if (strFromChoosen.equalsIgnoreCase("3")) {
+                        params.put("category_id", "3");
                         params.put("station_id", gD.prefs.getString("edit_ss_id", null));
                     }
                 }

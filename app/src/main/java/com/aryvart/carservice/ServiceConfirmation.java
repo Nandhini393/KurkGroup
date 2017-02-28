@@ -227,19 +227,25 @@ public class ServiceConfirmation extends Activity implements ChooseServiceInterf
 
         }
         if (gD.prefs.getString("str_serviceType", null).equalsIgnoreCase("pickup")) {
-            str_ServiceType = "pickup";
+            str_ServiceType = "pickup_P";
             rl_modularLay.setVisibility(View.GONE);
             listConfirm.setVisibility(View.VISIBLE);
-            ll_cbDiagnoLay.setVisibility(View.GONE);
+            // ll_cbDiagnoLay.setVisibility(View.GONE);
 
             txt_pickUpCharge.setVisibility(View.VISIBLE);
             txt_pickUpText.setVisibility(View.VISIBLE);
+
+            txt_diagnoCharge.setVisibility(View.INVISIBLE);
+            txt_diagnoText.setVisibility(View.INVISIBLE);
 
             if (gD.prefs.getString("pickUp_address", null) != null) {
                 ll_addressLay.setVisibility(View.VISIBLE);
                 txt_address.setText(gD.prefs.getString("pickUp_address", null));
             }
             cb_pickUp.setChecked(true);
+            cb_pickUp.setEnabled(false);
+
+
             f_overall_amount = nRate + Float.parseFloat(gD.prefs.getString("ss_pickup_charge", null));
             Log.e("NN", "overall amount->" + String.valueOf(f_overall_amount));
             txt_overallAmount.setText("" + f_overall_amount);
@@ -261,21 +267,24 @@ public class ServiceConfirmation extends Activity implements ChooseServiceInterf
 
             //added diagno
             cb_diagno.setChecked(true);
-            //cb_diagno.setEnabled(false);
+            cb_diagno.setEnabled(false);
 
             cb_diagno.setTextColor(Color.parseColor("#000000"));
-            str_ServiceType = "diagnostics";
+            str_ServiceType = "diagnostics_D";
             f_overall_amount = nRate + Float.parseFloat(gD.prefs.getString("ss_diagno_charge", null));
             Log.e("NN", "overall amount->" + String.valueOf(f_overall_amount));
             txt_overallAmount.setText("" + f_overall_amount);
         } else if (gD.prefs.getString("str_serviceType", null).equalsIgnoreCase("modular")) {
             str_ServiceType = "modular";
-            rl_modularLay.setVisibility(View.VISIBLE);
-            listConfirm.setVisibility(View.GONE);
-            ll_cbDiagnoLay.setVisibility(View.GONE);
+            // rl_modularLay.setVisibility(View.VISIBLE);
+            listConfirm.setVisibility(View.VISIBLE);
+            // ll_cbDiagnoLay.setVisibility(View.GONE);
 
             txt_pickUpCharge.setVisibility(View.INVISIBLE);
             txt_pickUpText.setVisibility(View.INVISIBLE);
+
+            txt_diagnoText.setVisibility(View.INVISIBLE);
+            txt_diagnoCharge.setVisibility(View.INVISIBLE);
 
             ll_addressLay.setVisibility(View.GONE);
             txt_address.setText(gD.prefs.getString("pickUp_address", null));
@@ -283,14 +292,50 @@ public class ServiceConfirmation extends Activity implements ChooseServiceInterf
                 ll_addressLay.setVisibility(View.VISIBLE);
                 txt_address.setText(gD.prefs.getString("pickUp_address", null));
             }*/
-            nRate = Float.parseFloat(gD.prefs.getString("ss_modular_reprogramming_charge", null));
+
+
+            //** not added modular amount **//
+
+            //nRate = Float.parseFloat(gD.prefs.getString("ss_modular_reprogramming_charge", null));
+
+
             Log.e("NNMod", "nRateModular->" + String.valueOf(nRate));
-            txt_modularAmt.setText("" + nRate);
+            // txt_modularAmt.setText("" + nRate);
             str_cbStatus = "modular";
             f_overall_amount = nRate;
             Log.e("NN", "overall amount->" + String.valueOf(f_overall_amount));
             txt_total_amt.setText("" + nRate);
             txt_overallAmount.setText("" + f_overall_amount);
+
+            cb_diagno.setEnabled(true);
+            cb_pickUp.setEnabled(true);
+
+        } else if (gD.prefs.getString("str_serviceType", null).equalsIgnoreCase("bookservice")) {
+            str_ServiceType = "diagnosispickupNA";
+            rl_modularLay.setVisibility(View.GONE);
+            listConfirm.setVisibility(View.VISIBLE);
+            ll_addressLay.setVisibility(View.GONE);
+
+            txt_pickUpCharge.setVisibility(View.INVISIBLE);
+            txt_pickUpText.setVisibility(View.INVISIBLE);
+            txt_diagnoText.setVisibility(View.INVISIBLE);
+            txt_diagnoCharge.setVisibility(View.INVISIBLE);
+
+            txt_address.setText(gD.prefs.getString("pickUp_address", null));
+               /* //not added diagno
+                f_overall_amount = nRate;
+                Log.e("NN", "overall amount->" + String.valueOf(f_overall_amount));
+                txt_overallAmount.setText("" + f_overall_amount);*/
+
+            //added diagno
+
+
+           /* cb_diagno.setTextColor(Color.parseColor("#000000"));
+            str_ServiceType = "diagnostics";
+            f_overall_amount = nRate + Float.parseFloat(gD.prefs.getString("ss_diagno_charge", null));
+            Log.e("NN", "overall amount->" + String.valueOf(f_overall_amount));*/
+
+            txt_overallAmount.setText("" + nRate);
         } else if (gD.prefs.getString("str_serviceType", null).equalsIgnoreCase("modularpickup")) {
             str_ServiceType = "modularpickup";
             rl_modularLay.setVisibility(View.VISIBLE);
@@ -341,11 +386,27 @@ public class ServiceConfirmation extends Activity implements ChooseServiceInterf
                         str_ServiceType = "diagnopickup";
                     } else if (gD.prefs.getString("str_serviceType", null).equalsIgnoreCase("pickup")) {
                         str_ServiceType = "pickup";
+                    } else if (gD.prefs.getString("str_serviceType", null).equalsIgnoreCase("bookservice")) {
+                        str_ServiceType = "pickup_B";
                     }
 
 
                     if (cb_diagno.isChecked()) {
-                        str_ServiceType = "diagnosispickup";
+                        if (gD.prefs.getString("str_serviceType", null).equalsIgnoreCase("pickup")) {
+
+                            str_ServiceType = "diagnosispickup_P";
+                        } else if (gD.prefs.getString("str_serviceType", null).equalsIgnoreCase("diagnostics")) {
+
+                            str_ServiceType = "diagnosispickup_D";
+                        }
+                        else if (gD.prefs.getString("str_serviceType", null).equalsIgnoreCase("bookservice")){
+
+                            str_ServiceType = "diagnosispickup_B";
+                        }
+                        else {
+                            str_ServiceType = "diagnosispickup";
+                        }
+
                         f_overall_amount = nRate + Float.parseFloat(gD.prefs.getString("ss_pickup_charge", null)) + Float.parseFloat(gD.prefs.getString("ss_diagno_charge", null));
                         Log.e("NN", "overall amount->" + String.valueOf(f_overall_amount));
                         txt_overallAmount.setText("" + f_overall_amount);
@@ -364,6 +425,8 @@ public class ServiceConfirmation extends Activity implements ChooseServiceInterf
                         str_ServiceType = "diagnosispickupNA";
                     } else if (gD.prefs.getString("str_serviceType", null).equalsIgnoreCase("pickup")) {
                         str_ServiceType = "pickupNA";
+                    } else if (gD.prefs.getString("str_serviceType", null).equalsIgnoreCase("bookservice")) {
+                        str_ServiceType = "diagnosispickupNA";
                     }
                     //txt_pickUpText.setVisibility(View.GONE);
                     //txt_pickUpCharge.setVisibility(View.GONE);
@@ -372,7 +435,25 @@ public class ServiceConfirmation extends Activity implements ChooseServiceInterf
                     txt_overallAmount.setText("" + f_overall_amount);
 
                     if (cb_diagno.isChecked()) {
-                        str_ServiceType = "diagnostics";
+
+                        if (gD.prefs.getString("str_serviceType", null).equalsIgnoreCase("modular")) {
+                            str_ServiceType = "diagnostics";
+
+                        } else if (gD.prefs.getString("str_serviceType", null).equalsIgnoreCase("pickup")) {
+
+                            str_ServiceType = "pickup_P";
+                        } else if (gD.prefs.getString("str_serviceType", null).equalsIgnoreCase("diagnostics")) {
+
+                            str_ServiceType = "diagnostics_D";
+                        }
+                        else if (gD.prefs.getString("str_serviceType", null).equalsIgnoreCase("bookservice")) {
+
+                            str_ServiceType = "diagnostics_B";
+                        }
+                        else {
+                            str_ServiceType = "diagnostics";
+                        }
+
                         f_overall_amount = nRate + Float.parseFloat(gD.prefs.getString("ss_diagno_charge", null));
                         Log.e("NN", "overall amount->" + String.valueOf(f_overall_amount));
                         txt_overallAmount.setText("" + f_overall_amount);
@@ -411,14 +492,44 @@ public class ServiceConfirmation extends Activity implements ChooseServiceInterf
                     txt_diagnoText.setVisibility(View.VISIBLE);
                     txt_diagnoCharge.setVisibility(View.VISIBLE);
                     //  cb_pickUp.setChecked(false);
-                    str_ServiceType = "diagnostics";
+                    //str_ServiceType = "diagnostics";
                     f_overall_amount = nRate + Float.parseFloat(gD.prefs.getString("ss_diagno_charge", null));
                     Log.e("NN", "overall amount->" + String.valueOf(f_overall_amount));
                     txt_overallAmount.setText("" + f_overall_amount);
 
+                    if (gD.prefs.getString("str_serviceType", null).equalsIgnoreCase("pickup")) {
+
+                        str_ServiceType = "pickup_P";
+                    } else if (gD.prefs.getString("str_serviceType", null).equalsIgnoreCase("diagnostics")) {
+
+                        str_ServiceType = "diagnostics_D";
+                    } else if (gD.prefs.getString("str_serviceType", null).equalsIgnoreCase("modular")) {
+
+                        str_ServiceType = "diagnostics";
+                    } else if (gD.prefs.getString("str_serviceType", null).equalsIgnoreCase("bookservice")) {
+
+                        str_ServiceType = "diagnostics_B";
+                    } else {
+                        str_ServiceType = "diagnostics";
+                    }
+
 
                     if (cb_pickUp.isChecked()) {
-                        str_ServiceType = "diagnosispickup";
+                        if (gD.prefs.getString("str_serviceType", null).equalsIgnoreCase("pickup")) {
+
+                            str_ServiceType = "diagnosispickup_P";
+                        } else if (gD.prefs.getString("str_serviceType", null).equalsIgnoreCase("diagnostics")) {
+
+                            str_ServiceType = "diagnosispickup_D";
+                        }
+
+                        else if (gD.prefs.getString("str_serviceType", null).equalsIgnoreCase("bookservice")) {
+
+                            str_ServiceType = "diagnosispickup_B";
+                        }
+                        else {
+                            str_ServiceType = "diagnosispickup";
+                        }
                         f_overall_amount = nRate + Float.parseFloat(gD.prefs.getString("ss_pickup_charge", null)) + Float.parseFloat(gD.prefs.getString("ss_diagno_charge", null));
                         Log.e("NN", "overall amount->" + String.valueOf(f_overall_amount));
                         txt_overallAmount.setText("" + f_overall_amount);
@@ -435,10 +546,47 @@ public class ServiceConfirmation extends Activity implements ChooseServiceInterf
 
                     if (gD.prefs.getString("str_serviceType", null).equalsIgnoreCase("diagnostics")) {
                         str_ServiceType = "diagnosispickupNA";
+                    } else if (gD.prefs.getString("str_serviceType", null).equalsIgnoreCase("modular")) {
+                        str_ServiceType = "modular";
+                    } else if (gD.prefs.getString("str_serviceType", null).equalsIgnoreCase("pickup")) {
+                        str_ServiceType = "diagnosispickupNA";
+                    } else if (gD.prefs.getString("str_serviceType", null).equalsIgnoreCase("bookservice")) {
+                        str_ServiceType = "diagnosispickupNA";
                     }
 
                     if (cb_pickUp.isChecked()) {
-                        str_ServiceType = "diagnopickup";
+
+
+                        if (gD.prefs.getString("str_serviceType", null).equalsIgnoreCase("pickup")) {
+
+                            str_ServiceType = "pickup_P";
+                        } else if (gD.prefs.getString("str_serviceType", null).equalsIgnoreCase("diagnostics")) {
+
+                            str_ServiceType = "diagnostics_D";
+                        } else if (gD.prefs.getString("str_serviceType", null).equalsIgnoreCase("modular")) {
+
+                            str_ServiceType = "modularpickup";
+                        }
+
+                        else if (gD.prefs.getString("str_serviceType", null).equalsIgnoreCase("bookservice")) {
+
+                            str_ServiceType = "pickup_B";
+                        }
+
+                        else {
+                            str_ServiceType = "diagnostics";
+                        }
+
+
+                        // str_ServiceType = "pickup";
+                     /*   if (gD.prefs.getString("str_serviceType", null).equalsIgnoreCase("pickup"))
+                        {
+                            str_ServiceType = "pickup";
+                        }
+                        else{
+                            str_ServiceType = "diagnosispickup";
+                        }
+*/
                         f_overall_amount = nRate + Float.parseFloat(gD.prefs.getString("ss_pickup_charge", null));
                         Log.e("NN", "overall amount->" + String.valueOf(f_overall_amount));
                         txt_overallAmount.setText("" + f_overall_amount);
@@ -471,7 +619,9 @@ public class ServiceConfirmation extends Activity implements ChooseServiceInterf
                 boolean isConnected = netInfo != null && netInfo.isConnectedOrConnecting();
                 if (isConnected) {
 
-                    serviceConfirmCall();
+                     serviceConfirmCall();
+
+
 
                    /* if (str_cbStatus != null) {
                         serviceConfirmCall();

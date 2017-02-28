@@ -79,6 +79,9 @@
         <activity
             android:name=".Edt_Service.ServiceConfirmation_Edit"
             android:windowSoftInputMode="stateHidden"></activity>
+        <activity
+            android:name=".Edt_Service.ServiceConfirmation_EditNew"
+            android:windowSoftInputMode="stateHidden"></activity>
 
         <meta-data
             android:name="com.google.android.gms.version"
