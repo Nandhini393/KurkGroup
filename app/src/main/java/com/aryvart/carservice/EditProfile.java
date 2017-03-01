@@ -173,6 +173,7 @@ public class EditProfile extends Activity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
+        startActivity(new Intent(EditProfile.this,BookService.class));
         finish();
     }
     //email validation

@@ -335,7 +335,12 @@ public class ServiceConfirmation extends Activity implements ChooseServiceInterf
             f_overall_amount = nRate + Float.parseFloat(gD.prefs.getString("ss_diagno_charge", null));
             Log.e("NN", "overall amount->" + String.valueOf(f_overall_amount));*/
 
-            txt_overallAmount.setText("" + nRate);
+            f_overall_amount = nRate;
+            Log.e("NN", "overall amount->" + String.valueOf(f_overall_amount));
+            txt_overallAmount.setText("" + f_overall_amount);
+            txt_total_amt.setText("" + nRate);
+
+           // txt_overallAmount.setText("" + nRate);
         } else if (gD.prefs.getString("str_serviceType", null).equalsIgnoreCase("modularpickup")) {
             str_ServiceType = "modularpickup";
             rl_modularLay.setVisibility(View.VISIBLE);
@@ -351,7 +356,13 @@ public class ServiceConfirmation extends Activity implements ChooseServiceInterf
                 ll_addressLay.setVisibility(View.VISIBLE);
                 txt_address.setText(gD.prefs.getString("pickUp_address", null));
             }*/
-            nRate = Float.parseFloat(gD.prefs.getString("ss_modular_reprogramming_charge", null));
+
+
+
+            // ** not added modular amount **//
+
+
+           // nRate = Float.parseFloat(gD.prefs.getString("ss_modular_reprogramming_charge", null));
             Log.e("NNMod", "nRateModular->" + String.valueOf(nRate));
             txt_modularAmt.setText("" + nRate);
             str_cbStatus = "modularpickup";
@@ -808,11 +819,11 @@ public class ServiceConfirmation extends Activity implements ChooseServiceInterf
                */
 
                 if (str_category_id != null) {
-                    params.put("services", str_category_id);
+                    params.put("services", str_category_id.trim());
                 }
-
+Log.e("LL",str_ServiceType);
                 params.put("registerid", gD.prefs.getString("reg_id", null));
-                params.put("charge", str_ServiceType);
+                params.put("charge", str_ServiceType.trim());
                 params.put("rate", String.valueOf(f_overall_amount));
                 params.put("date", gD.prefs.getString("ss_date", null));
                 params.put("stationid", gD.prefs.getString("ss_id", null));

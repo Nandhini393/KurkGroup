@@ -1044,6 +1044,7 @@ public class BookService extends Activity implements LocationListener, View.OnCl
             Button btn_no = (Button) itemView1.findViewById(R.id.btn_no);
             txt_content.setText("Do you wish to exit the app?");
             btn_yes.setOnClickListener(new View.OnClickListener() {
+                @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
                 @Override
                 public void onClick(View v) {
                     ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -1052,6 +1053,7 @@ public class BookService extends Activity implements LocationListener, View.OnCl
 
                     if (isConnected) {
                         finish();
+                        finishAffinity();
                     } else {
                         Toast.makeText(BookService.this, "No internet connection", Toast.LENGTH_SHORT).show();
                     }
