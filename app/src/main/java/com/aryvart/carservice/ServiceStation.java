@@ -313,12 +313,12 @@ int year,month,day;
                         Toast.makeText(ServiceStation.this, "Select your service date", Toast.LENGTH_SHORT).show();
                     } else {
 
-                        /*if (gD.prefs.getString("str_serviceType", null).equalsIgnoreCase("modular") || gD.prefs.getString("str_serviceType", null).equalsIgnoreCase("modularpickup")) {
+                        if (gD.prefs.getString("str_serviceType", null).equalsIgnoreCase("diagnostics")) {
                             startActivity(new Intent(ServiceStation.this, ServiceConfirmation.class));
                             finish();
+                        }
+                        else {
 
-
-                        } */
                             Intent i = new Intent(ServiceStation.this, ChooseService.class);
                             startActivity(i);
                             finish();
@@ -345,7 +345,7 @@ int year,month,day;
                                 }
 
                             }
-
+                        }
 
 
                     }

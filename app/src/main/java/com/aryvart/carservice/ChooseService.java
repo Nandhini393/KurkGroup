@@ -91,6 +91,7 @@ public class ChooseService extends Activity implements ChooseServiceInterface {
     ArrayList<String> arrayList_id;
     ArrayList<CommonBean> arrayList;
     TextView txt_amt, txt_choice, txt_header, txt_selectServiceText, txt_errorMsg;
+    ImageView img_oil,img_full;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -114,6 +115,8 @@ public class ChooseService extends Activity implements ChooseServiceInterface {
         txt_header = (TextView) findViewById(R.id.txt_header);
         txt_amt = (TextView) findViewById(R.id.txt_amt);
         txt_choice = (TextView) findViewById(R.id.txt_choice);
+        img_oil=(ImageView)findViewById(R.id.img_oil);
+        img_full=(ImageView)findViewById(R.id.img_ful);
 
         txt_modularRepText = (TextView) findViewById(R.id.txt_modularRepText);
         ll_modularRep= (LinearLayout) findViewById(R.id.ll_modular_rep);
@@ -257,7 +260,7 @@ public class ChooseService extends Activity implements ChooseServiceInterface {
                         if (isConnected) {
                             listView.setVisibility(View.VISIBLE);
                             txt_errorMsg.setVisibility(View.GONE);
-                            LoadLayout(jsonArray_my_profile, "Response");
+                            LoadLayout(jsonArray_my_profile,strChoosenService);
                         } else {
                             listView.setVisibility(View.GONE);
                             txt_errorMsg.setVisibility(View.VISIBLE);
@@ -299,6 +302,7 @@ public class ChooseService extends Activity implements ChooseServiceInterface {
                         Toast.makeText(ChooseService.this, "Choose atleast one service", Toast.LENGTH_SHORT).show();
                     } else {
                         Intent i = new Intent(ChooseService.this, ServiceConfirmation.class);
+                        i.putExtra("ss_serviceChoice",strChoosenService);
                         Log.i("HH", "array_list : " + lang_list_new);
 
                         //Set the values
@@ -369,7 +373,7 @@ public class ChooseService extends Activity implements ChooseServiceInterface {
                                     }
                                 }
 
-                                mAdapter = new ChooseServiceAdapter(context, beanArrayList, (ChooseServiceInterface) context);
+                                mAdapter = new ChooseServiceAdapter(context,strFromChoosen, beanArrayList, (ChooseServiceInterface) context);
                                 listView.setAdapter(mAdapter);
                                 mAdapter.notifyDataSetChanged();
                                 //txt_drawer_error_msg.setVisibility(View.GONE);
@@ -469,7 +473,7 @@ public class ChooseService extends Activity implements ChooseServiceInterface {
 
     // ** Load layout to save the services respose ** //
 
-    private ArrayList<CommonBean> LoadLayout(JSONArray providerServicesMonth, String stridentifyEdit) {
+    private ArrayList<CommonBean> LoadLayout(JSONArray providerServicesMonth, String strFromChoosen) {
         ArrayList<CommonBean> beanArrayList = new ArrayList<CommonBean>();
 
         JSONObject jsobj = null;
@@ -490,7 +494,7 @@ public class ChooseService extends Activity implements ChooseServiceInterface {
                     }
                 }
 
-                mAdapter = new ChooseServiceAdapter(context, beanArrayList, (ChooseServiceInterface) context);
+                mAdapter = new ChooseServiceAdapter(context,strFromChoosen, beanArrayList, (ChooseServiceInterface) context);
                 listView.setAdapter(mAdapter);
                 mAdapter.notifyDataSetChanged();
 
@@ -510,7 +514,35 @@ public class ChooseService extends Activity implements ChooseServiceInterface {
     // ** while selecting add data to arraylist ** //
 
     @Override
-    public void getServiceStationAddress(String str_id, String str_name, Float f_price) {
+    public void getServiceStationAddress(String str_id,String str_serviceType,String str_name, Float f_price) {
+        Log.i("NAN", "str_serviceType-->" + strChoosenService);
+        Log.i("NAN", "str_serviceType***-->" + str_serviceType);
+    /*    SharedPreferences.Editor sp_pref= gD.prefs.edit();
+        sp_pref.putString("ss_serviceChoice",str_serviceType);
+        sp_pref.commit();
+        if(gD.prefs.getString("ss_serviceChoice",null)!=null){
+            Log.i("NAN", "str_serviceType***1-->" + gD.prefs.getString("ss_serviceChoice",null));
+        }
+        else
+        {
+            Log.i("NAN", "str_serviceType is null");
+        }*/
+
+        if(str_serviceType.equalsIgnoreCase("1")){
+            ll_fullService.setEnabled(false);
+            ll_oilChange.setEnabled(true);
+            txt_fullService.setTextColor(Color.parseColor("#7a7a7a"));
+            img_full.setBackgroundResource(R.drawable.full_grey);
+            //Toast.makeText(ChooseService.this, "You can choose only one service at a time", Toast.LENGTH_SHORT).show();
+        }
+        else if(str_serviceType.equalsIgnoreCase("2")){
+            ll_oilChange.setEnabled(false);
+            ll_fullService.setEnabled(true);
+            txt_oilService.setTextColor(Color.parseColor("#7a7a7a"));
+            img_oil.setBackgroundResource(R.drawable.oil_grey);
+            //Toast.makeText(ChooseService.this, "You can choose only one service at a time", Toast.LENGTH_SHORT).show();
+        }
+
         str_ServiceStationId = str_id;
         listView.setVisibility(View.GONE);
         txt_errorMsg.setVisibility(View.GONE);
@@ -623,7 +655,17 @@ public class ChooseService extends Activity implements ChooseServiceInterface {
 
         Log.i("GHK", String.valueOf(lang_list_new.size()));
 
+        if (lang_list_new.size() == 0) {
+            ll_fullService.setEnabled(true);
+            ll_oilChange.setEnabled(true);
 
+            txt_fullService.setTextColor(Color.parseColor("#000000"));
+            img_full.setBackgroundResource(R.drawable.car_service);
+            txt_oilService.setTextColor(Color.parseColor("#000000"));
+            img_oil.setBackgroundResource(R.drawable.oil_service);
+
+
+        }
         ArrayList<String> alCID = new ArrayList<String>(alCatId);
         Log.i("TT", "del & alCatId-->" + String.valueOf(alCatId));
 

@@ -33,11 +33,13 @@ public class ChooseServiceAdapter extends BaseAdapter {
     private static LayoutInflater inflater = null;
     HashMap<String, JSONObject> hsMap = new HashMap<String, JSONObject>();
     int n_rate;
-    public ChooseServiceAdapter(Context con, List<CommonBean> alBean, ChooseServiceInterface interfac) {
+    String str_ServiceType;
+    public ChooseServiceAdapter(Context con, String str_SerVice_Type,List<CommonBean> alBean, ChooseServiceInterface interfac) {
         context = con;
         serviceStationBean = alBean;
         inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         myInterface = interfac;
+        str_ServiceType= str_SerVice_Type;
 
     }
 
@@ -84,7 +86,7 @@ public class ChooseServiceAdapter extends BaseAdapter {
             public void onClick(View v) {
              /*   n_rate+=serviceBean.getN_serviceId();
                 Log.i("MM", "Total : "+n_rate);*/
-                myInterface.getServiceStationAddress(String.valueOf(serviceBean.getN_serviceId()), serviceBean.getStr_serviceName(),serviceBean.getF_price());
+                myInterface.getServiceStationAddress(String.valueOf(serviceBean.getN_serviceId()),str_ServiceType, serviceBean.getStr_serviceName(),serviceBean.getF_price());
             }
         });
 

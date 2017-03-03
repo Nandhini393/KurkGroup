@@ -127,54 +127,76 @@ public class CancelBooking extends Activity implements ChooseServiceInterface {
         Log.e("NN_edit", "edit_ss_modularAmt->" + getIntent().getStringExtra("edit_ss_modularAmt"));
 
         if (str_EditServiceArrayResp != null) {
-            Log.e("NN_edit", "str_serviceArray->" + str_EditServiceArrayResp);
-            ArrayList<CommonBean> beanArrayList = new ArrayList<CommonBean>();
-            ArrayList<String> beanIdList = new ArrayList<String>();
 
-            try {
-                JSONObject jsobj = new JSONObject(str_EditServiceArrayResp);
-                f_overallAmount = Float.valueOf(jsobj.getString("rate"));
-                str_EditBookingId = jsobj.getString("booking_id");
-                Log.i("HH", "f_overallAmount : " + f_overallAmount);
-                Log.i("HH", "str_EditBookingId : " + str_EditBookingId);
-                txt_overAllAmt.setText("" + f_overallAmount);
-                Log.i("HH", "strResp : " + str_EditServiceArrayResp);
 
-                // if (jsobj.getString("code").equalsIgnoreCase("2")) {
-                JSONArray services_stations = jsobj.getJSONArray("services");
+                Log.e("NN_edit", "str_serviceArray->" + str_EditServiceArrayResp);
+                ArrayList<CommonBean> beanArrayList = new ArrayList<CommonBean>();
+                ArrayList<String> beanIdList = new ArrayList<String>();
 
-                if (str_EditServiceArrayResp.length() > 0) {
+                try {
+                    JSONObject jsobj = new JSONObject(str_EditServiceArrayResp);
+                    f_overallAmount = Float.valueOf(jsobj.getString("rate"));
+                    str_EditBookingId = jsobj.getString("booking_id");
+                    Log.i("HH", "f_overallAmount : " + f_overallAmount);
+                    Log.i("HH", "str_EditBookingId : " + str_EditBookingId);
+                    txt_overAllAmt.setText("" + f_overallAmount);
+                    Log.i("HH", "strResp : " + str_EditServiceArrayResp);
+                    if(!getIntent().getStringExtra("edit_ss_serviceType").equalsIgnoreCase("diagnostics_D")|| !getIntent().getStringExtra("edit_ss_serviceType").equalsIgnoreCase("diagnosispickup_D")) {
 
-                    for (int i = 0; i < services_stations.length(); i++) {
-                        CommonBean drawerBean = new CommonBean();
-                        drawerBean.setStr_serviceName(services_stations.getJSONObject(i).getString("service_name"));
-                        drawerBean.setN_serviceId(Integer.parseInt(services_stations.getJSONObject(i).getString("service_id")));
-                        drawerBean.setF_price(Integer.parseInt(services_stations.getJSONObject(i).getString("service_rate")));
-                        beanArrayList.add(drawerBean);
-                        beanIdList.add(services_stations.getJSONObject(i).getString("service_id"));
+                        // if (jsobj.getString("code").equalsIgnoreCase("2")) {
+                        JSONArray services_stations = jsobj.getJSONArray("services");
+
+                        if (str_EditServiceArrayResp.length() > 0) {
+
+                            for (int i = 0; i < services_stations.length(); i++) {
+                                CommonBean drawerBean = new CommonBean();
+                                drawerBean.setStr_serviceName(services_stations.getJSONObject(i).getString("service_name"));
+                                drawerBean.setN_serviceId(Integer.parseInt(services_stations.getJSONObject(i).getString("service_id")));
+                                drawerBean.setF_price(Integer.parseInt(services_stations.getJSONObject(i).getString("service_rate")));
+                                beanArrayList.add(drawerBean);
+                                beanIdList.add(services_stations.getJSONObject(i).getString("service_id"));
+                            }
+                        }
+                        DisplayServicesAdapter mAdap = new DisplayServicesAdapter(context, beanArrayList, (ChooseServiceInterface) context);
+                        list_serviceDisplay.setAdapter(mAdap);
+                        mAdap.notifyDataSetChanged();
                     }
-                }
-                DisplayServicesAdapter mAdap = new DisplayServicesAdapter(context, beanArrayList, (ChooseServiceInterface) context);
-                list_serviceDisplay.setAdapter(mAdap);
-                mAdap.notifyDataSetChanged();
 
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+
 
         }
 
         // ** diagnostics ** //
 
         if (getIntent().getStringExtra("edit_ss_serviceType").equalsIgnoreCase("diagnostics_D")) {
-            rl_modularLay.setVisibility(View.GONE);
-            list_serviceDisplay.setVisibility(View.VISIBLE);
+            rl_modularLay.setVisibility(View.VISIBLE);
+            list_serviceDisplay.setVisibility(View.GONE);
+            txt_modularAmt.setText("" + Float.parseFloat(getIntent().getStringExtra("edit_ss_diagnoAmt")));
             txt_AddAmtText.setText("Diagnostics service charge");
             txt_AdditionAmtCharge.setText("" + Float.parseFloat(getIntent().getStringExtra("edit_ss_diagnoAmt")));
+
+
+
+            txt_total_amt.setText("" + Float.parseFloat(getIntent().getStringExtra("edit_ss_diagnoAmt")));
+            txt_overAllAmt.setText(""+Float.parseFloat(getIntent().getStringExtra("edit_ss_diagnoAmt")));
         }
         else if (getIntent().getStringExtra("edit_ss_serviceType").equalsIgnoreCase("diagnosispickup_D")) {
-            txt_AddAmtText.setText("Pick up service charge\n\nDiagnostics service charge\n");
-            txt_AdditionAmtCharge.setText("" + Float.parseFloat(getIntent().getStringExtra("edit_ss_pickUpAmt")) + "\n\n" + Float.parseFloat(getIntent().getStringExtra("edit_ss_diagnoAmt")) + "\n");
+            rl_modularLay.setVisibility(View.VISIBLE);
+            list_serviceDisplay.setVisibility(View.GONE);
+
+            txt_AddAmtText.setText("Pick up service charge");
+            txt_AdditionAmtCharge.setText("" + Float.parseFloat(getIntent().getStringExtra("edit_ss_pickUpAmt")) + "\n");
+            txt_modularAmt.setText("" + Float.parseFloat(getIntent().getStringExtra("edit_ss_diagnoAmt")));
+
+            txt_total_amt.setText("" + Float.parseFloat(getIntent().getStringExtra("edit_ss_diagnoAmt")));
+            Float val1=Float.valueOf(getIntent().getStringExtra("edit_ss_diagnoAmt"));
+            Float val2=Float.valueOf(getIntent().getStringExtra("edit_ss_pickUpAmt"));
+            Float total = val1+val2;
+            txt_overAllAmt.setText(""+total);
 
         }
 
@@ -184,7 +206,7 @@ public class CancelBooking extends Activity implements ChooseServiceInterface {
         else if (getIntent().getStringExtra("edit_ss_serviceType").equalsIgnoreCase("pickup_P")) {
             rl_modularLay.setVisibility(View.GONE);
             list_serviceDisplay.setVisibility(View.VISIBLE);
-            txt_AddAmtText.setText("Pick up service charge");
+            txt_AddAmtText.setText("Pick up service charge\n\nDiagnostics service charge\n");
             txt_AdditionAmtCharge.setText("" + Float.parseFloat(getIntent().getStringExtra("edit_ss_pickUpAmt")));
         }
         else if (getIntent().getStringExtra("edit_ss_serviceType").equalsIgnoreCase("diagnosispickup_P")) {
@@ -306,7 +328,7 @@ public class CancelBooking extends Activity implements ChooseServiceInterface {
     }
 
     @Override
-    public void getServiceStationAddress(String str_id, String str_name, Float price) {
+    public void getServiceStationAddress(String str_id, String str_serviceType,String str_name, Float price) {
 
     }
 

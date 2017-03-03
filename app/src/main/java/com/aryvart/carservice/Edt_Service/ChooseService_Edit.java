@@ -88,6 +88,7 @@ public class ChooseService_Edit extends Activity implements ChooseServiceInterfa
     ArrayList<String> arrayList_id;
     ArrayList<CommonBean> arrayList;
     TextView txt_amt,txt_choice,txt_header,txt_selectServiceText,txt_errorMsg;;
+    ImageView img_oil,img_full;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -111,6 +112,8 @@ public class ChooseService_Edit extends Activity implements ChooseServiceInterfa
         txt_amt = (TextView) findViewById(R.id.txt_amt);
         txt_choice = (TextView) findViewById(R.id.txt_choice);
 
+        img_oil=(ImageView)findViewById(R.id.img_oil);
+        img_full=(ImageView)findViewById(R.id.img_ful);
 
         txt_modularRepText = (TextView) findViewById(R.id.txt_modularRepText);
         ll_modularRep= (LinearLayout) findViewById(R.id.ll_modular_rep);
@@ -131,6 +134,20 @@ public class ChooseService_Edit extends Activity implements ChooseServiceInterfa
         //  str_EditBookingId=gD.prefs.getString("edit_ss_id", null);
         //for saving dats in sharedpreference
 
+        Log.i("TT", "edit_ss_serviceChoosen-->" +gD.prefs.getString("edit_ss_serviceChoosen", null));
+
+        if(gD.prefs.getString("edit_ss_serviceChoosen", null).equalsIgnoreCase("1")){
+
+            txt_oilService.setTextColor(Color.parseColor("#0987ff"));
+            txt_fullService.setTextColor(Color.parseColor("#000000"));
+            //Toast.makeText(ChooseService.this, "You can choose only one service at a time", Toast.LENGTH_SHORT).show();
+        }
+        else if(gD.prefs.getString("edit_ss_serviceChoosen", null).equalsIgnoreCase("2")){
+
+            txt_oilService.setTextColor(Color.parseColor("#000000"));
+            txt_fullService.setTextColor(Color.parseColor("#0987ff"));
+            //Toast.makeText(ChooseService.this, "You can choose only one service at a time", Toast.LENGTH_SHORT).show();
+        }
 
 
 
@@ -153,6 +170,7 @@ public class ChooseService_Edit extends Activity implements ChooseServiceInterfa
             txt_oilService.setTextColor(Color.parseColor("#0987ff"));
             txt_fullService.setTextColor(Color.parseColor("#000000"));
         }
+
 
 
         SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(context);
@@ -291,7 +309,7 @@ public class ChooseService_Edit extends Activity implements ChooseServiceInterfa
                     if (count == 0) {
                         if (isConnected) {
                             listView.setVisibility(View.VISIBLE);
-                            LoadLayout(jsonArray_my_profile, "Response");
+                            LoadLayout(jsonArray_my_profile,strChoosenService);
                         }
                         else {
                             listView.setVisibility(View.GONE);
@@ -336,7 +354,7 @@ public class ChooseService_Edit extends Activity implements ChooseServiceInterfa
                     } else {
                         Intent i = new Intent(ChooseService_Edit.this, ServiceConfirmation_EditNew.class);
                         Log.i("HH", "array_list : " + lang_list_new);
-
+                        i.putExtra("ss_serviceChoice",gD.prefs.getString("edit_ss_serviceChoosen",null));
                         //Set the values
                         SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(context);
                         SharedPreferences.Editor editor = sharedPrefs.edit();
@@ -400,7 +418,7 @@ public class ChooseService_Edit extends Activity implements ChooseServiceInterfa
                                     }
                                 }
 
-                                mAdapter = new ChooseServiceAdapter(context, beanArrayList, (ChooseServiceInterface) context);
+                                mAdapter = new ChooseServiceAdapter(context,strFromChoosen, beanArrayList, (ChooseServiceInterface) context);
                                 listView.setAdapter(mAdapter);
                                 mAdapter.notifyDataSetChanged();
                                 //txt_drawer_error_msg.setVisibility(View.GONE);
@@ -490,7 +508,7 @@ public class ChooseService_Edit extends Activity implements ChooseServiceInterfa
 
     }
 
-    private ArrayList<CommonBean> LoadLayout(JSONArray providerServicesMonth, String stridentifyEdit) {
+    private ArrayList<CommonBean> LoadLayout(JSONArray providerServicesMonth, String strFromChoosen) {
         ArrayList<CommonBean> beanArrayList = new ArrayList<CommonBean>();
 
         JSONObject jsobj = null;
@@ -510,7 +528,7 @@ public class ChooseService_Edit extends Activity implements ChooseServiceInterfa
                     }
                 }
 
-                mAdapter = new ChooseServiceAdapter(context, beanArrayList, (ChooseServiceInterface) context);
+                mAdapter = new ChooseServiceAdapter(context,strFromChoosen,beanArrayList, (ChooseServiceInterface) context);
                 listView.setAdapter(mAdapter);
                 mAdapter.notifyDataSetChanged();
 
@@ -524,43 +542,67 @@ public class ChooseService_Edit extends Activity implements ChooseServiceInterfa
     }
 
     @Override
-    public void getServiceStationAddress(String str_id, String str_name, Float f_price) {
+    public void getServiceStationAddress(String str_id,String str_serviceType, String str_name, Float f_price) {
         str_ServiceStationId = str_id;
         listView.setVisibility(View.GONE);
         ll_displayServicList.setVisibility(View.VISIBLE);
         Log.i("ver1", "f_priceAdd-->" + f_price);
-        ArrayList<CommonBean> al = new ArrayList<CommonBean>(lang_list_new);
-        if (al.size() == 0) {
-            CommonBean serviceBean = new CommonBean();
-            serviceBean.setStr_serviceName(str_name);
-            serviceBean.setN_serviceId(Integer.parseInt(str_id));
-            serviceBean.setF_price(f_price);
-            lang_list_new.add(serviceBean);
 
-            alCatId.add(String.valueOf(str_id));
+        Log.i("ver1", "serviceType1-->" + str_serviceType);
+        Log.i("ver1", "serviceType2-->" + gD.prefs.getString("edit_ss_serviceChoosen", null));
 
-
-            Set<CommonBean> hs = new LinkedHashSet<>();
-            hs.addAll(lang_list_new);
-            lang_list_new.clear();
-            lang_list_new.addAll(hs);
-
-
-            Log.i("TT", "add & al_bean-->" + String.valueOf(lang_list_new.size()));
-            Log.i("TT", "add & bean-->" + String.valueOf(lang_list_new));
-            Set<String> hs1 = new LinkedHashSet<>();
-            hs1.addAll(alCatId);
-            alCatId.clear();
-            alCatId.addAll(hs1);
-            Log.i("ver", "Adding--->" + Integer.parseInt(str_id));
-            Log.i("ver", "Array Size--->" + alCatId.size());
+        if(str_serviceType.equalsIgnoreCase("1")){
+            ll_fullService.setEnabled(false);
+            ll_oilChange.setEnabled(true);
+            txt_fullService.setTextColor(Color.parseColor("#7a7a7a"));
+            img_full.setBackgroundResource(R.drawable.full_grey);
+            //Toast.makeText(ChooseService.this, "You can choose only one service at a time", Toast.LENGTH_SHORT).show();
+        }
+        else if(str_serviceType.equalsIgnoreCase("2")){
+            ll_oilChange.setEnabled(false);
+            ll_fullService.setEnabled(true);
+            txt_oilService.setTextColor(Color.parseColor("#7a7a7a"));
+            img_oil.setBackgroundResource(R.drawable.oil_grey);
+            //Toast.makeText(ChooseService.this, "You can choose only one service at a time", Toast.LENGTH_SHORT).show();
+        }
 
 
+        if(str_serviceType.equalsIgnoreCase(gD.prefs.getString("edit_ss_serviceChoosen", null))){
+
+            SharedPreferences.Editor sp_pref= gD.prefs.edit();
+            sp_pref.putString("edit_ss_serviceChoosen",str_serviceType);
+            sp_pref.commit();
+
+            ArrayList<CommonBean> al = new ArrayList<CommonBean>(lang_list_new);
+            if (al.size() == 0) {
+                CommonBean serviceBean = new CommonBean();
+                serviceBean.setStr_serviceName(str_name);
+                serviceBean.setN_serviceId(Integer.parseInt(str_id));
+                serviceBean.setF_price(f_price);
+                lang_list_new.add(serviceBean);
+
+                alCatId.add(String.valueOf(str_id));
+
+
+                Set<CommonBean> hs = new LinkedHashSet<>();
+                hs.addAll(lang_list_new);
+                lang_list_new.clear();
+                lang_list_new.addAll(hs);
+
+
+                Log.i("TT", "add & al_bean-->" + String.valueOf(lang_list_new.size()));
+                Log.i("TT", "add & bean-->" + String.valueOf(lang_list_new));
+                Set<String> hs1 = new LinkedHashSet<>();
+                hs1.addAll(alCatId);
+                alCatId.clear();
+                alCatId.addAll(hs1);
+                Log.i("ver", "Adding--->" + Integer.parseInt(str_id));
+                Log.i("ver", "Array Size--->" + alCatId.size());
 
 
 
-        } else {
-            Log.i("ver1", "f_priceAddElse-->" + f_price);
+            } else {
+                Log.i("ver1", "f_priceAddElse-->" + f_price);
             /*for (int c = 0; c < al.size(); c++) {
 
             }*/
@@ -569,25 +611,25 @@ public class ChooseService_Edit extends Activity implements ChooseServiceInterfa
                 if (al.get(c).getStr_serviceName().equalsIgnoreCase(str_name)) {
                     Toast.makeText(context, "Category already selected", Toast.LENGTH_SHORT).show();
                 } else {*/
-            CommonBean serviceBean = new CommonBean();
-            serviceBean.setStr_serviceName(str_name);
-            serviceBean.setN_serviceId(Integer.parseInt(str_id));
-            serviceBean.setF_price(f_price);
-            lang_list_new.add(serviceBean);
+                CommonBean serviceBean = new CommonBean();
+                serviceBean.setStr_serviceName(str_name);
+                serviceBean.setN_serviceId(Integer.parseInt(str_id));
+                serviceBean.setF_price(f_price);
+                lang_list_new.add(serviceBean);
 
-            alCatId.add(String.valueOf(str_id));
+                alCatId.add(String.valueOf(str_id));
 
-            Set<CommonBean> hs = new LinkedHashSet<>();
-            hs.addAll(lang_list_new);
-            lang_list_new.clear();
-            lang_list_new.addAll(hs);
-            Log.i("TT", "add & al_bean-->" + String.valueOf(lang_list_new.size()));
-            Log.i("TT", "add & bean-->" + String.valueOf(lang_list_new));
+                Set<CommonBean> hs = new LinkedHashSet<>();
+                hs.addAll(lang_list_new);
+                lang_list_new.clear();
+                lang_list_new.addAll(hs);
+                Log.i("TT", "add & al_bean-->" + String.valueOf(lang_list_new.size()));
+                Log.i("TT", "add & bean-->" + String.valueOf(lang_list_new));
 
-            Set<String> hs1 = new LinkedHashSet<>();
-            hs1.addAll(alCatId);
-            alCatId.clear();
-            alCatId.addAll(hs1);
+                Set<String> hs1 = new LinkedHashSet<>();
+                hs1.addAll(alCatId);
+                alCatId.clear();
+                alCatId.addAll(hs1);
 
 
 
@@ -608,10 +650,114 @@ public class ChooseService_Edit extends Activity implements ChooseServiceInterfa
                 /*}
 
             }*/
+            }
+            ChooseServiceDisplayAdapter mAdap = new ChooseServiceDisplayAdapter(context, lang_list_new, (ChooseServiceInterface) context);
+            list_serviceDisplay.setAdapter(mAdap);
+            mAdap.notifyDataSetChanged();
         }
-        ChooseServiceDisplayAdapter mAdap = new ChooseServiceDisplayAdapter(context, lang_list_new, (ChooseServiceInterface) context);
-        list_serviceDisplay.setAdapter(mAdap);
-        mAdap.notifyDataSetChanged();
+        else{
+
+            lang_list_new.clear();
+            alCatId.clear();
+
+            ChooseServiceDisplayAdapter mAdapp = new ChooseServiceDisplayAdapter(context, lang_list_new, (ChooseServiceInterface) context);
+            list_serviceDisplay.setAdapter(mAdapp);
+            mAdapp.notifyDataSetChanged();
+
+            SharedPreferences.Editor sp_pref= gD.prefs.edit();
+            sp_pref.putString("edit_ss_serviceChoosen",str_serviceType);
+            sp_pref.commit();
+
+            ArrayList<CommonBean> al = new ArrayList<CommonBean>(lang_list_new);
+            if (al.size() == 0) {
+                CommonBean serviceBean = new CommonBean();
+                serviceBean.setStr_serviceName(str_name);
+                serviceBean.setN_serviceId(Integer.parseInt(str_id));
+                serviceBean.setF_price(f_price);
+                lang_list_new.add(serviceBean);
+
+                alCatId.add(String.valueOf(str_id));
+
+
+                Set<CommonBean> hs = new LinkedHashSet<>();
+                hs.addAll(lang_list_new);
+                lang_list_new.clear();
+                lang_list_new.addAll(hs);
+
+
+                Log.i("TT", "add & al_bean-->" + String.valueOf(lang_list_new.size()));
+                Log.i("TT", "add & bean-->" + String.valueOf(lang_list_new));
+                Set<String> hs1 = new LinkedHashSet<>();
+                hs1.addAll(alCatId);
+                alCatId.clear();
+                alCatId.addAll(hs1);
+                Log.i("ver", "Adding--->" + Integer.parseInt(str_id));
+                Log.i("ver", "Array Size--->" + alCatId.size());
+
+
+
+            } else {
+                Log.i("ver1", "f_priceAddElse-->" + f_price);
+            /*for (int c = 0; c < al.size(); c++) {
+
+            }*/
+
+          /*  for (int c = 0; c < al.size(); c++) {
+                if (al.get(c).getStr_serviceName().equalsIgnoreCase(str_name)) {
+                    Toast.makeText(context, "Category already selected", Toast.LENGTH_SHORT).show();
+                } else {*/
+                CommonBean serviceBean = new CommonBean();
+                serviceBean.setStr_serviceName(str_name);
+                serviceBean.setN_serviceId(Integer.parseInt(str_id));
+                serviceBean.setF_price(f_price);
+                lang_list_new.add(serviceBean);
+
+                alCatId.add(String.valueOf(str_id));
+
+                Set<CommonBean> hs = new LinkedHashSet<>();
+                hs.addAll(lang_list_new);
+                lang_list_new.clear();
+                lang_list_new.addAll(hs);
+                Log.i("TT", "add & al_bean-->" + String.valueOf(lang_list_new.size()));
+                Log.i("TT", "add & bean-->" + String.valueOf(lang_list_new));
+
+                Set<String> hs1 = new LinkedHashSet<>();
+                hs1.addAll(alCatId);
+                alCatId.clear();
+                alCatId.addAll(hs1);
+
+
+
+                    /*for (int i=0; i<alCatId.size(); i++){
+
+                        Log.i("TT", "alCatId.get(i)-->" + alCatId.get(i));
+                        nRate+=Integer.parseInt(alCatId.get(i));
+
+
+                        Log.i("TT", "totlal add rate-->" + nRate);
+                    }*/
+
+                   /* for (int i=0; i<alCatId.size(); i++){
+                        Log.i("ver", nRate+ "----" + alCatId.get(i));*/
+           /* nRate = nRate + f_price;
+            Log.i("ver", "Total-->" + nRate);*/
+                   /* }*/
+                /*}
+
+            }*/
+            }
+            ChooseServiceDisplayAdapter mAdap = new ChooseServiceDisplayAdapter(context, lang_list_new, (ChooseServiceInterface) context);
+            list_serviceDisplay.setAdapter(mAdap);
+            mAdap.notifyDataSetChanged();
+
+
+
+
+
+        }
+
+
+
 
     }
 
@@ -636,7 +782,17 @@ public class ChooseService_Edit extends Activity implements ChooseServiceInterfa
         lang_list_new.addAll(hs);
 
         Log.i("GHK", String.valueOf(lang_list_new.size()));
+        if (lang_list_new.size() == 0) {
+            ll_fullService.setEnabled(true);
+            ll_oilChange.setEnabled(true);
 
+            txt_fullService.setTextColor(Color.parseColor("#000000"));
+            img_full.setBackgroundResource(R.drawable.car_service);
+            txt_oilService.setTextColor(Color.parseColor("#000000"));
+            img_oil.setBackgroundResource(R.drawable.oil_service);
+
+
+        }
 
         ArrayList<String> alCID = new ArrayList<String>(alCatId);
         Log.i("TT", "del & alCatId-->" + String.valueOf(alCatId));

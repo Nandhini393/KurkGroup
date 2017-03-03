@@ -199,7 +199,7 @@ public class CancelBookingList extends Activity implements EditBookInterface {
     @Override
     public void getEditService(String str_stationId, String str_name, String str_address,
                                String str_date, String str_image, String str_bookingId, String str_serviceArray,
-                               String str_ServiceType,String str_pickUpAmt,String str_diagnoAmt,String str_modularAmt,String str_pickUpAdress,String str_enableCancelBook) {
+                               String str_ServiceType,String str_pickUpAmt,String str_diagnoAmt,String str_modularAmt,String str_pickUpAdress,String str_enableCancelBook,String str_serviceChoosen) {
 
         Log.e("NN_edit", "str_stationId->" + str_stationId);
         Log.e("NN_edit", "str_bookingId->" + str_bookingId);

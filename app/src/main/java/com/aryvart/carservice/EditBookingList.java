@@ -129,7 +129,7 @@ public class EditBookingList extends Activity implements EditBookInterface {
                                         drawerBean.setStr_pickUpAddress(providersServiceJSONobject.getString("pickup_address"));
                                         drawerBean.setStr_enableCancelBooking(providersServiceJSONobject.getString("enable"));
 
-
+                                        drawerBean.setStr_serviceChoosen(providersServiceJSONobject.getString("servicechoice"));
                                         String image = GeneralData.LOCAL_IP_IMAGE + providersServiceJSONobject.getString("image");
                                         drawerBean.setN_image(image);
                                         beanArrayList.add(drawerBean);
@@ -213,10 +213,12 @@ public class EditBookingList extends Activity implements EditBookInterface {
     @Override
     public void getEditService(String str_stationId,String str_name,String str_address,String str_date,String str_image, String str_bookingId, String str_serviceArray
                                ,String str_ServiceType,String str_pickUpAmt,
-                               String str_diagnoAmt,String str_modularAmt,String str_pickUpAddress,String str_enableCancelBook) {
+                               String str_diagnoAmt,String str_modularAmt,String str_pickUpAddress,String str_enableCancelBook,
+                                String str_serviceChoosen) {
         Log.e("NN_edit", "str_stationId->" + str_stationId);
         Log.e("NN_edit", "str_bookingId->" + str_bookingId);
         Log.e("NN_edit", "str_serviceArray->" + str_serviceArray);
+        Log.e("NN_edit", "str_serviceChoosen->" + str_serviceChoosen);
 
 
         Intent i = new Intent(EditBookingList.this,ServiceStation_Edit.class);
@@ -235,6 +237,7 @@ public class EditBookingList extends Activity implements EditBookInterface {
 
         prefEdit.putString("edit_ss_pickUpAddress", str_pickUpAddress);
         prefEdit.putString("edit_ss_enableCancelBook", str_enableCancelBook);
+        prefEdit.putString("edit_ss_serviceChoosen", str_serviceChoosen);
 
         i.putExtra("from_edit","value");
         String [] date =str_date.split(" ");

@@ -87,7 +87,7 @@ ImageLoader img_carImage;
                 if(serviceBean.getStr_enableCancelBooking().equalsIgnoreCase("0")){
                     myInterface.getEditService(serviceBean.getStr_serviceId(),"","","","",
                             serviceBean.getStr_serviceBookingId(),serviceBean.getStr_Response(), serviceBean.getStr_ServiceType(),
-                            serviceBean.getPickup_charge(),serviceBean.getStr_diagnosis_charge(),serviceBean.getModular_reprogramming_charge(),serviceBean.getStr_pickUpAddress(),serviceBean.getStr_enableCancelBooking());
+                            serviceBean.getPickup_charge(),serviceBean.getStr_diagnosis_charge(),serviceBean.getModular_reprogramming_charge(),serviceBean.getStr_pickUpAddress(),serviceBean.getStr_enableCancelBooking(),"");
                 }
                 else if(serviceBean.getStr_enableCancelBooking().equalsIgnoreCase("1")){
                     View itemView1;

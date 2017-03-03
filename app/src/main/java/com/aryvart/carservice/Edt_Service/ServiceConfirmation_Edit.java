@@ -167,6 +167,7 @@ public class ServiceConfirmation_Edit extends Activity implements ChooseServiceI
         }
         Log.i("BN_CS_EDIT", "f_pickupCharge->" + f_pickupCharge);
         Log.i("BN_CS_EDIT", "f_diagnoCharge->" + f_diagnoCharge);
+        Log.i("BN_CS_EDIT", "service_choosen->" + getIntent().getStringExtra("ss_serviceChoice"));
         //  f_pickupCharge = Float.parseFloat(gD.prefs.getString("ss_pickup_charge", null));
 
         //  arrayList = new ArrayList<CommonBean>();
@@ -636,7 +637,7 @@ public class ServiceConfirmation_Edit extends Activity implements ChooseServiceI
     }
 
     @Override
-    public void getServiceStationAddress(String str_id, String str_name, Float price) {
+    public void getServiceStationAddress(String str_id,String str_serviceType, String str_name, Float price) {
 
     }
 

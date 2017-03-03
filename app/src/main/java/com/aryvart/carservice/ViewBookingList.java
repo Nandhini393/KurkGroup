@@ -193,7 +193,7 @@ public class ViewBookingList extends Activity implements EditBookInterface {
     @Override
     public void getEditService(String str_stationId, String str_name, String str_address,
                                String str_date, String str_image, String str_bookingId, String str_serviceArray ,String str_ServiceType,
-                               String str_pickUpAmt,String str_diagnoAmt,String str_modularAmt,String str_pickUpAddress,String str_enableCancelBook) {
+                               String str_pickUpAmt,String str_diagnoAmt,String str_modularAmt,String str_pickUpAddress,String str_enableCancelBook,String str_serviceChoosen) {
 
     }
 

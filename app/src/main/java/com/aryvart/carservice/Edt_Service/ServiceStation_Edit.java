@@ -227,11 +227,11 @@ public class ServiceStation_Edit extends Activity implements ServiceStationInter
                     } else if (txt_date.getText().toString().trim().length() == 0) {
                         Toast.makeText(ServiceStation_Edit.this, "Select your service date", Toast.LENGTH_SHORT).show();
                     } else {
-                       /* if (gD.prefs.getString("edit_ss_serviceType", null).equalsIgnoreCase("modular")||gD.prefs.getString("edit_ss_serviceType", null).equalsIgnoreCase("modularpickup")) {
-                            startActivity(new Intent(ServiceStation_Edit.this,ServiceConfirmation_Edit.class));
+                      if (gD.prefs.getString("edit_ss_serviceType", null).equalsIgnoreCase("diagnostics_D")||gD.prefs.getString("edit_ss_serviceType", null).equalsIgnoreCase("diagnosispickup_D")) {
+                            startActivity(new Intent(ServiceStation_Edit.this,ServiceConfirmation_EditNew.class));
                             finish();
                         }
-                        else{*/
+                        else{
                             Intent i = new Intent(ServiceStation_Edit.this, ChooseService_Edit.class);
                             //  i.putExtra("edit_ss_id",gD.prefs.getString("edit_ss_id", null));
 
@@ -298,7 +298,7 @@ public class ServiceStation_Edit extends Activity implements ServiceStationInter
                             startActivity(i);
                             finish();
 
-                       // }
+                       }
 
                     }
                 } else {
