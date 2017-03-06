@@ -73,14 +73,14 @@ int n_rate;
         holder.txt_serviceRate.setTypeface(typeFace3);
 
         holder.txt_serviceName.setText(serviceBean.getStr_serviceName());
-        holder.txt_serviceRate.setText("" + serviceBean.getF_price());
-        Log.i("MM", "IF : "+serviceBean.getF_price());
+        holder.txt_serviceRate.setText("" + serviceBean.getStr_servicePrice());
+        Log.i("MM", "IF : "+serviceBean.getStr_servicePrice());
 
 
         holder.img_delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                myInterface.delChoosenService(serviceBean.getN_serviceId(), serviceBean.getStr_serviceName(),serviceBean.getF_price());
+                myInterface.delChoosenService(serviceBean.getN_serviceId(), serviceBean.getStr_serviceName(),serviceBean.getStr_servicePrice());
                 serviceStationBean.remove(serviceBean);
                 notifyDataSetChanged();
 

@@ -5,10 +5,12 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
@@ -30,6 +32,7 @@ import com.aryvart.carservice.Adapters.CancelBookAdapter;
 import com.aryvart.carservice.Bean.CommonBean;
 import com.aryvart.carservice.GenericClasses.GeneralData;
 import com.aryvart.carservice.Interfaces.EditBookInterface;
+import com.google.gson.Gson;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -214,6 +217,8 @@ public class CancelBookingList extends Activity implements EditBookInterface {
         i.putExtra("edit_ss_modularAmt", str_modularAmt);
         i.putExtra("edit_ss_pickUpAddress", str_pickUpAdress);
         i.putExtra("edit_ss_enableCancelBook", str_enableCancelBook);
+
+
         startActivity(i);
         finish();
     }

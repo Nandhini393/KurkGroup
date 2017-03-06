@@ -1,5 +1,6 @@
 package com.aryvart.carservice;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -8,12 +9,14 @@ import android.graphics.Color;
 import android.graphics.Typeface;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -50,9 +53,14 @@ import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Type;
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
+import java.text.NumberFormat;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 /**
@@ -69,7 +77,8 @@ public class ServiceConfirmation extends Activity implements ChooseServiceInterf
     CheckBox cb_pickUp, cb_diagno;
     String str_category_id;
     GeneralData gD;
-    Float f_overall_amount, f_pickupCharge, f_diagnoCharge, f_modularCharge;
+    // new change --> float to string
+    String f_overall_amount, f_pickupCharge, f_diagnoCharge, f_modularCharge;
     Button btn_confirm, btn_edit, btn_cancel;
     float nRate = 0;
     String strFrom = "insert";
@@ -87,6 +96,81 @@ public class ServiceConfirmation extends Activity implements ChooseServiceInterf
         gD = new GeneralData(context);
         img_back = (ImageView) findViewById(R.id.img_back);
         listConfirm = (ListView) findViewById(R.id.list_confirm);
+
+        if (!gD.prefs.getString("str_serviceType", null).equalsIgnoreCase("diagnostics")){
+            // listview scroll (lolipop)
+
+            if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                Runnable fitsOnScreen = new Runnable() {
+                    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+                    @Override
+                    public void run() {
+                        int last = listConfirm.getLastVisiblePosition();
+                        if(last == listConfirm.getCount() - 1 && listConfirm.getChildAt(last).getBottom() <= listConfirm.getHeight()) {
+                            // It fits!
+                            listConfirm.setNestedScrollingEnabled(false);
+
+                            //android:nestedScrollingEnabled="true"
+                        }
+                        else {
+                            // It doesn't fit...
+                            listConfirm.setNestedScrollingEnabled(true);
+                        }
+                    }
+                };
+
+                listConfirm.post(fitsOnScreen);
+            }
+            else {
+
+
+                Runnable fitsOnScreen = new Runnable() {
+                    @Override
+                    public void run() {
+                        int last = listConfirm.getLastVisiblePosition();
+                        if(last == listConfirm.getCount() - 1 && listConfirm.getChildAt(last).getBottom() <= listConfirm.getHeight()) {
+                            // It fits!
+
+
+                            //android:nestedScrollingEnabled="true"
+                        }
+                        else {
+                            // It doesn't fit...
+                            listConfirm.setOnTouchListener(new ListView.OnTouchListener() {
+                                @Override
+                                public boolean onTouch(View v, MotionEvent event) {
+                                    int action = event.getAction();
+                                    switch (action) {
+
+                                        case MotionEvent.ACTION_DOWN:
+                                            // Disallow ScrollView to intercept touch events.
+                                            v.getParent().requestDisallowInterceptTouchEvent(true);
+                                            break;
+
+                                        case MotionEvent.ACTION_UP:
+                                            // Allow ScrollView to intercept touch events.
+                                            v.getParent().requestDisallowInterceptTouchEvent(false);
+                                            break;
+                                    }
+
+                                    // Handle ListView touch events.
+                                    v.onTouchEvent(event);
+                                    return true;
+                                }
+                            });
+                        }
+                    }
+                };
+                listConfirm.post(fitsOnScreen);
+
+
+            }
+
+        }
+
+
+
+
         txt_total_amt = (TextView) findViewById(R.id.txt_total_amt);
         cb_pickUp = (CheckBox) findViewById(R.id.cb_pickup);
         cb_diagno = (CheckBox) findViewById(R.id.cb_diagno);
@@ -154,16 +238,18 @@ public class ServiceConfirmation extends Activity implements ChooseServiceInterf
             txt_pickUpCharge.setText("" + f_pickupCharge);
             txt_diagnoCharge.setText("" + f_diagnoCharge);
         }*/
-        f_pickupCharge = Float.parseFloat(gD.prefs.getString("ss_pickup_charge", null));
-        f_diagnoCharge = Float.parseFloat(gD.prefs.getString("ss_diagno_charge", null));
+        f_pickupCharge = gD.prefs.getString("ss_pickup_charge", null);
+        f_diagnoCharge = gD.prefs.getString("ss_diagno_charge", null);
         if (f_pickupCharge != null || f_diagnoCharge != null) {
             txt_pickUpCharge.setText("" + f_pickupCharge);
             txt_diagnoCharge.setText("" + f_diagnoCharge);
         }
         Log.i("BN_COS", "f_pickupCharge->" + f_pickupCharge);
         Log.i("BN_COS", "f_diagnoCharge->" + f_diagnoCharge);
-        Log.i("BN_COS", "service_choosen->" + getIntent().getStringExtra("ss_serviceChoice"));
-        str_Servicechoice = getIntent().getStringExtra("ss_serviceChoice");
+
+
+        Log.i("BN_COS", "service_choosen->" + gD.prefs.getString("ss_serviceChoice1",null));
+        str_Servicechoice = gD.prefs.getString("ss_serviceChoice1",null);
        /* f_modularCharge= Float.parseFloat(gD.prefs.getString("ss_modular_reprogramming_charge", null));
         if (f_modularCharge != null) {
             txt_modularAmt.setText("" + f_modularCharge);
@@ -218,12 +304,34 @@ public class ServiceConfirmation extends Activity implements ChooseServiceInterf
 
 
             for (int i = 0; i < arrayList.size(); i++) {
+
                 CommonBean cb = arrayList.get(i);
-                nRate += cb.getF_price();
-                Log.i("TT", "totlalRate-->" + nRate);
+
+                // ** new changes float to string ** //
+                try {
+             //NumberFormat.getNumberInstance(java.util.Locale.US).parse(cb.getStr_servicePrice());
+
+                   // Float x= Float.valueOf(String.valueOf(NumberFormat.getNumberInstance(java.util.Locale.US).parse(cb.getStr_servicePrice())));
+
+                   Float x=Float.valueOf(cb.getStr_servicePrice().replaceAll(",", ""));
+                    nRate += x;
+                    Log.i("TT", "totlalRate-->" + nRate);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
 
             }
-            txt_total_amt.setText("" + nRate);
+
+
+            NumberFormat.getNumberInstance(new Locale("en", "in")).format(nRate).toString();
+            Log.i("TTO", "currency2-->->" +  NumberFormat.getCurrencyInstance(new Locale("en", "in")).format(nRate).toString());
+            Log.i("TTO", "currency3-->->" +   NumberFormat.getNumberInstance(new Locale("en", "in")).format(nRate).toString());
+           // Log.i("TTO", "currency3-->->" +  NumberFormat.getCurrencyInstance(new Locale("en", "in")).format(nRate).replace("Rs.",""));
+
+            // ** ADD COMMA TO NUMBER BASED ON ITS HUNDREDS THOUSANDS VALUE ** //
+            txt_total_amt.setText("" + NumberFormat.getNumberInstance(new Locale("en", "in")).format(nRate));
+
             str_category_id = arrayList_id.toString().substring(1, arrayList_id.toString().length() - 1).trim();
             Log.i("TT", "str_category_id->" + str_category_id);
 
@@ -247,10 +355,16 @@ public class ServiceConfirmation extends Activity implements ChooseServiceInterf
             cb_pickUp.setChecked(true);
             cb_pickUp.setEnabled(false);
 
+            // *** NEW CHANGES FLOAT TO STRING *** //
 
-            f_overall_amount = nRate + Float.parseFloat(gD.prefs.getString("ss_pickup_charge", null));
+            Float x = nRate + Float.valueOf(gD.prefs.getString("ss_pickup_charge", null).replaceAll(",",""));
+
+
+            f_overall_amount = NumberFormat.getNumberInstance(new Locale("en", "in")).format(x) ;
             Log.e("NN", "overall amount->" + String.valueOf(f_overall_amount));
-            txt_overallAmount.setText("" + f_overall_amount);
+
+
+            txt_overallAmount.setText("" +f_overall_amount);
         } else if (gD.prefs.getString("str_serviceType", null).equalsIgnoreCase("diagnostics")) {
             rl_modularLay.setVisibility(View.VISIBLE);
             listConfirm.setVisibility(View.GONE);
@@ -275,15 +389,33 @@ public class ServiceConfirmation extends Activity implements ChooseServiceInterf
 
             cb_diagno.setVisibility(View.GONE);
             ll_cbDiagnoLay.setVisibility(View.GONE);
-            txt_modularAmt.setText("" + Float.parseFloat(gD.prefs.getString("ss_diagno_charge", null)));
+
+            txt_modularAmt.setText("" + String.valueOf(gD.prefs.getString("ss_diagno_charge", null)));
 
 
             cb_diagno.setTextColor(Color.parseColor("#000000"));
             str_ServiceType = "diagnostics_D";
-            f_overall_amount = nRate + Float.parseFloat(gD.prefs.getString("ss_diagno_charge", null));
+
+
+            // *** NEW CHANGES FLOAT TO STRING *** //
+
+            Float x = nRate + Float.parseFloat(gD.prefs.getString("ss_diagno_charge", null).replaceAll(",",""));
+
+
+
+            f_overall_amount = NumberFormat.getNumberInstance(new Locale("en", "in")).format(x) ;
+
+           // f_overall_amount = nRate + Float.parseFloat(gD.prefs.getString("ss_diagno_charge", null));
+
+
+
+
             Log.e("NN", "overall amount->" + String.valueOf(f_overall_amount));
             txt_overallAmount.setText("" + f_overall_amount);
-            txt_total_amt.setText("" + Float.parseFloat(gD.prefs.getString("ss_diagno_charge", null)));
+
+
+
+            txt_total_amt.setText("" +gD.prefs.getString("ss_diagno_charge", null));
 
 
         } else if (gD.prefs.getString("str_serviceType", null).equalsIgnoreCase("modular")) {
@@ -314,9 +446,20 @@ public class ServiceConfirmation extends Activity implements ChooseServiceInterf
             Log.e("NNMod", "nRateModular->" + String.valueOf(nRate));
             // txt_modularAmt.setText("" + nRate);
             str_cbStatus = "modular";
-            f_overall_amount = nRate;
+
+
+
+            f_overall_amount = NumberFormat.getNumberInstance(new Locale("en", "in")).format(nRate);
+
+
+
             Log.e("NN", "overall amount->" + String.valueOf(f_overall_amount));
-            txt_total_amt.setText("" + nRate);
+
+
+            txt_total_amt.setText("" + NumberFormat.getNumberInstance(new Locale("en", "in")).format(nRate));
+
+
+
             txt_overallAmount.setText("" + f_overall_amount);
 
             cb_diagno.setEnabled(true);
@@ -347,10 +490,12 @@ public class ServiceConfirmation extends Activity implements ChooseServiceInterf
             f_overall_amount = nRate + Float.parseFloat(gD.prefs.getString("ss_diagno_charge", null));
             Log.e("NN", "overall amount->" + String.valueOf(f_overall_amount));*/
 
-            f_overall_amount = nRate;
+            f_overall_amount =NumberFormat.getNumberInstance(new Locale("en", "in")).format(nRate);
             Log.e("NN", "overall amount->" + String.valueOf(f_overall_amount));
             txt_overallAmount.setText("" + f_overall_amount);
-            txt_total_amt.setText("" + nRate);
+
+
+            txt_total_amt.setText("" + NumberFormat.getNumberInstance(new Locale("en", "in")).format(nRate));
 
             // txt_overallAmount.setText("" + nRate);
         } else if (gD.prefs.getString("str_serviceType", null).equalsIgnoreCase("modularpickup")) {
@@ -377,9 +522,22 @@ public class ServiceConfirmation extends Activity implements ChooseServiceInterf
             Log.e("NNMod", "nRateModular->" + String.valueOf(nRate));
             txt_modularAmt.setText("" + nRate);
             str_cbStatus = "modularpickup";
-            f_overall_amount = nRate + Float.parseFloat(gD.prefs.getString("ss_pickup_charge", null));
+
+
+            // *** NEW CHANGES FLOAT TO STRING *** //
+
+            Float x = nRate + Float.parseFloat(gD.prefs.getString("ss_pickup_charge", null).replaceAll(",",""));
+            f_overall_amount = NumberFormat.getNumberInstance(new Locale("en", "in")).format(x );
+
+           // f_overall_amount = nRate + Float.parseFloat(gD.prefs.getString("ss_pickup_charge", null));
+
+
+
+
             Log.e("NN", "overall amount->" + String.valueOf(f_overall_amount));
-            txt_total_amt.setText("" + nRate);
+
+            txt_total_amt.setText("" + NumberFormat.getNumberInstance(new Locale("en", "in")).format(nRate));
+
             txt_overallAmount.setText("" + f_overall_amount);
         }
 
@@ -391,7 +549,14 @@ public class ServiceConfirmation extends Activity implements ChooseServiceInterf
                 if (buttonView.isChecked()) {
                     txt_pickUpText.setVisibility(View.VISIBLE);
                     txt_pickUpCharge.setVisibility(View.VISIBLE);
-                    f_overall_amount = nRate + Float.parseFloat(gD.prefs.getString("ss_pickup_charge", null));
+
+                    Float x = nRate + Float.parseFloat(gD.prefs.getString("ss_pickup_charge", null).replaceAll(",",""));
+                    f_overall_amount = NumberFormat.getNumberInstance(new Locale("en", "in")).format(x ); ;
+
+                   // f_overall_amount = nRate + Float.parseFloat(gD.prefs.getString("ss_pickup_charge", null));
+
+
+
                     Log.e("NN", "overall amount->" + String.valueOf(f_overall_amount));
                     txt_overallAmount.setText("" + f_overall_amount);
 
@@ -427,7 +592,15 @@ public class ServiceConfirmation extends Activity implements ChooseServiceInterf
                             str_ServiceType = "diagnosispickup";
                         }
 
-                        f_overall_amount = nRate + Float.parseFloat(gD.prefs.getString("ss_pickup_charge", null)) + Float.parseFloat(gD.prefs.getString("ss_diagno_charge", null));
+
+
+                        Float xy = nRate + Float.parseFloat(gD.prefs.getString("ss_pickup_charge", null).replaceAll(",","")) + Float.parseFloat(gD.prefs.getString("ss_diagno_charge", null).replaceAll(",",""));
+                        f_overall_amount =NumberFormat.getNumberInstance(new Locale("en", "in")).format(xy ); ;
+
+                        //f_overall_amount = nRate + Float.parseFloat(gD.prefs.getString("ss_pickup_charge", null)) + Float.parseFloat(gD.prefs.getString("ss_diagno_charge", null));
+
+
+
                         Log.e("NN", "overall amount->" + String.valueOf(f_overall_amount));
                         txt_overallAmount.setText("" + f_overall_amount);
                     }
@@ -450,7 +623,7 @@ public class ServiceConfirmation extends Activity implements ChooseServiceInterf
                     }
                     //txt_pickUpText.setVisibility(View.GONE);
                     //txt_pickUpCharge.setVisibility(View.GONE);
-                    f_overall_amount = nRate;
+                    f_overall_amount = NumberFormat.getNumberInstance(new Locale("en", "in")).format(nRate );
                     Log.e("NN", "overall amount->" + String.valueOf(f_overall_amount));
                     txt_overallAmount.setText("" + f_overall_amount);
 
@@ -472,7 +645,11 @@ public class ServiceConfirmation extends Activity implements ChooseServiceInterf
                             str_ServiceType = "diagnostics";
                         }
 
-                        f_overall_amount = nRate + Float.parseFloat(gD.prefs.getString("ss_diagno_charge", null));
+
+                        Float xy = nRate + Float.parseFloat(gD.prefs.getString("ss_diagno_charge", null).replaceAll(",",""));
+                        f_overall_amount =NumberFormat.getNumberInstance(new Locale("en", "in")).format(xy ) ;
+
+                        //f_overall_amount = nRate + Float.parseFloat(gD.prefs.getString("ss_diagno_charge", null));
                         Log.e("NN", "overall amount->" + String.valueOf(f_overall_amount));
                         txt_overallAmount.setText("" + f_overall_amount);
                     }
@@ -511,7 +688,13 @@ public class ServiceConfirmation extends Activity implements ChooseServiceInterf
                     txt_diagnoCharge.setVisibility(View.VISIBLE);
                     //  cb_pickUp.setChecked(false);
                     //str_ServiceType = "diagnostics";
-                    f_overall_amount = nRate + Float.parseFloat(gD.prefs.getString("ss_diagno_charge", null));
+
+                    Float xy = nRate + Float.parseFloat(gD.prefs.getString("ss_diagno_charge", null).replaceAll(",",""));
+                    f_overall_amount = NumberFormat.getNumberInstance(new Locale("en", "in")).format(xy );
+
+
+
+                   // f_overall_amount = nRate + Float.parseFloat(gD.prefs.getString("ss_diagno_charge", null));
                     Log.e("NN", "overall amount->" + String.valueOf(f_overall_amount));
                     txt_overallAmount.setText("" + f_overall_amount);
 
@@ -545,7 +728,11 @@ public class ServiceConfirmation extends Activity implements ChooseServiceInterf
                         } else {
                             str_ServiceType = "diagnosispickup";
                         }
-                        f_overall_amount = nRate + Float.parseFloat(gD.prefs.getString("ss_pickup_charge", null)) + Float.parseFloat(gD.prefs.getString("ss_diagno_charge", null));
+
+                        Float xy1 = nRate + Float.parseFloat(gD.prefs.getString("ss_pickup_charge", null).replaceAll(",","")) + Float.parseFloat(gD.prefs.getString("ss_diagno_charge", null).replaceAll(",",""));
+                        f_overall_amount = NumberFormat.getNumberInstance(new Locale("en", "in")).format(xy1) ;
+
+                        //f_overall_amount = nRate + Float.parseFloat(gD.prefs.getString("ss_pickup_charge", null)) + Float.parseFloat(gD.prefs.getString("ss_diagno_charge", null));
                         Log.e("NN", "overall amount->" + String.valueOf(f_overall_amount));
                         txt_overallAmount.setText("" + f_overall_amount);
                     }
@@ -555,7 +742,7 @@ public class ServiceConfirmation extends Activity implements ChooseServiceInterf
                     txt_diagnoCharge.setVisibility(View.INVISIBLE);
                     Log.i("BN_SCon", "str_serviceType-->" + gD.prefs.getString("str_serviceType", null));
                     str_ServiceType = "diagnoNA";
-                    f_overall_amount = nRate;
+                    f_overall_amount = NumberFormat.getNumberInstance(new Locale("en", "in")).format(nRate );
                     Log.e("NN", "overall amount->" + String.valueOf(f_overall_amount));
                     txt_overallAmount.setText("" + f_overall_amount);
 
@@ -598,7 +785,11 @@ public class ServiceConfirmation extends Activity implements ChooseServiceInterf
                             str_ServiceType = "diagnosispickup";
                         }
 */
-                        f_overall_amount = nRate + Float.parseFloat(gD.prefs.getString("ss_pickup_charge", null));
+                        Float xy1 = nRate + Float.parseFloat(gD.prefs.getString("ss_pickup_charge", null).replaceAll(",",""));
+                        f_overall_amount =NumberFormat.getNumberInstance(new Locale("en", "in")).format(xy1) ;
+
+                        //f_overall_amount = nRate + Float.parseFloat(gD.prefs.getString("ss_pickup_charge", null));
+
                         Log.e("NN", "overall amount->" + String.valueOf(f_overall_amount));
                         txt_overallAmount.setText("" + f_overall_amount);
                     }
@@ -714,12 +905,17 @@ public class ServiceConfirmation extends Activity implements ChooseServiceInterf
     }
 
     @Override
-    public void getServiceStationAddress(String str_id, String str_serviceType, String str_name, Float price) {
+    public void getServiceStationAddress(String str_id, String str_serviceType, String str_name, String price) {
 
     }
 
     @Override
-    public void delChoosenService(int str_id, String str_name, Float str_price) {
+    public void delChoosenService(int str_id, String str_name, String str_price) {
+
+    }
+
+    @Override
+    public void getServiceStationMainAddress(String str_id, String str_service_type, String str_name) {
 
     }
 
@@ -829,7 +1025,9 @@ public class ServiceConfirmation extends Activity implements ChooseServiceInterf
                 Log.e("LL", str_ServiceType);
                 params.put("registerid", gD.prefs.getString("reg_id", null));
                 params.put("charge", str_ServiceType.trim());
-                params.put("rate", String.valueOf(f_overall_amount));
+                //Double db_f_overall_amount= Double.valueOf(f_overall_amount);
+
+                params.put("rate",f_overall_amount);
                 params.put("date", gD.prefs.getString("ss_date", null));
                 params.put("stationid", gD.prefs.getString("ss_id", null));
                 params.put("address", txt_address.getText().toString().trim());

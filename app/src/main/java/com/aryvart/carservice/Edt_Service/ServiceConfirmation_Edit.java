@@ -211,7 +211,12 @@ public class ServiceConfirmation_Edit extends Activity implements ChooseServiceI
 
             for (int i = 0; i < arrayList.size(); i++) {
                 CommonBean cb = arrayList.get(i);
-                nRate += cb.getF_price();
+
+
+                // ** new changes float to string ** //
+
+                Float x= Float.valueOf(cb.getStr_servicePrice());
+                nRate += x;
                 Log.i("TT", "totlalRate-->" + nRate);
 
             }
@@ -637,12 +642,17 @@ public class ServiceConfirmation_Edit extends Activity implements ChooseServiceI
     }
 
     @Override
-    public void getServiceStationAddress(String str_id,String str_serviceType, String str_name, Float price) {
+    public void getServiceStationAddress(String str_id,String str_serviceType, String str_name, String price) {
 
     }
 
     @Override
-    public void delChoosenService(int str_id, String str_name, Float str_price) {
+    public void delChoosenService(int str_id, String str_name, String str_price) {
+
+    }
+
+    @Override
+    public void getServiceStationMainAddress(String str_id, String str_service_type, String str_name) {
 
     }
 

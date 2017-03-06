@@ -155,28 +155,27 @@
                         </LinearLayout>
                     </LinearLayout>
                 </RelativeLayout>
-
-
                 <RelativeLayout
-                    android:id="@+id/rl_select_service_station"
+                    android:id="@+id/rl_selectMain_services"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_marginLeft="20dp"
                     android:layout_marginRight="20dp"
                     android:layout_marginTop="10dp"
-                    android:layout_weight="0.3"
+                    android:layout_weight="0.2"
                     android:background="@drawable/edit_text_border2"
                     android:orientation="horizontal"
                     android:padding="5dp">
 
                     <TextView
-                        android:id="@+id/txt_selectServiceText"
+                        android:id="@+id/txt_selectMainServiceText"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentLeft="true"
                         android:layout_centerInParent="true"
                         android:layout_marginLeft="10dp"
                         android:text="Select services"
+                        android:textColor="#6d6d6d"
                         android:textSize="15dp" />
 
                     <ImageView
@@ -188,6 +187,40 @@
 
 
                 </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/rl_select_service_station"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_weight="0.2"
+                    android:visibility="gone"
+                    android:background="@drawable/edit_text_border2"
+                    android:orientation="horizontal"
+                    android:padding="5dp">
+
+                    <TextView
+                        android:id="@+id/txt_selectServiceText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentLeft="true"
+                        android:layout_centerInParent="true"
+                        android:layout_marginLeft="10dp"
+                        android:text="Select sub services"
+                        android:textSize="15dp" />
+
+                    <ImageView
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerInParent="true"
+                        android:background="@drawable/down_arrow" />
+
+
+                </RelativeLayout>
+
 
                 <LinearLayout
                     android:layout_width="match_parent"

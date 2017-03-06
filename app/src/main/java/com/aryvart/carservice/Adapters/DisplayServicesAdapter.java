@@ -15,6 +15,8 @@ import com.aryvart.carservice.R;
 
 import org.json.JSONObject;
 
+import java.text.NumberFormat;
+import java.text.ParseException;
 import java.util.HashMap;
 import java.util.List;
 
@@ -72,11 +74,27 @@ public class DisplayServicesAdapter extends BaseAdapter {
 
         Log.e("AS", serviceBean.getStr_serviceName() + "---" + serviceBean.getN_serviceId());
         holder.txt_service_name1.setText(serviceBean.getStr_serviceName());
-        holder.txt_service_rate1.setText("" + serviceBean.getF_price());
-        Log.i("AS", "IF : "+ serviceBean.getF_price());
-        n_rate+=serviceBean.getF_price();
-        Log.i("AS!", "IF : "+n_rate);
-        myInterface.delChoosenService(0,"", Float.valueOf(n_rate));
+        holder.txt_service_rate1.setText("" + serviceBean.getStr_servicePrice());
+        Log.i("AS", "IF : "+ serviceBean.getStr_servicePrice());
+
+
+          //  Float x= Float.valueOf(String.valueOf(NumberFormat.getNumberInstance(java.util.Locale.US).parse(serviceBean.getStr_servicePrice())));
+
+
+           /* Float.valueOf(serviceBean.getStr_servicePrice().replaceAll(",",""));
+            n_rate+=Float.valueOf(serviceBean.getStr_servicePrice().replaceAll(",",""));*/
+
+
+        //n_rate+=Integer.valueOf(serviceBean.getStr_servicePrice().replaceAll(",", ""));
+        Log.i("TT", "totlalRateAdap-->" + n_rate);
+
+
+            Log.i("AS!", "IF1 : "+serviceBean.getN_serviceId());
+        Log.i("AS!", "IF2 : "+serviceBean.getStr_serviceName());
+        Log.i("AS!", "IF 3: "+serviceBean.getStr_servicePrice());
+
+        myInterface.delChoosenService(serviceBean.getN_serviceId(),serviceBean.getStr_serviceName(),serviceBean.getStr_servicePrice());
+        //Float f = Float.valueOf(serviceBean.getStr_servicePrice());
         return rowView;
     }
 

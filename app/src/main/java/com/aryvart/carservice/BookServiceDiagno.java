@@ -233,6 +233,8 @@ public class BookServiceDiagno extends Activity {
                     prefEdit1.putString("edit_ss_name", null);
                     prefEdit1.putString("edit_ss_addr", null);
                     prefEdit1.putString("edit_ss_date", null);
+                    prefEdit1.putString("ss_serviceChoice", "3");
+                    prefEdit1.putString("edit_ss_serviceChoosen", "3");
                     SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(context);
                     SharedPreferences.Editor editor = sharedPrefs.edit();
                     Gson gson = new Gson();

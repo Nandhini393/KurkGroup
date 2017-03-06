@@ -164,7 +164,7 @@
             android:layout_alignParentLeft="true"
             android:layout_centerInParent="true"
             android:textColor="@color/black"
-            android:text="Diagnostiscs Charge"
+            android:text="Diagnostics Service Charge"
             android:textSize="13dp" />
 
         <TextView

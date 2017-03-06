@@ -260,7 +260,7 @@ public class ServiceStation_Edit extends Activity implements ServiceStationInter
                                                     CommonBean drawerBean = new CommonBean();
                                                     drawerBean.setStr_serviceName(services_stations.getJSONObject(j).getString("service_name"));
                                                     drawerBean.setN_serviceId(Integer.parseInt(services_stations.getJSONObject(j).getString("service_id")));
-                                                    drawerBean.setF_price(Integer.parseInt(services_stations.getJSONObject(j).getString("service_rate")));
+                                                    drawerBean.setStr_servicePrice(services_stations.getJSONObject(j).getString("service_rate"));
                                                     beanArrayList.add(drawerBean);
                                                     beanIdList.add(services_stations.getJSONObject(j).getString("service_id"));
 

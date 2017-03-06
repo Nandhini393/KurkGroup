@@ -330,7 +330,6 @@ public class BookService extends Activity implements LocationListener, View.OnCl
             }
         });
 
-
       /*  Log.e("BN!!", "completeAddresss"+gD.strAddress);
 
         SharedPreferences.Editor prefEditAddr = gD.prefs.edit();
@@ -345,7 +344,7 @@ public class BookService extends Activity implements LocationListener, View.OnCl
         else{
             Log.e("BN!", "completeAddresss is null");
             strAddress="";
-        }*/
+        }  */
 
         // ** button diagnostics code ** //
 
@@ -371,10 +370,9 @@ public class BookService extends Activity implements LocationListener, View.OnCl
                 }else {
 
 
-
-
                      if (str_ServiceType.equalsIgnoreCase("diagnostics")) {
                          prefEdit_D.putString("pickUp_address", gD.strAddress);
+
                          Log.e("BNd", "completeAddresss->" + gD.strAddress);
                        /* if (str_EditButtonClicked != null) {
                             Intent i = new Intent(BookService.this, BookServiceDiagno.class);
@@ -410,6 +408,9 @@ public class BookService extends Activity implements LocationListener, View.OnCl
 
 
                 prefEdit.putString("str_serviceType", str_ServiceType);
+
+                prefEdit.putString("ss_serviceChoice", "1");
+
                 //prefEdit.putString("pickUp_address", gD.strAddress);
 
                 Log.i("BNCom_onBu", "str_ServiceType->" + str_ServiceType);
@@ -477,6 +478,7 @@ public class BookService extends Activity implements LocationListener, View.OnCl
         ll_cancelService.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 startActivity(new Intent(BookService.this, CancelBookingList.class));
             }
         });
@@ -582,6 +584,7 @@ public class BookService extends Activity implements LocationListener, View.OnCl
                     prefBtnBook.putString("edit_ss_name", null);
                     prefBtnBook.putString("edit_ss_addr", null);
                     prefBtnBook.putString("edit_ss_date", null);
+                    prefBtnBook.putString("ss_serviceChoice", "1");
 
                     SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(context);
                     SharedPreferences.Editor editor = sharedPrefs.edit();

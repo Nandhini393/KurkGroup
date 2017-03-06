@@ -7,17 +7,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
-import android.widget.RadioButton;
 import android.widget.TextView;
 
 import com.aryvart.carservice.Bean.CommonBean;
 import com.aryvart.carservice.Interfaces.ChooseServiceInterface;
-import com.aryvart.carservice.Interfaces.ServiceStationInterface;
 import com.aryvart.carservice.R;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.HashMap;
@@ -26,7 +21,7 @@ import java.util.List;
 /**
  * Created by android2 on 9/6/16.
  */
-public class ChooseServiceAdapter extends BaseAdapter {
+public class ChooseServiceMainAdapter extends BaseAdapter {
     Context context;
     ChooseServiceInterface myInterface;
     List<CommonBean> serviceStationBean;
@@ -34,7 +29,7 @@ public class ChooseServiceAdapter extends BaseAdapter {
     HashMap<String, JSONObject> hsMap = new HashMap<String, JSONObject>();
     int n_rate;
     String str_ServiceType;
-    public ChooseServiceAdapter(Context con, String str_SerVice_Type,List<CommonBean> alBean, ChooseServiceInterface interfac) {
+    public ChooseServiceMainAdapter(Context con, String str_SerVice_Type, List<CommonBean> alBean, ChooseServiceInterface interfac) {
         context = con;
         serviceStationBean = alBean;
         inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -75,18 +70,19 @@ public class ChooseServiceAdapter extends BaseAdapter {
 
         Typeface typeFace3 = Typeface.createFromAsset(context.getAssets(), "fonts/Lato-Regular.ttf");
         holder.txt_service_name1.setTypeface(typeFace3);
-        holder.txt_service_rate1.setTypeface(typeFace3);
+       // holder.txt_service_rate1.setTypeface(typeFace3);
 
         Log.e("AS", serviceBean.getStr_serviceName() + "---" + serviceBean.getN_serviceId());
         holder.txt_service_name1.setText(serviceBean.getStr_serviceName());
-        holder.txt_service_rate1.setText(serviceBean.getStr_servicePrice());
+       // holder.txt_service_rate1.setText("" + serviceBean.getF_price());
+        holder.txt_service_rate1.setVisibility(View.GONE);
         Log.i("AS", "IF : "+ serviceBean.getStr_servicePrice());
         rowView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
              /*   n_rate+=serviceBean.getN_serviceId();
                 Log.i("MM", "Total : "+n_rate);*/
-                myInterface.getServiceStationAddress(String.valueOf(serviceBean.getN_serviceId()),str_ServiceType, serviceBean.getStr_serviceName(),serviceBean.getStr_servicePrice());
+                myInterface.getServiceStationMainAddress(String.valueOf(serviceBean.getN_serviceId()),str_ServiceType, serviceBean.getStr_serviceName());
             }
         });
 

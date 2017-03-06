@@ -76,7 +76,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center|left"
-                android:text="Card Number"
+                android:text="Car Number"
                 android:textColor="@color/black"
                 android:textSize="15dp"
 
@@ -119,7 +119,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center|left"
-                android:text="Card Model"
+                android:text="Car Model"
                 android:textColor="@color/black"
                 android:textSize="15dp"
 
@@ -162,7 +162,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center|left"
-                android:text="Card Type"
+                android:text="Car Type"
                 android:textColor="@color/black"
                 android:textSize="15dp"
 

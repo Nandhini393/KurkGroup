@@ -218,6 +218,7 @@ int year,month,day;
                     } else {
                         listView.setVisibility(View.GONE);
                         txt_error.setVisibility(View.VISIBLE);
+                        Toast.makeText(ServiceStation.this, "No response from server.Check your internet connection", Toast.LENGTH_SHORT).show();
                         txt_error.setText("No response from server.Check your internet connection");
                         txt_error.setTextColor(Color.parseColor("#ff0000"));
                     }
@@ -229,6 +230,8 @@ int year,month,day;
                     } else {
                         listView.setVisibility(View.GONE);
                         txt_error.setVisibility(View.GONE);
+                        Toast.makeText(ServiceStation.this, "No response from server.Check your internet connection", Toast.LENGTH_SHORT).show();
+
                         txt_error.setText("No response from server.Check your internet connection");
                         txt_error.setTextColor(Color.parseColor("#ff0000"));
                     }
