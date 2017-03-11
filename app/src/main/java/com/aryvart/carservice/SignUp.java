@@ -259,7 +259,7 @@ public class SignUp extends Activity {
 
     public void signUpCall() {
         gD.showAlertDialog(context, "Registering", "Please wait");
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, GeneralData.LOCAL_IP + "register.php",
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, GeneralData.LOCAL_IP + "register_new.php",
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {

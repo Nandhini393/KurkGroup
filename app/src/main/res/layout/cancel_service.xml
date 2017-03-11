@@ -74,7 +74,7 @@
         android:id="@+id/txt_car_reg_num"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="150"
+        android:text="null"
         android:layout_centerInParent="true"
         android:layout_toRightOf="@+id/txt_carNumText"
         android:textColor="@color/black"

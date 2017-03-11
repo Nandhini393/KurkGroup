@@ -68,7 +68,7 @@ public class BookService extends Activity implements LocationListener, View.OnCl
     TextView txt_view_car_det;
     Button btn_bookService, btn_viewBookings;
     ImageView img_menu;
-    TextView txt_headerName,txt_bookServiceLabel;
+    TextView txt_headerName, txt_bookServiceLabel;
     String strname, strcartype, strcar_number, strcar_model, strpass;
 
     //Menu
@@ -113,6 +113,7 @@ public class BookService extends Activity implements LocationListener, View.OnCl
     public static boolean isNetworkEnabled = false;
     LocationManager locationManager;
     String strAddress;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -164,8 +165,8 @@ public class BookService extends Activity implements LocationListener, View.OnCl
         txt_headerName = (TextView) findViewById(R.id.txt_header);
         btn_viewBookings = (Button) findViewById(R.id.btn_view_bookings);
         ll_Map = (LinearLayout) findViewById(R.id.ll_map);
-        txt_bookServiceLabel=(TextView)findViewById(R.id.txt_bookServiceLAbel);
-      //  txt_pickUpAddress = (TextView) findViewById(R.id.txt_PickUpAddr);
+        txt_bookServiceLabel = (TextView) findViewById(R.id.txt_bookServiceLAbel);
+
         Typeface typeFace1 = Typeface.createFromAsset(getAssets(), "fonts/Oswald-Bold.otf");
         txt_headerName.setTypeface(typeFace1);
         txt_view_car_det.setTypeface(typeFace1);
@@ -330,28 +331,14 @@ public class BookService extends Activity implements LocationListener, View.OnCl
             }
         });
 
-      /*  Log.e("BN!!", "completeAddresss"+gD.strAddress);
 
-        SharedPreferences.Editor prefEditAddr = gD.prefs.edit();
-        prefEditAddr.putString("pickUp_address", gD.strAddress);
-        prefEditAddr.commit();
-
-
-        if(gD.prefs.getString("pickUp_address",null)!=null){
-            Log.e("BN!", "completeAddresss"+gD.prefs.getString("pickUp_address",null));
-            strAddress=gD.prefs.getString("pickUp_address",null);
-        }
-        else{
-            Log.e("BN!", "completeAddresss is null");
-            strAddress="";
-        }  */
-
-        // ** button diagnostics code ** //
+        // ** button diagnostics code ** // ( SHOW THE CONFIRMATION PAGE DIRECTLY - NO SERVICE SELECTION NEEDED )
 
         final SharedPreferences.Editor prefEdit_D = gD.prefs.edit();
         ll_diagno.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 str_ServiceType = "diagnostics";
                 txt_diagnoText.setTextColor(Color.parseColor("#0987ff"));
                 txt_pickUpText.setTextColor(Color.parseColor("#000000"));
@@ -359,7 +346,7 @@ public class BookService extends Activity implements LocationListener, View.OnCl
 
                 Log.i("BNCom_onBu", "completeAddresss->" + strAddress);
                 Log.i("BNCom_onBu", "str_ServiceType->" + str_ServiceType);
-                Log.e("BN!!d", "completeAddresss"+gD.strAddress);
+                Log.e("BN!!d", "completeAddresss" + gD.strAddress);
 
                 if (str_ServiceType == null) {
                     Log.e("BN", "str_ServiceType is null");
@@ -367,20 +354,16 @@ public class BookService extends Activity implements LocationListener, View.OnCl
                 } else if (gD.strAddress == null) {
                     Log.e("BN", "completeAddresss is null");
                     Toast.makeText(BookService.this, "Enter your address", Toast.LENGTH_SHORT).show();
-                }else {
+                } else {
 
 
-                     if (str_ServiceType.equalsIgnoreCase("diagnostics")) {
-                         prefEdit_D.putString("pickUp_address", gD.strAddress);
+                    if (str_ServiceType.equalsIgnoreCase("diagnostics")) {
+                        prefEdit_D.putString("pickUp_address", gD.strAddress);
 
-                         Log.e("BNd", "completeAddresss->" + gD.strAddress);
-                       /* if (str_EditButtonClicked != null) {
-                            Intent i = new Intent(BookService.this, BookServiceDiagno.class);
-                            i.putExtra("str_fromEdit", "edit");
-                            startActivity(i);
-                        } else {*/
+                        Log.e("BNd", "completeAddresss->" + gD.strAddress);
+
                         startActivity(new Intent(BookService.this, BookServiceDiagno.class));
-                        //}
+
 
                     }
 
@@ -401,17 +384,12 @@ public class BookService extends Activity implements LocationListener, View.OnCl
                 txt_pickUpText.setTextColor(Color.parseColor("#0987ff"));
                 txt_diagnoText.setTextColor(Color.parseColor("#000000"));
                 str_ServiceType = "pickup";
-                Log.e("BN!!p", "completeAddresss"+gD.strAddress);
-             /*   SharedPreferences.Editor prefEdit4 = gD.prefs.edit();
-                prefEdit4.putString("str_serviceType", str_ServiceType);
-                prefEdit4.commit();*/
+                Log.e("BN!!p", "completeAddresss" + gD.strAddress);
 
 
                 prefEdit.putString("str_serviceType", str_ServiceType);
 
                 prefEdit.putString("ss_serviceChoice", "1");
-
-                //prefEdit.putString("pickUp_address", gD.strAddress);
 
                 Log.i("BNCom_onBu", "str_ServiceType->" + str_ServiceType);
 
@@ -421,18 +399,11 @@ public class BookService extends Activity implements LocationListener, View.OnCl
                 } else if (gD.strAddress == null) {
                     Log.e("BN", "completeAddresss is null");
                     Toast.makeText(BookService.this, "Enter your address", Toast.LENGTH_SHORT).show();
-                }
-                else{
+                }else {
 
                     prefEdit.putString("pickUp_address", gD.strAddress);
                     Log.i("BNCom_onBu", "completeAddresss->" + strAddress);
                     if (str_ServiceType.equalsIgnoreCase("pickup")) {
-                       /* if (str_EditButtonClicked != null) {
-                            Log.e("YK", "not null");
-                            Log.e("BN", "str_ServiceType->" + str_ServiceType);
-
-                            startActivity(new Intent(BookService.this, ServiceStation.class));
-                        } else {*/
                         startActivity(new Intent(BookService.this, ServiceStation.class));
                         prefEdit.putString("ss_name", null);
                         prefEdit.putString("ss_id", null);
@@ -456,7 +427,7 @@ public class BookService extends Activity implements LocationListener, View.OnCl
                         editor.putString("key", json);
                         editor.putString("key_id", json_id);
                         editor.commit();
-                        //}
+
                     }
                 }
 
@@ -466,7 +437,6 @@ public class BookService extends Activity implements LocationListener, View.OnCl
 
 
         // ** menu contents * //
-
 
         ll_updateProfile.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -552,7 +522,7 @@ public class BookService extends Activity implements LocationListener, View.OnCl
         btn_bookService.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                str_ServiceType="bookservice";
+                str_ServiceType = "bookservice";
                 txt_pickUpText.setTextColor(Color.parseColor("#000000"));
                 txt_diagnoText.setTextColor(Color.parseColor("#000000"));
 
@@ -562,9 +532,7 @@ public class BookService extends Activity implements LocationListener, View.OnCl
                 } else if (gD.strAddress == null) {
                     Log.e("BN", "completeAddresss is null");
                     Toast.makeText(BookService.this, "Enter your address", Toast.LENGTH_SHORT).show();
-                }
-
-                else{
+                } else {
 
                     prefBtnBook.putString("str_serviceType", str_ServiceType);
                     prefBtnBook.putString("pickUp_address", gD.strAddress);
@@ -599,81 +567,7 @@ public class BookService extends Activity implements LocationListener, View.OnCl
                 prefBtnBook.commit();
             }
         });
-/*
 
-        final SharedPreferences.Editor prefEdit = gD.prefs.edit();
-        btn_bookService.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-
-                Log.i("BNCom_onBu", "completeAddresss->" + completeAddresss);
-                Log.i("BNCom_onBu", "str_ServiceType->" + str_ServiceType);
-
-                if (str_ServiceType == null) {
-                    Log.e("BN", "str_ServiceType is null");
-                    Toast.makeText(BookService.this, "Select your service type", Toast.LENGTH_SHORT).show();
-                } else if (completeAddresss == null) {
-                    Log.e("BN", "completeAddresss is null");
-                    Toast.makeText(BookService.this, "Enter your address", Toast.LENGTH_SHORT).show();
-                }else {
-                    Log.e("BN", "completeAddresss->" + completeAddresss);
-                    prefEdit.putString("pickUp_address", completeAddresss);
-                    prefEdit.putString("str_serviceType", str_ServiceType);
-
-                    if (str_ServiceType.equalsIgnoreCase("pickup")) {
-                       */
-/* if (str_EditButtonClicked != null) {
-                            Log.e("YK", "not null");
-                            Log.e("BN", "str_ServiceType->" + str_ServiceType);
-
-                            startActivity(new Intent(BookService.this, ServiceStation.class));
-                        } else {*//*
-
-                        startActivity(new Intent(BookService.this, ServiceStation.class));
-                        prefEdit.putString("ss_name", null);
-                        prefEdit.putString("ss_id", null);
-                        prefEdit.putString("ss_image", null);
-                        prefEdit.putString("ss_addr", null);
-                        prefEdit.putString("ss_diagno_charge", null);
-                        prefEdit.putString("ss_pickup_charge", null);
-                        prefEdit.putString("ss_modular_reprogramming_charge", null);
-                        prefEdit.putString("edit_ss_id", null);
-                        prefEdit.putString("edit_ss_book_id", null);
-                        prefEdit.putString("edit_ss_serviceArray", null);
-                        prefEdit.putString("edit_ss_image", null);
-                        prefEdit.putString("edit_ss_name", null);
-                        prefEdit.putString("edit_ss_addr", null);
-                        prefEdit.putString("edit_ss_date", null);
-                        SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(context);
-                        SharedPreferences.Editor editor = sharedPrefs.edit();
-                        Gson gson = new Gson();
-                        String json = gson.toJson(null);
-                        String json_id = gson.toJson(null);
-                        editor.putString("key", json);
-                        editor.putString("key_id", json_id);
-                        editor.commit();
-                        //}
-                    } else if (str_ServiceType.equalsIgnoreCase("diagnostics")) {
-                       */
-/* if (str_EditButtonClicked != null) {
-                            Intent i = new Intent(BookService.this, BookServiceDiagno.class);
-                            i.putExtra("str_fromEdit", "edit");
-                            startActivity(i);
-
-
-                        } else {*//*
-
-                        startActivity(new Intent(BookService.this, BookServiceDiagno.class));
-                        //}
-
-                    }
-
-                }
-                prefEdit.commit();
-            }
-        });
-*/
 
 
         // ** button view bookings code ** //
@@ -688,11 +582,11 @@ public class BookService extends Activity implements LocationListener, View.OnCl
 
     }
 
+
     //  ** persmission method.  ** //
 
-
     public static void verifyStoragePermissions(Activity activity) {
-// Check if we have read or write permission
+        // Check if we have read or write permission
         int writePermission = ActivityCompat.checkSelfPermission(activity, Manifest.permission.WRITE_EXTERNAL_STORAGE);
         int readPermission = ActivityCompat.checkSelfPermission(activity, Manifest.permission.READ_EXTERNAL_STORAGE);
 
@@ -707,7 +601,7 @@ public class BookService extends Activity implements LocationListener, View.OnCl
                 access_fine_loc_Permission != PackageManager.PERMISSION_GRANTED ||
                 access_coarse_loc_Permission != PackageManager.PERMISSION_GRANTED ||
                 wifiPermission != PackageManager.PERMISSION_GRANTED) {
-// We don't have permission so prompt the user
+        // We don't have permission so prompt the user
             ActivityCompat.requestPermissions(
                     activity,
                     PERMISSIONS_STORAGE,
@@ -742,6 +636,7 @@ public class BookService extends Activity implements LocationListener, View.OnCl
 
     @Override
     public void onLocationChanged(Location loc) {
+
         try {
             // TODO Auto-generated method stub
 
@@ -812,7 +707,9 @@ public class BookService extends Activity implements LocationListener, View.OnCl
                     }
                 });
             }
-        } catch (Exception e) {
+        }
+
+        catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -1032,6 +929,7 @@ public class BookService extends Activity implements LocationListener, View.OnCl
 
 
     }
+
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
 
@@ -1072,7 +970,7 @@ public class BookService extends Activity implements LocationListener, View.OnCl
         }
         return true;
 
-}
+    }
 
     @Override
     public void onClick(View v) {

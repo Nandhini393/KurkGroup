@@ -576,6 +576,7 @@ public class ChooseService_Edit extends Activity implements ChooseServiceInterfa
     // ** get MAIN service REST call for specific service station ** //
 
     public void getMainServicesCall(final String strFromChoosen) {
+        gD.showAlertDialog(context, "Loading", "Please Wait");
         Log.i("HH", "strFromChoosen ** : " + strFromChoosen);
         StringRequest stringRequest = new StringRequest(Request.Method.POST, GeneralData.LOCAL_IP + "services.php",
                 new Response.Listener<String>() {
@@ -613,9 +614,12 @@ public class ChooseService_Edit extends Activity implements ChooseServiceInterfa
                                 listView.setAdapter(mAdapter_Main);
                                 mAdapter_Main.notifyDataSetChanged();
                                 //txt_drawer_error_msg.setVisibility(View.GONE);
+                                gD.altDialog.dismiss();
 
                             } else {
                                 Log.e("NN", "No services available");
+                                jsonArray_Main=null;
+                                gD.altDialog.dismiss();
                                /* listView.setVisibility(View.GONE);
                                 txt_errorMsg.setVisibility(View.VISIBLE);*/
                             }
@@ -744,7 +748,14 @@ public class ChooseService_Edit extends Activity implements ChooseServiceInterfa
                                 listView.setAdapter(mAdapter);
                                 mAdapter.notifyDataSetChanged();
                                 //txt_drawer_error_msg.setVisibility(View.GONE);
-gD.altDialog.dismiss();
+                                gD.altDialog.dismiss();
+                            }
+                            else {
+                                gD.altDialog.dismiss();
+                                Log.e("NN", "No services available");
+                                jsonArray_my_profile=null;
+                               /* listView.setVisibility(View.GONE);
+                                txt_errorMsg.setVisibility(View.VISIBLE);*/
                             }
 
                         } catch (Exception e) {

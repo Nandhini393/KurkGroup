@@ -157,12 +157,9 @@ public class ChooseService extends Activity implements ChooseServiceInterface {
         txt_selectMainServiceText.setTypeface(typeFace);
 
 
-
-
         if (gD.prefs.getString("ss_serviceChoice", null) != null) {
             Log.e("TTB", "ss_serviceChoice" + gD.prefs.getString("ss_serviceChoice", null));
-        }
-        else{
+        } else {
             Log.e("TTB", "ss_serviceChoice is null");
         }
 
@@ -171,6 +168,7 @@ public class ChooseService extends Activity implements ChooseServiceInterface {
 
             strChoosenService = "3";
             txt_modularRepText.setTextColor(Color.parseColor("#0987ff"));
+            jsonArray_Main=null;
             getMainServicesCall(strChoosenService);
             ll_modularRep.setVisibility(View.VISIBLE);
             ll_chooseSerLay.setVisibility(View.GONE);
@@ -179,57 +177,46 @@ public class ChooseService extends Activity implements ChooseServiceInterface {
 
             ll_modularRep.setVisibility(View.GONE);
             ll_chooseSerLay.setVisibility(View.VISIBLE);
+
+            // ** HIGHLIGHT THE ALREADY SELECTED SERVICE ( FULL OR OIL ) ** //
+
             if (gD.prefs.getString("ss_serviceChoice", null) != null) {
                 Log.e("TTB", "ss_serviceChoice" + gD.prefs.getString("ss_serviceChoice", null));
                 strChoosenService = gD.prefs.getString("ss_serviceChoice", null);
+                jsonArray_Main=null;
                 getMainServicesCall(strChoosenService);
 
-                if(strChoosenService.equalsIgnoreCase("1")){
+                if (strChoosenService.equalsIgnoreCase("1")) {
                     txt_oilService.setTextColor(Color.parseColor("#0987ff"));
                     txt_fullService.setTextColor(Color.parseColor("#000000"));
-                }
-                else{
+                } else {
                     txt_oilService.setTextColor(Color.parseColor("#000000"));
                     txt_fullService.setTextColor(Color.parseColor("#0987ff"));
                 }
 
             }
-            else{
+
+            // ** AT FIRST TIME THE CHOICE WILL BE NULL SO IT WILL SELECT OIL SERVICE BY DEFAULT ** //
+
+            else {
+
                 Log.e("TTB", "ss_serviceChoice is null");
                 strChoosenService = "1";
+                jsonArray_Main=null;
                 getMainServicesCall(strChoosenService);
                 txt_oilService.setTextColor(Color.parseColor("#0987ff"));
                 txt_fullService.setTextColor(Color.parseColor("#000000"));
             }
-
 
 
         }
 
-        /*if (gD.prefs.getString("ss_serviceChoice", null) != null) {
-
-            Log.e("TTB", "ss_serviceChoice" + gD.prefs.getString("ss_serviceChoice", null));
-            if (gD.prefs.getString("ss_serviceChoice", null).equalsIgnoreCase("1")) {
-
-                txt_oilService.setTextColor(Color.parseColor("#0987ff"));
-                txt_fullService.setTextColor(Color.parseColor("#000000"));
-                strChoosenService = "1";
-                getMainServicesCall(strChoosenService);
-
-                //Toast.makeText(ChooseService.this, "You can choose only one service at a time", Toast.LENGTH_SHORT).show();
-            } else if (gD.prefs.getString("ss_serviceChoice", null).equalsIgnoreCase("2")) {
-
-                txt_oilService.setTextColor(Color.parseColor("#000000"));
-                txt_fullService.setTextColor(Color.parseColor("#0987ff"));
-                strChoosenService = "2";
-                getMainServicesCall(strChoosenService);
-
-                //Toast.makeText(ChooseService.this, "You can choose only one service at a time", Toast.LENGTH_SHORT).show();
-            }
-        }*/
+        // ** SERVICE STATION ADDRESS ** //
 
         str_EditServiceId = gD.prefs.getString("ss_id", null);
         Log.i("TTB", "str_EditServiceId" + str_EditServiceId);
+
+
         //for saving dats in sharedpreference
 
         Log.i("PP2", "id" + gD.prefs.getString("ss_id", null));
@@ -242,7 +229,7 @@ public class ChooseService extends Activity implements ChooseServiceInterface {
 
         Log.i("PP2", "ss_date" + gD.prefs.getString("ss_date", null));
 
-        // **saving the value in shared pref for back and edit btn func**//
+        // **saving the ARRAYLIST (SERIVCES ID AND NAME ) value in shared pref for back and edit btn func **//
 
         SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(context);
         Gson gson = new Gson();
@@ -294,6 +281,9 @@ public class ChooseService extends Activity implements ChooseServiceInterface {
 
                     if (gD.prefs.getString("ss_serviceChoice", null) != null) {
 
+                    /*   *******  CLEAR THE ARRAYLIST ,
+                        TEXT OF SERVICE SELECTED AND SUB SERVICE (HIDE) WHEN THE SERVICES ARE INTERCHANGED( CAN CHOOSE EITHER OIL OR FULL NOT BOTH)********  */
+
                         if (gD.prefs.getString("ss_serviceChoice", null).equalsIgnoreCase("2")) {
 
                             txt_selectMainServiceText.setText("Select services");
@@ -313,6 +303,7 @@ public class ChooseService extends Activity implements ChooseServiceInterface {
                         }
 
                     }
+
                 } else {
                     Snackbar.make(findViewById(android.R.id.content), "No Internet Connection", Snackbar.LENGTH_LONG)
                             .show();
@@ -341,6 +332,9 @@ public class ChooseService extends Activity implements ChooseServiceInterface {
 
                     if (gD.prefs.getString("ss_serviceChoice", null) != null) {
 
+                          /*   *******  CLEAR THE ARRAYLIST ,
+                        TEXT OF SERVICE SELECTED AND SUB SERVICE (HIDE) WHEN THE SERVICES ARE INTERCHANGED( CAN CHOOSE EITHER OIL OR FULL NOT BOTH)********  */
+
                         if (gD.prefs.getString("ss_serviceChoice", null).equalsIgnoreCase("1")) {
 
                             txt_selectMainServiceText.setText("Select services");
@@ -365,6 +359,7 @@ public class ChooseService extends Activity implements ChooseServiceInterface {
             }
         });
 
+        // ** IMAGE BACK CODING ** //
 
         img_back.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -376,8 +371,7 @@ public class ChooseService extends Activity implements ChooseServiceInterface {
         });
 
 
-        // ** FIRST DROP DOWN ** //
-
+        // ** FIRST DROP DOWN ** // ( FOR SELECTING SERVICES AS OIL OR FULL )
 
         rl_selectMainServices.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -433,17 +427,17 @@ public class ChooseService extends Activity implements ChooseServiceInterface {
         });
 
 
-        // ** SECOND DROP DOWN ** ///
+        // ** SECOND DROP DOWN ** /// ( FOR SELECTING SUB SERVICES --> EITHER FROM OIL OR FULL )
 
         rl_selectServiceStation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.e("NNJ","count->"+count);
+                Log.e("NNJ", "count->" + count);
                 ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
                 NetworkInfo netInfo = connectivityManager.getActiveNetworkInfo();
                 boolean isConnected = netInfo != null && netInfo.isConnectedOrConnecting();
                 if (strChoosenService != null) {
-                    Log.e("NNJ","strChoosenService->"+strChoosenService);
+                    Log.e("NNJ", "strChoosenService->" + strChoosenService);
                     if (count == 0) {
 
                         if (isConnected) {
@@ -457,9 +451,6 @@ public class ChooseService extends Activity implements ChooseServiceInterface {
                             txt_errorMsg.setTextColor(Color.parseColor("#ff0000"));
                         }
 
-                       /* if (ll_displayServicList.getVisibility() == View.VISIBLE) {
-                            ll_displayServicList.setVisibility(View.GONE);
-                        }*/
                         count = 1;
                     } else if (count == 1) {
                         if (isConnected) {
@@ -480,6 +471,8 @@ public class ChooseService extends Activity implements ChooseServiceInterface {
             }
         });
 
+        // ** BUTTON CONFIRM CODE ** //
+
         btn_confirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -494,7 +487,7 @@ public class ChooseService extends Activity implements ChooseServiceInterface {
                         Log.i("HHPP", "strChoosenService : " + strChoosenService);
                         Intent i = new Intent(ChooseService.this, ServiceConfirmation.class);
                         SharedPreferences.Editor sp_Prefs = gD.prefs.edit();
-                        sp_Prefs.putString("ss_serviceChoice1", gD.prefs.getString("ss_serviceChoice",null));
+                        sp_Prefs.putString("ss_serviceChoice1", gD.prefs.getString("ss_serviceChoice", null));
                         sp_Prefs.commit();
 
                         //i.putExtra("ss_serviceChoice",strChoosenService);
@@ -533,6 +526,7 @@ public class ChooseService extends Activity implements ChooseServiceInterface {
     // ** get MAIN service REST call for specific service station ** //
 
     public void getMainServicesCall(final String strFromChoosen) {
+        gD.showAlertDialog(context, "Loading", "Please Wait");
         Log.i("HH", "strFromChoosen : " + strFromChoosen);
         StringRequest stringRequest = new StringRequest(Request.Method.POST, GeneralData.LOCAL_IP + "services.php",
                 new Response.Listener<String>() {
@@ -554,6 +548,8 @@ public class ChooseService extends Activity implements ChooseServiceInterface {
                                 JSONArray profile_created_by = jsobj.getJSONArray("services");
                                 jsonArray_Main = jsobj.getJSONArray("services");
 
+                                Log.i("HHj", "jsonArray_Main : " + jsonArray_Main);
+
                                 if (profile_created_by.length() > 0) {
                                     for (int i = 0; i < profile_created_by.length(); i++) {
 
@@ -571,7 +567,11 @@ public class ChooseService extends Activity implements ChooseServiceInterface {
                                 mAdapter_Main.notifyDataSetChanged();
                                 //txt_drawer_error_msg.setVisibility(View.GONE);
 
-                            } else {
+                                gD.altDialog.dismiss();
+                            }
+                            else {
+                                gD.altDialog.dismiss();
+                                jsonArray_Main = null;
                                 Log.e("NN", "No services available");
                                /* listView.setVisibility(View.GONE);
                                 txt_errorMsg.setVisibility(View.VISIBLE);*/
@@ -628,14 +628,6 @@ public class ChooseService extends Activity implements ChooseServiceInterface {
                     }
                 }
 
-
-//username=sathish@ansjad.com&password=testing
-
-               /* params.put("username", edt_email.getText().toString().trim());
-                params.put("password", edt_password.getText().toString().trim());*/
-
-// params.put("username", "dineshW@adjhd.com");
-// params.put("password", "123456");
                 return params;
             }
 
@@ -710,6 +702,7 @@ public class ChooseService extends Activity implements ChooseServiceInterface {
                             } else {
                                 gD.altDialog.dismiss();
                                 Log.e("NN", "No services available");
+                                jsonArray_my_profile=null;
                                /* listView.setVisibility(View.GONE);
                                 txt_errorMsg.setVisibility(View.VISIBLE);*/
                             }
@@ -773,14 +766,6 @@ public class ChooseService extends Activity implements ChooseServiceInterface {
                     }
                 }
 
-
-//username=sathish@ansjad.com&password=testing
-
-               /* params.put("username", edt_email.getText().toString().trim());
-                params.put("password", edt_password.getText().toString().trim());*/
-
-// params.put("username", "dineshW@adjhd.com");
-// params.put("password", "123456");
                 return params;
             }
 
@@ -812,8 +797,9 @@ public class ChooseService extends Activity implements ChooseServiceInterface {
 
     private ArrayList<CommonBean> LoadLayout_Main(JSONArray providerServicesMonth, String strFromChoosen) {
         Log.e("LL", "hiii");
-        ArrayList<CommonBean> beanArrayList = new ArrayList<CommonBean>();
+        Log.e("NNJ", "providerServicesMonth***->" + providerServicesMonth);
 
+        ArrayList<CommonBean> beanArrayList = new ArrayList<CommonBean>();
         JSONObject jsobj = null;
 
         if (providerServicesMonth != null) {
@@ -826,7 +812,6 @@ public class ChooseService extends Activity implements ChooseServiceInterface {
                         CommonBean drawerBean = new CommonBean();
                         drawerBean.setStr_serviceName(jsobj.getString("service_sub_category_name"));
                         drawerBean.setN_serviceId(Integer.parseInt(jsobj.getString("service_sub_category")));
-                        //drawerBean.setF_price(Integer.parseInt(jsobj.getString("service_rate")));
                         beanArrayList.add(drawerBean);
 
                     }
@@ -852,7 +837,8 @@ public class ChooseService extends Activity implements ChooseServiceInterface {
     // ** Load layout (second drop down ) to save the services respose ** //
 
     private ArrayList<CommonBean> LoadLayout(JSONArray providerServicesMonth, String strFromChoosen) {
-        Log.e("NNJ","strChoosenService->"+strChoosenService);
+        Log.e("NNJ", "strChoosenService->" + strChoosenService);
+        Log.e("NNJ", "providerServicesMonth->" + providerServicesMonth);
         ArrayList<CommonBean> beanArrayList = new ArrayList<CommonBean>();
 
         JSONObject jsobj = null;
@@ -890,46 +876,51 @@ public class ChooseService extends Activity implements ChooseServiceInterface {
     }
 
 
-    // ** while selecting add data to arraylist ** //
+    // ** while selecting add data to arraylist ** // ( FOR SECOND DROP DOWN )
 
     @Override
     public void getServiceStationAddress(String str_id, String str_serviceType, String str_name, String f_price) {
         Log.i("NAN", "str_serviceType-->" + strChoosenService);
         Log.i("NAN", "str_serviceType***-->" + str_serviceType);
-    /*    SharedPreferences.Editor sp_pref= gD.prefs.edit();
-        sp_pref.putString("ss_serviceChoice",str_serviceType);
-        sp_pref.commit();
-        if(gD.prefs.getString("ss_serviceChoice",null)!=null){
-            Log.i("NAN", "str_serviceType***1-->" + gD.prefs.getString("ss_serviceChoice",null));
-        }
-        else
-        {
-            Log.i("NAN", "str_serviceType is null");
-        }*/
+
         str_ServiceStationId = str_id;
 
         listView.setVisibility(View.GONE);
 
-        count = 0;
+        count = 0;  // SET THE COUNT VALUE SO THAT IT WILL  OPEN AGAIN AFTER THE LISTVIEW IS GONE ( rl_selectServiceStation --> click listner)
+
         txt_errorMsg.setVisibility(View.GONE);
         ll_displayServicList.setVisibility(View.VISIBLE);
         Log.i("ver1", "f_priceAdd-->" + f_price);
+
+
+        // ** DISABLE THE FULL SERVICES IF OIL DATAS ARE SELECTED  IN ARRAY ** //
 
         if (str_serviceType.equalsIgnoreCase("1")) {
             ll_fullService.setEnabled(false);
             ll_oilChange.setEnabled(true);
             txt_fullService.setTextColor(Color.parseColor("#7a7a7a"));
             img_full.setBackgroundResource(R.drawable.full_grey);
-            //Toast.makeText(ChooseService.this, "You can choose only one service at a time", Toast.LENGTH_SHORT).show();
-        } else if (str_serviceType.equalsIgnoreCase("2")) {
+
+        }
+
+        // ** DISABLE THE OIL SERVICES IF FULL DATAS ARE SELECTED IN ARRAY ** //
+
+        else if (str_serviceType.equalsIgnoreCase("2")) {
             ll_oilChange.setEnabled(false);
             ll_fullService.setEnabled(true);
             txt_oilService.setTextColor(Color.parseColor("#7a7a7a"));
             img_oil.setBackgroundResource(R.drawable.oil_grey);
-            //Toast.makeText(ChooseService.this, "You can choose only one service at a time", Toast.LENGTH_SHORT).show();
+
         }
 
         if (gD.prefs.getString("ss_serviceChoice", null) != null) {
+
+
+            // ** CHECK THE SERVICE TYPE AND CLEAR THE ARRAY ACCORDINGLY ** //
+
+
+            // ** If already selected value and currently chosen value are same then add datas to the same arraylist ** //
 
             if (gD.prefs.getString("ss_serviceChoice", null).equalsIgnoreCase(str_serviceType)) {
                 ArrayList<CommonBean> al = new ArrayList<CommonBean>(lang_list_new);
@@ -951,6 +942,7 @@ public class ChooseService extends Activity implements ChooseServiceInterface {
 
                     Log.i("TT", "add & al_bean-->" + String.valueOf(lang_list_new.size()));
                     Log.i("TT", "add & bean-->" + String.valueOf(lang_list_new));
+                    Log.i("TT", "checkk->" + String.valueOf(serviceBean.getStr_servicePrice()));
                     Set<String> hs1 = new LinkedHashSet<>();
                     hs1.addAll(alCatId);
                     alCatId.clear();
@@ -961,14 +953,7 @@ public class ChooseService extends Activity implements ChooseServiceInterface {
 
                 } else {
                     Log.i("ver1", "f_priceAddElse-->" + f_price);
-            /*for (int c = 0; c < al.size(); c++) {
 
-            }*/
-
-          /*  for (int c = 0; c < al.size(); c++) {
-                if (al.get(c).getStr_serviceName().equalsIgnoreCase(str_name)) {
-                    Toast.makeText(context, "Category already selected", Toast.LENGTH_SHORT).show();
-                } else {*/
                     CommonBean serviceBean = new CommonBean();
                     serviceBean.setStr_serviceName(str_name);
                     serviceBean.setN_serviceId(Integer.parseInt(str_id));
@@ -989,30 +974,15 @@ public class ChooseService extends Activity implements ChooseServiceInterface {
                     alCatId.clear();
                     alCatId.addAll(hs1);
 
-
-
-                    /*for (int i=0; i<alCatId.size(); i++){
-
-                        Log.i("TT", "alCatId.get(i)-->" + alCatId.get(i));
-                        nRate+=Integer.parseInt(alCatId.get(i));
-
-
-                        Log.i("TT", "totlal add rate-->" + nRate);
-                    }*/
-
-                   /* for (int i=0; i<alCatId.size(); i++){
-                        Log.i("ver", nRate+ "----" + alCatId.get(i));*/
-           /* nRate = nRate + f_price;
-            Log.i("ver", "Total-->" + nRate);*/
-                   /* }*/
-                /*}
-
-            }*/
                 }
                 ChooseServiceDisplayAdapter mAdap = new ChooseServiceDisplayAdapter(context, lang_list_new, (ChooseServiceInterface) context);
                 list_serviceDisplay.setAdapter(mAdap);
                 mAdap.notifyDataSetChanged();
-            } else {
+            }
+
+            // ** If already selected value and currently chosen value are NOT SAME  THEN CLEAR THE ARRAYLIST and add the new data to arraylist ** //
+
+            else {
 
                 lang_list_new.clear();
                 alCatId.clear();
@@ -1055,14 +1025,7 @@ public class ChooseService extends Activity implements ChooseServiceInterface {
 
                 } else {
                     Log.i("ver1", "f_priceAddElse-->" + f_price);
-            /*for (int c = 0; c < al.size(); c++) {
 
-            }*/
-
-          /*  for (int c = 0; c < al.size(); c++) {
-                if (al.get(c).getStr_serviceName().equalsIgnoreCase(str_name)) {
-                    Toast.makeText(context, "Category already selected", Toast.LENGTH_SHORT).show();
-                } else {*/
                     CommonBean serviceBean = new CommonBean();
                     serviceBean.setStr_serviceName(str_name);
                     serviceBean.setN_serviceId(Integer.parseInt(str_id));
@@ -1083,25 +1046,6 @@ public class ChooseService extends Activity implements ChooseServiceInterface {
                     alCatId.clear();
                     alCatId.addAll(hs1);
 
-
-
-                    /*for (int i=0; i<alCatId.size(); i++){
-
-                        Log.i("TT", "alCatId.get(i)-->" + alCatId.get(i));
-                        nRate+=Integer.parseInt(alCatId.get(i));
-
-
-                        Log.i("TT", "totlal add rate-->" + nRate);
-                    }*/
-
-                   /* for (int i=0; i<alCatId.size(); i++){
-                        Log.i("ver", nRate+ "----" + alCatId.get(i));*/
-           /* nRate = nRate + f_price;
-            Log.i("ver", "Total-->" + nRate);*/
-                   /* }*/
-                /*}
-
-            }*/
                 }
                 ChooseServiceDisplayAdapter mAdap = new ChooseServiceDisplayAdapter(context, lang_list_new, (ChooseServiceInterface) context);
                 list_serviceDisplay.setAdapter(mAdap);
@@ -1136,6 +1080,11 @@ public class ChooseService extends Activity implements ChooseServiceInterface {
 
         Log.i("GHK", String.valueOf(lang_list_new.size()));
 
+
+        // **  WHILE DELETING THE VALUES IN ARRAYLIST USING CROSS IMAGE **//
+
+        // ** check whether the arraylist is empty , if it is then enable both the services ( oil and full ) ** //
+
         if (lang_list_new.size() == 0) {
 
             ll_displayServicList.setVisibility(View.GONE);
@@ -1149,10 +1098,12 @@ public class ChooseService extends Activity implements ChooseServiceInterface {
             txt_selectMainServiceText.setTextColor(Color.parseColor("#6d6d6d"));
 
             if (gD.prefs.getString("str_serviceType", null).equalsIgnoreCase("modular")) {
+
                 txt_oilService.setTextColor(Color.parseColor("#0987ff"));
                 strChoosenService = "3";
                 getMainServicesCall(strChoosenService);
             } else {
+
                 txt_oilService.setTextColor(Color.parseColor("#0987ff"));
                 strChoosenService = "1";
                 getMainServicesCall(strChoosenService);
@@ -1161,11 +1112,12 @@ public class ChooseService extends Activity implements ChooseServiceInterface {
 
             txt_fullService.setTextColor(Color.parseColor("#000000"));
             img_full.setBackgroundResource(R.drawable.car_service);
-            //txt_oilService.setTextColor(Color.parseColor("#000000"));
             img_oil.setBackgroundResource(R.drawable.oil_service);
 
 
         }
+
+
         ArrayList<String> alCID = new ArrayList<String>(alCatId);
         Log.i("TT", "del & alCatId-->" + String.valueOf(alCatId));
 
@@ -1192,13 +1144,10 @@ public class ChooseService extends Activity implements ChooseServiceInterface {
         alCatId.addAll(hs1);
 
 
-
-      /*  *//*for (int i = 0; i < alCatId.size(); i++) {*//*
-        nRate = nRate - f_price;
-           *//* nRate += Integer.parseInt(alCatId.get(i));*//*
-        Log.i("ver", "Delete - Total-->" + nRate);
-        *//*}*/
     }
+
+
+    // ** while selecting add data to arraylist ** // ( FOR FIRST DROP DOWN )
 
     @Override
     public void getServiceStationMainAddress(String str_id, String str_service_type, String str_name) {
@@ -1206,6 +1155,9 @@ public class ChooseService extends Activity implements ChooseServiceInterface {
         Log.i("TT", "str_id->" + str_id);
         Log.i("TT", "str_service_type->" + str_service_type);
         Log.i("TT", "str_name->" + str_name);
+
+
+        // SET THE COUNT VALUE TO " 0 "  SO THAT IT WILL  OPEN AGAIN AFTER THE LISTVIEW IS GONE ( rl_selectServiceMainStation --> click listner)
 
         countM = 0;
         txt_selectMainServiceText.setText(str_name);
@@ -1223,7 +1175,6 @@ public class ChooseService extends Activity implements ChooseServiceInterface {
 
         getServicesCall(str_service_type, str_id);
 
-        //LoadLayout(jsonArray_my_profile, strChoosenService);
 
     }
 

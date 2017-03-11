@@ -148,7 +148,11 @@ public class BookServiceDiagno extends Activity {
             }
         });*/
 
-        //** diagnostics button ** //
+
+
+
+        // ** button diagnostics code ** // ( SHOW THE CONFIRMATION PAGE DIRECTLY - NO SERVICE SELECTION NEEDED )
+
         final SharedPreferences.Editor prefEdit1 = gD.prefs.edit();
         ll_diagno.setOnClickListener(new View.OnClickListener() {
             @Override

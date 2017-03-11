@@ -75,7 +75,7 @@ public class ChooseServiceMainAdapter extends BaseAdapter {
         Log.e("AS", serviceBean.getStr_serviceName() + "---" + serviceBean.getN_serviceId());
         holder.txt_service_name1.setText(serviceBean.getStr_serviceName());
        // holder.txt_service_rate1.setText("" + serviceBean.getF_price());
-        holder.txt_service_rate1.setVisibility(View.GONE);
+        holder.txt_service_rate1.setVisibility(View.INVISIBLE);
         Log.i("AS", "IF : "+ serviceBean.getStr_servicePrice());
         rowView.setOnClickListener(new View.OnClickListener() {
             @Override
